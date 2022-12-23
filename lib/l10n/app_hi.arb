@@ -1,0 +1,56 @@
+{
+"@@locale": "hi",
+
+"languages" : "बोली",
+"login":"लॉग इन करें",
+"shopByCategories": "Shop by Categories",
+"bookOurServices": "Book our Services",
+"recommendedForYou":"आप के लिए अनुशंसित",
+"merchantNearYou":"आपके पास का व्यापारी",
+"viewAll":"सभी को देखें",
+"bestDeal":"सर्वश्रेष्ठ सौदा",
+"budgetBuys":"बजट खरीदता है",
+
+"signin" : "साइन इन करें",
+"signinSubTitle" : "Hello Welcome back to your account!",
+"usingPass" : "Email",
+"usingOTP" : "Phone Number",
+"emailORMobile" : "ईमेल पता / मोबाइल नंबर",
+"email" : "ईमेल",
+"password" : "पासवर्ड",
+"emailAddress":"Email Address",
+"mobileNumber":"Mobile Number",
+
+"emailError" : "The Email ID field is required.",
+"mobileError" : "The Mobile field id required.",
+"passwordError" : "The Password field id required.",
+"validEmailError" : "Please enter a valid email or phone number.",
+"validPasswordError" : "Please enter a valid password.",
+"forgotPassword" : "Forgot Password?",
+"sendOtp" : "Send OTP",
+
+"verification" : "Verification",
+"verificationSubHeading" :"We have sent the code verification to your Mobile Number",
+"verificationError" : "Enter verification code",
+"verifyOTP" : "Verify OTP",
+"resendOTP" : "Re-send Code",
+
+"forgotPassword" : "Forgot Password?",
+"forgotPasswordSubHeading" : "Don't worry, we are here to help you",
+"registeredEmailAddress" : "Registered Email Address",
+"validateRegisteredEmail" : "Please enter registered Email Address",
+"resetPassword" : "Reset Password",
+
+"passwordResetSuccessfully" : "Password Reset Successfully",
+"weHaveSentAnTemporaryPasswordToYourRegEmail":"We have sent an temporary password to your registered email address",
+"signInNow":"Sign In Now",
+"offersOnly":"Offers only",
+
+"deliveryDetails":"Delivery Details",
+"callCustomer":"Call Customer",
+"orderSummary":"Order Summary",
+"acceptPackedShippedCompleted":"Accepted/Packed/Shipped/Completed"
+
+
+
+}

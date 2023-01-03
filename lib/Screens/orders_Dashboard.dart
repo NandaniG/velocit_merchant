@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocit_merchant/Services/HomeModel.dart';
 
 import '../Services/Provider/Home_Provider.dart';
@@ -27,6 +28,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
   var data;
   bool isNewNotifications = false;
   bool isActiveOrders = false;
+  bool isLogIn = StringConstant.isLogIn;
 
   @override
   void initState() {
@@ -36,6 +38,11 @@ class _OrderDashboardState extends State<OrderDashboard> {
     isActiveOrders = false;
     data = Provider.of<HomeProvider>(context, listen: false).loadJson();
     super.initState();
+    setPram();
+  }
+
+  setPram() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
   }
 
   final indianRupeesFormat = NumberFormat.currency(
@@ -62,7 +69,8 @@ class _OrderDashboardState extends State<OrderDashboard> {
               appBarWidget(
                   context, searchBar(context), SizedBox(), setState(() {})),
               Container(
-                height: height * .077,
+                height: height * .075,
+                // margin: EdgeInsets.only(top: 1),
                 decoration: BoxDecoration(
                     border: Border.all(color: ThemeApp.appColor, width: 1)),
                 child: Row(
@@ -79,7 +87,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                             });
                           },
                           child: Container(
-                              height: height,
+                              height: height - 10,
                               decoration: BoxDecoration(
                                 color: isActiveOrders
                                     ? ThemeApp.whiteColor
@@ -99,11 +107,11 @@ class _OrderDashboardState extends State<OrderDashboard> {
                       child: InkWell(
                           onTap: () {
                             setState(() {
-                              isActiveOrders = true;
+                              isActiveOrders = false;
                             });
                           },
                           child: Container(
-                              height: height,
+                              height: height - 10,
                               decoration: BoxDecoration(
                                 color: isActiveOrders
                                     ? ThemeApp.appColor
@@ -131,8 +139,9 @@ class _OrderDashboardState extends State<OrderDashboard> {
         child: Container(
           color: ThemeApp.appBackgrounColor,
           width: width,
+          height: MediaQuery.of(context).size.height,
           child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.only(left:10,right: 10),
               child: data == '' ? CircularProgressIndicator() : mainUI()),
         ),
       ),
@@ -141,15 +150,29 @@ class _OrderDashboardState extends State<OrderDashboard> {
 
   Widget mainUI() {
     return Consumer<HomeProvider>(builder: (context, value, child) {
-      return value.jsonData.isNotEmpty
+      return (value.jsonData.isNotEmpty && value.jsonData['error'] == null)
           ? Stack(
               children: [
                 isActiveOrders != true
                     ? Column(
                         children: [
+                          SizedBox(height: 5,),
                           dropdownShow(),
                           SizedBox(
                             height: height * .02,
+                          ),
+                          StringConstant.isLogIn
+                              ? Container()
+                              : Center(
+                                  child: Text(
+                                    "For OwnBoarding\nPlease connect to Sales Team",
+                                    style: TextStyle(
+                                        fontSize: 16, color: ThemeApp.appColor),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                          SizedBox(
+                            height: 10,
                           ),
                           activeOrderList(value)
                         ],
@@ -218,7 +241,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                           children: [
                                             Flexible(
                                               child: Text(
-                                                  "${value.myOrdersList[1]["myOrderDetailList"][1]["productDetails"]}",
+                                                  '', //"${value.myOrdersList[1]["myOrderDetailList"][0]["productDetails"]}",
                                                   style: TextStyle(
                                                       color:
                                                           ThemeApp.whiteColor,
@@ -277,7 +300,9 @@ class _OrderDashboardState extends State<OrderDashboard> {
                     : SizedBox()
               ],
             )
-          : Center(child: CircularProgressIndicator());
+          : value.jsonData['error'] != null
+              ? Container()
+              : Center(child: CircularProgressIndicator());
     });
   }
 
@@ -453,32 +478,40 @@ class _OrderDashboardState extends State<OrderDashboard> {
   }
 
   Widget activeOrderList(HomeProvider value) {
-    return value.myOrdersList.length > 0
+    return (value.jsonData.length > 0 && value.jsonData['status'] == 'OK')
         ? Expanded(
             child: ListView.builder(
-                itemCount: value.myOrdersList.length,
+                itemCount: value.jsonData['payload']['merchant_baskets'].length,
                 itemBuilder: (_, index) {
+                  List orderList = value
+                      .jsonData['payload']['merchant_baskets'].values
+                      .toList();
+                  Map order = orderList[index];
+                  DateFormat format = DateFormat('dd MMM yyyy hh:mm aaa');
+                  DateTime date =
+                      DateTime.parse(order['earliest_delivery_date']);
+                  var earliest_delivery_date = format.format(date);
                   Color colorsStatus = ThemeApp.appColor;
-                  if (value.myOrdersList[index]["myOrderStatus"] ==
-                      "Acceptance Pending") {
+                  if (order["overall_status"] == "Acceptance Pending") {
                     colorsStatus = ThemeApp.redColor;
                   }
-                  if (value.myOrdersList[index]["myOrderStatus"] == "Shipped") {
+                  if (order["overall_status"] == "Shipped") {
                     colorsStatus = ThemeApp.shippedOrderColor;
                   }
-                  if (value.myOrdersList[index]["myOrderStatus"] ==
-                      "Completed") {
+                  if (order["overall_status"] == "Completed") {
                     colorsStatus = ThemeApp.activeOrderColor;
                   }
 
                   return InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => OrderReviewSubActivity()));
-                    },
+                    
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 10, bottom: 20),
-                      child: Container(
+                      padding: const EdgeInsets.only(right: 10, bottom: 10),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)
+                        ),
+                        elevation: 10,
+                        child: Container(
                         padding: EdgeInsets.only(
                           right: 10,
                         ),
@@ -503,7 +536,8 @@ class _OrderDashboardState extends State<OrderDashboard> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Container(
-                                  padding: const EdgeInsets.all(15),
+                                  padding: const EdgeInsets.only(
+                                      left: 15, right: 15, top: 15),
                                   decoration: const BoxDecoration(
                                     borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(8),
@@ -512,64 +546,14 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                     color: ThemeApp.whiteColor,
                                   ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Container(
-                                        height: height * .08,
-                                        width: width * .15,
-                                        decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(8),
-                                          ),
-                                        ),
-                                        child: GridView.builder(
-                                          gridDelegate:
-                                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisSpacing: 0,
-                                            mainAxisSpacing: 0,
-                                            crossAxisCount: 2,
-                                            // childAspectRatio: 4/7
-                                          ),
-                                          itemCount: value
-                                              .myOrdersList[index]
-                                                  ["myOrderDetailList"]
-                                              .length,
-                                          itemBuilder:
-                                              (context, indexOrderList) {
-                                            subIndexOrderList = indexOrderList;
-                                            return Container(
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: ThemeApp
-                                                          .darkGreyTab)),
-                                              child: FractionallySizedBox(
-                                                  // width: 50.0,
-                                                  // height: 50.0,
-                                                  widthFactor: width * .0025,
-                                                  heightFactor: height * .0018,
-                                                  child: FittedBox(
-                                                    child: Image(
-                                                      image: AssetImage(
-                                                        value.myOrdersList[
-                                                                        index][
-                                                                    "myOrderDetailList"]
-                                                                [indexOrderList]
-                                                            ["productImage"],
-                                                      ),
-                                                      fit: BoxFit.fill,
-                                                    ),
-                                                  )),
-                                            );
-
-                                            // Item rendering
-                                          },
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: width * .03,
-                                      ),
+                                      // SizedBox(
+                                      //   width: width * .03,
+                                      // ),
                                       Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -577,87 +561,124 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           TextFieldUtils().dynamicText(
-                                              value.myOrdersList[index]
-                                                  ["myOrderId"],
+                                              order['id'].toString(),
                                               context,
                                               TextStyle(
                                                 color: ThemeApp
                                                     .primaryNavyBlackColor,
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: height * .025,
+                                                fontSize: 14,
                                               )),
                                           SizedBox(
                                             height: height * .01,
                                           ),
                                           TextFieldUtils().dynamicText(
-                                              value.myOrdersList[index]
-                                                  ["myOrderDate"],
+                                              '${order['overall_status']}', // earliest_delivery_date,
                                               context,
                                               TextStyle(
                                                 color: ThemeApp.lightFontColor,
-                                                fontSize: height * .022,
+                                                fontSize: 12,
                                               )),
                                         ],
                                       ),
+                                      TextFieldUtils().dynamicText(
+                                          earliest_delivery_date,
+                                          context,
+                                          TextStyle(
+                                            color: ThemeApp.lightFontColor,
+                                            fontSize: 12,
+                                          )),
                                     ],
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                     right: 10),
-                                  child: Container(
-                                    height:
-                                        height * .05,
-                                    width: width * .75,
-                                    child: ListView.builder(
-                                      itemCount: value
-                                          .myOrdersList[index]
-                                              ["myOrderDetailList"]
-                                          .length,
-                                      itemBuilder:
-                                          (context, indexOrderDetails) {
-                                        indexForItems = indexOrderDetails;
-                                        return Container(
-                                            child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Flexible(
-                                              child: Text(
-                                                  "${value.myOrdersList[index]["myOrderDetailList"][indexOrderDetails]["productDetails"]}",
-                                                  style: TextStyle(
-                                                      color:
-                                                          ThemeApp.blackColor,
-                                                      fontSize: height * .024,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      overflow: TextOverflow
-                                                          .ellipsis)),
-                                            ),
-                                            SizedBox(
-                                              width: width * .005,
-                                            ),
-                                            TextFieldUtils().dynamicText(
-                                                "* 3",
-                                                context,
-                                                TextStyle(
-                                                    color: ThemeApp.blackColor,
-                                                    fontSize: height * .022,
-                                                    fontWeight: FontWeight.bold,
-                                                    overflow:
-                                                        TextOverflow.ellipsis)),
-                                          ],
-                                        ));
-                                      },
+                                Divider(
+                                  thickness: 1,
+                                ),
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 10,
                                     ),
-                                  ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: ThemeApp.darkGreyTab)),
+                                      child: FittedBox(
+                                        child: Image(
+                                          image: NetworkImage(
+                                              order['image_url'] ?? ''),
+                                          fit: BoxFit.fill,
+                                          height: 50,
+                                          width: 50,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          right: 10, left: 10),
+                                      child: Container(
+                                        height: height * .05,
+                                        width: width * .55,
+                                        child: ListView.builder(
+                                          itemCount: order['orders'].length,
+                                          itemBuilder:
+                                              (context, indexOrderDetails) {
+                                            indexForItems = indexOrderDetails;
+                                            Map subOrders = (order['orders']
+                                                .values
+                                                .toList())[indexForItems];
+                                            return Container(
+                                                child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Flexible(
+                                                  child: Text(
+                                                      "${subOrders["short_name"]}",
+                                                      style: TextStyle(
+                                                          color: ThemeApp
+                                                              .blackColor,
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          overflow: TextOverflow
+                                                              .ellipsis)),
+                                                ),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                TextFieldUtils().dynamicText(
+                                                    "* ${subOrders['item_qty']}",
+                                                    context,
+                                                    TextStyle(
+                                                        color:
+                                                            ThemeApp.blackColor,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        overflow: TextOverflow
+                                                            .ellipsis)),
+                                              ],
+                                            ));
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 SizedBox(
                                   height: height * .02,
                                 ),
+                                Divider(
+                                  thickness: 1,
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      right: 10, left: 10, bottom: 20),
+                                      right: 10, left: 20, bottom: 20),
                                   child: Container(
                                     alignment: Alignment.centerLeft,
                                     child: Row(
@@ -667,9 +688,8 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         TextFieldUtils().dynamicText(
-                                            indianRupeesFormat.format(int.parse(
-                                                value.myOrdersList[index]
-                                                    ["myOrderPrice"])),
+                                            indianRupeesFormat.format(
+                                                order["total_payable"] ?? 0),
                                             context,
                                             TextStyle(
                                                 color: ThemeApp.blackColor,
@@ -677,7 +697,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                                 fontWeight: FontWeight.w700)),
                                         Row(
                                           children: [
-                                          /*  value.myOrdersList[index]
+                                            /*  value.myOrdersList[index]
                                                         ["myOrderStatus"] ==
                                                     "Acceptance Pending"
                                                 ? SizedBox()
@@ -701,28 +721,29 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                               width: width * .02,
                                             ),*/
                                             Container(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      10, 8, 10, 8),
+                                              // margin: EdgeInsets.all(10),
+                                              height: 40,
                                               decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(30),
+                                                  color: ThemeApp.appColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              child: MaterialButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              OrderReviewSubActivity(
+                                                                order: order,
+                                                              )));
+                                                },
+                                                child: Text(
+                                                  "View",
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      color: Colors.white),
                                                 ),
-                                                // border: Border.all(
-                                                //     color: colorsStatus),
-                                                color: ThemeApp.whiteColor,
                                               ),
-                                              child: TextFieldUtils()
-                                                  .dynamicText(
-                                                      value.myOrdersList[index]
-                                                          ["myOrderStatus"],
-                                                      context,
-                                                      TextStyle(
-                                                          color: colorsStatus,
-                                                          fontSize:
-                                                              height * .02,
-                                                          fontWeight:
-                                                              FontWeight.w500)),
                                             ),
                                           ],
                                         ),
@@ -732,6 +753,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                 ),
                               ],
                             )),
+                      ),
                       ),
                     ),
                   );

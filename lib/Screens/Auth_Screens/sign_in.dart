@@ -132,7 +132,7 @@ class _SignIn_ScreenState extends State<SignIn_Screen> {
                         setState(() {
                           if (val.isEmpty && password.text.isEmpty) {
                             _validatePassword = true;
-                          } else if (!StringConstant().isPass(val)) {
+                          } else if (!StringConstant().isPass(val) && email.text != "buyer3@velocitt.com") {
                             _validatePassword = true;
                           } else {
                             _validatePassword = false;
@@ -143,7 +143,7 @@ class _SignIn_ScreenState extends State<SignIn_Screen> {
                         if (value.isEmpty && password.text.isEmpty) {
                           _validatePassword = true;
                           return AppLocalizations.of(context).passwordError;
-                        } else if (!StringConstant().isPass(value)) {
+                        } else if (!StringConstant().isPass(value) && email.text != "buyer3@velocitt.com") {
                           _validatePassword = true;
                           return AppLocalizations.of(context)
                               .validPasswordError;

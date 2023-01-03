@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:velocit_merchant/Screens/MyAccount_Ui/KYC/kyc_page.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/styles.dart';
 import '../../../utils/utils.dart';
@@ -176,7 +177,15 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
                                       SizedBox(
                                         width: width * .03,
                                       ),
-                                      TextFieldUtils().dynamicText(
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => KYCActivity(),
+                  ),
+                );
+                                        },
+                                        child: TextFieldUtils().dynamicText(
                                           'KYC',
                                           context,
                                           TextStyle(
@@ -184,6 +193,7 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
                                             fontWeight: FontWeight.w500,
                                             fontSize: height * .023,
                                           )),
+                                      ),
                                     ],
                                   ),
                                 ),

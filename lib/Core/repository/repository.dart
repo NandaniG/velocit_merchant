@@ -12,7 +12,7 @@ import '../data/network/networkApiServices.dart';
 
 import '../AppConstant/apiMapping.dart';
 
-class AuthRepository {
+class Repository {
   BaseApiServices _apiServices = NetworkApiServices();
 
   Future<dynamic> loginApiWithGet() async {
@@ -60,17 +60,32 @@ class AuthRepository {
     }
   }
 
-  Future postApiUsingEmailRequest(Map jsonMap, BuildContext context) async {
+  Future postApiRequest(Map jsonMap) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('jwt_token') ?? '';
+    // dynamic responseJson;
+    var url = ApiMapping.ConstructURI(StringConstant.apiMerchantBasket_findby_merchant);
 
+    dynamic responseJson = await _apiServices.getGetApiResponseWithBody(url, jsonMap);
+    
+    String rawJson = responseJson.toString();
+    print(responseJson.toString());
+    return responseJson;
+  }
+
+
+  Future getApiRequest(Map jsonMap) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('jwt_token') ?? '';
     dynamic responseJson;
-    var url = ApiMapping.getURI(apiEndPoint.auth_signIn_using_post);
+    var url = ApiMapping.ConstructURI(StringConstant.apiMerchantBasket_findby_merchant);
 
     HttpClient httpClient = new HttpClient();
-    HttpClientRequest request =
-        await httpClient.postUrl(Uri.parse(url)).timeout(Duration(seconds: 10));
+    HttpClientRequest request = 
+  await httpClient.getUrl(Uri.parse(url)).timeout(Duration(seconds: 10));
     request.headers.set('content-type', 'application/json');
-    request.add(utf8.encode(json.encode(jsonMap)));
+    // request.headers.set(HttpHeaders.authorizationHeader, 'Bearer $token');
+    // request.add(utf8.encode(json.encode(jsonMap)));
 
     HttpClientResponse response = await request.close();
     // todo - you should check the response.statusCode
@@ -99,10 +114,10 @@ class AuthRepository {
 
         print("LoginId : .. " + loginId.toString());
         // StringConstant.isLogIn = true;
-        Utils.successToast(id.toString());
+        // Utils.successToast(id.toString());
 
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => OrderDashboard()));
+        // Navigator.of(context).pushReplacement(
+        //     MaterialPageRoute(builder: (context) => OrderDashboard()));
       } else {      Utils.errorToast("System is busy, Please try after sometime.");
       }
     } catch (e) {

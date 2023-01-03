@@ -225,6 +225,7 @@ class _SignUpState extends State<SignUp> {
                       "password": password.text,
                       "email": email.text,
                       "mobile": mobileNumberController.text,
+                      "role":"mer"
                     };
                     print(data);
 

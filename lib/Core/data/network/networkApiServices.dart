@@ -25,6 +25,36 @@ class NetworkApiServices extends BaseApiServices {
   }
 
   @override
+  Future getGetApiResponseWithBody(String url,Map jsonMap) async {
+    dynamic responseJson;
+    try {
+      var headers = {
+  'Content-Type': 'application/json'
+};
+      final request = http.Request('GET', Uri.parse(url));
+      request.body = json.encode(jsonMap);
+      request.headers.addAll(headers);
+      final response = await request.send();
+        switch (response.statusCode) {
+      case 200:
+        var responseJson = await response.stream.bytesToString();
+        return responseJson;
+      case 400:
+        throw  Utils.errorToast("System is busy, Please try after sometime.");
+      case 500:
+      case 404:
+        throw  Utils.errorToast("System is busy, Please try after sometime.");
+
+      default:
+        throw  Utils.errorToast("System is busy, Please try after sometime.");
+    }
+    } on SocketException {
+      throw  Utils.errorToast("System is busy, Please try after sometime.");
+    }
+  }
+
+
+  @override
   Future getPostApiResponse(String url, dynamic data) async {
     dynamic responseJson;
     try {

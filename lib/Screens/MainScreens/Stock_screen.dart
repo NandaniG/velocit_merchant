@@ -61,13 +61,15 @@ bool isOutOfStock = false;
                                             width: 60.0,
                                             height: 60.0,
                                             decoration: new BoxDecoration(
-                                                shape: BoxShape.circle,
+                                                shape: BoxShape.rectangle,
+                                                borderRadius: BorderRadius.circular(10),
                                                 image: new DecorationImage(
                                                     fit: BoxFit.fill,
                                                     image: new AssetImage(
                                                       'assets/images/laptopImage.jpg',
                                                     )))),
                                       ),
+                                      SizedBox(width: 10,),
                                       Expanded(
                                         flex: 3,
                                         child: Column(
@@ -88,7 +90,8 @@ bool isOutOfStock = false;
                                                     fontWeight:
                                                     FontWeight.w400,
                                                     fontSize:
-                                                    height * .023,
+                                                    12,
+                                                    fontFamily: "Roboto",
                                                     overflow: TextOverflow
                                                         .ellipsis)),
 
@@ -98,7 +101,7 @@ bool isOutOfStock = false;
                                       Column(
                                         children: [
                                           TextFieldUtils().dynamicText(
-                                             'Out of Stock',
+                                             'In Stock',
                                               context,
                                               TextStyle(
                                                   color:

@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:velocit_merchant/Core/repository/repository.dart';
 
 import '../../utils/constants.dart';
 import '../HomeModel.dart';
@@ -13,9 +15,17 @@ class HomeProvider with ChangeNotifier {
   //--------------------load json file------------------------
   //----------------------------------------------------------
   loadJson() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
-      String jsonContent = await rootBundle.loadString("assets/jsonData.json");
+      String jsonContent = await Repository().postApiRequest({
+    "merchant_id":pref.getInt('merchant_id') ?? 4,
+    "IsActiveOrderList":StringConstant.IsActiveOrderList,
+    "from_days_in_past":7
+});
+      // rootBundle.loadString("assets/jsonData.json");
       jsonData = json.decode(jsonContent);
+      notifyListeners();
+      // return jsonData;
       print("____________loadJson______________________");
       // print(jsonData["stepperOfDeliveryList"]);
       // StringConstant.printObject(jsonData);
@@ -28,14 +38,15 @@ class HomeProvider with ChangeNotifier {
       // bestDealListService();
       // cartProductListService();
       // orderCheckOutListService();
-      myOrdersListService();budgetBuyListService();
+      // myOrdersListService();budgetBuyListService();
       // myAddressListService();
       // customerSupportService();
       // accountSettingService();
-      notificationsListService();
+      // notificationsListService();
       // offersListService();
     } catch (e) {
       print("Error in loadJson: $e");
+      return {};
 
     }
   }
@@ -201,7 +212,7 @@ class HomeProvider with ChangeNotifier {
 */
   var budgetBuyList;
 
-  Future<List<BudgetBuyList>> budgetBuyListService() async {
+  Future<List<dynamic>> budgetBuyListService() async {
     final jsondata = await rootBundle.loadString('assets/jsonData.json');
     budgetBuyList = json.decode(jsondata);
     budgetBuyList = budgetBuyList["budgetBuyList"];
@@ -214,19 +225,20 @@ class HomeProvider with ChangeNotifier {
   var myOrdersList;
   var myOrdersDetails;
 
-  Future<List<MyOrders>> myOrdersListService() async {
+  Future<List<dynamic>> myOrdersListService() async {
     final jsondata = await rootBundle.loadString('assets/jsonData.json');
     myOrdersList = json.decode(jsondata);
     myOrdersList = myOrdersList["myOrders"];
     print("-------------myOrderDetailList Data-------------");
     // print(myOrdersList.toString());
 
-    for (int i = 0; i <= myOrdersList.length; i++) {
+    for (int i = 0; i < myOrdersList.length; i++) {
       myOrdersDetails = myOrdersList[i]["myOrderDetailList"];
       print("-------------myOrderDetailList Dataaaaaaaa$myOrdersDetails");
     }
     // print(myOrdersDetails.toString());
-    return myOrdersList.map((e) => MyOrders.fromJson(e)).toList();
+    var myList = myOrdersList.map((e) => MyOrders.fromJson(e)).toList();
+    return myList;
   }
 
   //---------------------------------------------------------
@@ -278,7 +290,7 @@ var customerSupportList;
   //---------------------------------------------------------
   //----------------- My Orders--------------------
   var notificationDataList;
-  Future<List<NotificationsList>> notificationsListService() async {
+  Future<List<dynamic>> notificationsListService() async {
     final jsondata = await rootBundle.loadString('assets/jsonData.json');
     notificationDataList = json.decode(jsondata);
     notificationDataList = notificationDataList["notificationsList"];

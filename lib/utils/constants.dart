@@ -7,8 +7,14 @@ class StringConstant {
   static TextEditingController controllerSpeechToText =
       new TextEditingController();
 
+
+  static String apiMerchantBasket_findby_merchant = '/merchantbasket/findby_merchant';
+
+
+
   static String placesFromCurrentLocation = '';
   static bool isLogIn = false;
+  static bool IsActiveOrderList = true;
   static String testId = '';
   static String addressFromCurrentLocation = 'Maninagar BRTS stand, Punit Maharaj Road, Maninagar, Ahmedabad, Gujarat, India - 380021';
   static var getCartList_FromPref;

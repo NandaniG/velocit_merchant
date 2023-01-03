@@ -61,7 +61,7 @@ class ApiMapping {
         break;
 
       case apiEndPoint.auth_signUp_using_post:
-        retVal = ConstructURI("/auth/signup");
+        retVal = ConstructURI("/auth/signupmerchant");
         break;
 
       default:

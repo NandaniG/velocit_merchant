@@ -21,7 +21,7 @@ class _ReportScreenState extends State<ReportScreen> {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: ThemeApp.appBackgrounColor,
+      backgroundColor: ThemeApp.appBackgroundColor,
       key: scaffoldGlobalKey,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(height * .09),

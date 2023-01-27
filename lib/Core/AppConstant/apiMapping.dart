@@ -17,6 +17,21 @@ class ApiMapping {
         apiVersion +
         path;
   }
+  static String BASEAPI = baseProtocol +
+      "://" +
+      baseDomain +
+      ":" +
+      basePort +
+      "/" +
+      apiVersion;
+
+
+  static String loginViaEmailPassword = '/auth/login_via_email_password';
+  static String loginViaEmailOTP = '/auth/login_via_email_otp';
+  static String loginViaMobileOTP = '/auth/login_via_mobile_otp';
+  static String validateOTP = '/auth/login_via_otp_stage_2';
+
+
 
 //https://velocitapiqa.fulgorithmapi.com:443/v1/IAM/authenticate
   static String getURI(apiEndPoint ep) {

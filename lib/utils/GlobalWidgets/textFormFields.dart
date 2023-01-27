@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../../../utils/styles.dart';
+import '../constants.dart';
 
 class TextFormFieldsWidget extends StatefulWidget {
   TextEditingController controller;
@@ -18,23 +20,29 @@ class TextFormFieldsWidget extends StatefulWidget {
   FormFieldValidator validator;
   Icon? icon;
   Widget? suffixText;
+  Widget? preffixText;
   int? maxLength;
+  VoidCallback? onTap;
+  bool? readOnly;
 
   TextFormFieldsWidget(
       {required this.errorText,
-      this.intialvalue,
-      required this.textInputType,
-      required this.controller,
-      required this.hintText,
-      this.autoValidation,
-      this.obsecureText: false,
-      required this.onChange,
-      required this.validator,
-      this.enablepadding: true,
-      this.maxline: 1,
-      this.icon,
-      this.suffixText,
-      this.maxLength});
+        this.intialvalue,
+        this.onTap,
+        this.readOnly,
+        required this.textInputType,
+        required this.controller,
+        required this.hintText,
+        this.autoValidation,
+        this.obsecureText: false,
+        required this.onChange,
+        required this.validator,
+        this.enablepadding: true,
+        this.maxline: 1,
+        this.icon,
+        this.suffixText,
+        this.preffixText,
+        this.maxLength});
 
   @override
   _TextFormFieldsWidgetState createState() => _TextFormFieldsWidgetState();
@@ -43,20 +51,119 @@ class TextFormFieldsWidget extends StatefulWidget {
 class _TextFormFieldsWidgetState extends State<TextFormFieldsWidget> {
   FocusNode focusNode = FocusNode();
 
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   if (widget.intialvalue != null) {
-  //     setState(() {
-  //       widget.controller.text = widget.intialvalue!;
-  //     });
-  //   }
-  // }
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+      child: TextFormField(
+        controller: widget.controller,
+        autovalidateMode: widget.autoValidation,
+        keyboardType: widget.textInputType,
+        textCapitalization: TextCapitalization.words,
+        textInputAction: TextInputAction.next,
+        autofocus: false,
+        readOnly: widget.readOnly??false,
+        maxLength: widget.maxLength,
+        onTap: widget.onTap,
+        // focusNode: focusNode,
+        maxLines: widget.maxline,
+        onChanged: widget.onChange,
+        decoration: InputDecoration(
+          counterText: "",
+          prefixIcon: widget.preffixText,
+          suffixIcon: widget.suffixText,
+          // suffixIconConstraints: BoxConstraints(
+          //     maxWidth: MediaQuery.of(context).size.width * .3,
+          //     minWidth: MediaQuery.of(context).size.width * .3),
+          filled: true,
+
+          fillColor: Colors.white,
+          hintStyle: TextStyle(
+              fontFamily: 'Roboto',
+              color: Colors.grey,
+              fontSize: 14,
+              fontWeight: FontWeight.w400),
+          hintText: widget.hintText,
+          errorStyle: TextStyle(
+              fontFamily: 'Roboto',
+              color: ThemeApp.redColor,
+              fontSize: MediaQuery.of(context).size.height * 0.020),
+          errorMaxLines: 2,
+          contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
+              borderSide:  BorderSide(
+                color: ThemeApp.separatedLineColor,
+              )),
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
+              borderSide:  BorderSide(
+                  color: ThemeApp.separatedLineColor, width: 1)),
+          disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
+              borderSide:  BorderSide(
+                  color: ThemeApp.separatedLineColor, width: 1)),
+          errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
+              borderSide:  BorderSide(color: ThemeApp.redColor, width: 1)),
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
+              borderSide:  BorderSide(
+                  color: ThemeApp.separatedLineColor, width: 1)),
+        ),
+        validator: widget.validator,
+      ),
+    );
+  }
+}class EmailTextFormFieldsWidget extends StatefulWidget {
+  TextEditingController controller;
+  bool enablepadding;
+  bool obsecureText;
+  AutovalidateMode? autoValidation;
+  TextInputType textInputType;
+  String hintText;
+  String? intialvalue;
+  String errorText;
+  int maxline;
+  bool enabled;
+  FormFieldSetter onChange;
+  FormFieldValidator validator;
+  Icon? icon;
+  Widget? suffixText;
+  Widget? preffixText;
+  int? maxLength;
+  bool isEmailValidateIcon;
+
+  EmailTextFormFieldsWidget(
+      {required this.errorText,
+        this.intialvalue,
+        required this.textInputType,
+        required this.controller,
+        required this.hintText,
+        this.autoValidation,
+        this.obsecureText: false,
+        this.enabled: true,
+        required this.onChange,
+        required this.validator,
+        this.enablepadding: true,
+        this.maxline: 1,
+        this.icon,
+        this.suffixText,
+        this.preffixText,
+        this.maxLength,
+        this.isEmailValidateIcon: false});
+
+  @override
+  _EmailTextFormFieldsWidgetState createState() =>
+      _EmailTextFormFieldsWidgetState();
+}
+
+class _EmailTextFormFieldsWidgetState extends State<EmailTextFormFieldsWidget> {
+  FocusNode focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
       child: TextFormField(
         controller: widget.controller,
@@ -66,53 +173,87 @@ class _TextFormFieldsWidgetState extends State<TextFormFieldsWidget> {
         textInputAction: TextInputAction.next,
         autofocus: false,
         maxLength: widget.maxLength,
+        enabled: widget.enabled,
         // focusNode: focusNode,
         maxLines: widget.maxline,
         onChanged: widget.onChange,
+        style: TextStyle(
+            fontFamily: 'Roboto',
+            color: widget.enabled == true
+                ? ThemeApp.blackColor
+                : ThemeApp.subIconColor,
+            fontSize: 14,
+            fontWeight: FontWeight.w400),
         decoration: InputDecoration(
           counterText: "",
-          prefixIcon: widget.icon,
-          suffixIcon: widget.suffixText,
-          suffixIconConstraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * .3,
-              minWidth: MediaQuery.of(context).size.width * .3),
+
+          // prefixIcon: widget.preffixText,
+          // suffixIcon: widget.suffixText,
+
+          // suffixIconConstraints: BoxConstraints(
+          //     maxWidth: 15.54,
+          //     minWidth: 15.54),
+
+          prefixIcon: Padding(
+            padding: const EdgeInsets.fromLTRB(11.73, 12.73, 6.36, 12.73),
+            child: SvgPicture.asset(
+              'assets/appImages/Username.svg',
+              width: 16.56,
+              height: 16.56,
+            ),
+          ),
+          suffixIcon: !StringConstant().isEmail(widget.controller.text)
+              ? SizedBox()
+              : Padding(
+            padding:
+            const EdgeInsets.fromLTRB(11.73, 12.73, 11.73, 12.73),
+            child: SvgPicture.asset(
+              'assets/appImages/emailValidateIcon.svg',
+              width: 15.54,
+              height: 15.54,
+            ),
+          ),
           filled: true,
           fillColor: Colors.white,
           hintStyle: TextStyle(
+              fontFamily: 'Roboto',
               color: Colors.grey,
-              fontSize: MediaQuery.of(context).size.height * 0.020),
+              fontSize: 14,
+              fontWeight: FontWeight.w400),
           hintText: widget.hintText,
           errorStyle: TextStyle(
-              color: ThemeApp.innerTextFieldErrorColor,
+              fontFamily: 'Roboto',
+              color: ThemeApp.redColor,
               fontSize: MediaQuery.of(context).size.height * 0.020),
-          contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+          errorMaxLines: 2,
+          contentPadding: const EdgeInsets.fromLTRB(12.0, 12.0, 11.0, 12.0),
           border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(5),
               borderSide: const BorderSide(
-                color: ThemeApp.textFieldBorderColor,
+                color: ThemeApp.separatedLineColor,
               )),
           focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide:
-                  const BorderSide(color: ThemeApp.textFieldBorderColor, width: 1)),
-          disabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide:
-                  const BorderSide(color: ThemeApp.textFieldBorderColor, width: 1)),
-          errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(5),
               borderSide: const BorderSide(
-                  color: ThemeApp.innerTextFieldErrorColor, width: 1)),
+                  color: ThemeApp.separatedLineColor, width: 1)),
+          disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
+              borderSide: const BorderSide(
+                  color: ThemeApp.separatedLineColor, width: 1)),
+          errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
+              borderSide: const BorderSide(color: ThemeApp.redColor, width: 1)),
           enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide:
-                  const BorderSide(color: ThemeApp.textFieldBorderColor, width: 1)),
+              borderRadius: BorderRadius.circular(5),
+              borderSide: const BorderSide(
+                  color: ThemeApp.separatedLineColor, width: 1)),
         ),
         validator: widget.validator,
       ),
     );
   }
 }
+
 
 class CharacterTextFormFieldsWidget extends StatefulWidget {
   TextEditingController controller;
@@ -445,13 +586,20 @@ class _CardCVVTextFormFieldWidgetState
     );
   }
 }
-
 class MobileNumberTextFormField extends StatefulWidget {
   TextEditingController controller;
   bool enable = true;
+  FormFieldValidator validator;
+  FormFieldValidator onChanged;
+  String? errorText;
 
   MobileNumberTextFormField(
-      {Key? key, required this.controller,  })
+      {Key? key,
+        required this.controller,
+        required this.enable,
+        required this.validator,
+        required this.onChanged,
+        this.errorText})
       : super(key: key);
 
   @override
@@ -462,12 +610,14 @@ class MobileNumberTextFormField extends StatefulWidget {
 class _MobileNumberTextFormFieldState extends State<MobileNumberTextFormField> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
       child: IntlPhoneField(
+        invalidNumberMessage: widget.errorText,
+
         dropdownIconPosition: IconPosition.trailing,
         // showCountryFlag: false,
-        enabled: true,
+        enabled: widget.enable,
         controller: widget.controller,
         flagsButtonPadding: EdgeInsets.only(
           left: 20,
@@ -476,7 +626,7 @@ class _MobileNumberTextFormFieldState extends State<MobileNumberTextFormField> {
             border: Border(
               right: BorderSide(
                 //                   <--- left side
-                  color: ThemeApp.textFieldBorderColor,
+                  color: ThemeApp.separatedLineColor,
                   width: 1),
             )),
         initialCountryCode: "IN",
@@ -484,7 +634,17 @@ class _MobileNumberTextFormFieldState extends State<MobileNumberTextFormField> {
           FilteringTextInputFormatter.digitsOnly,
           LengthLimitingTextInputFormatter(10),
         ],
-        style: TextStyle(color: ThemeApp.darkGreyColor),
+        style: TextStyle(
+            fontFamily: 'Roboto',
+            color: widget.enable == true
+                ? ThemeApp.blackColor
+                : ThemeApp.subIconColor,
+            fontSize: 14,
+            fontWeight: FontWeight.w400),
+        dropdownTextStyle:     TextStyle(fontFamily: 'Roboto',
+            color: widget.enable ==true?ThemeApp.blackColor:ThemeApp.subIconColor,
+            fontSize: 14,fontWeight: FontWeight.w400) ,
+        // style: TextStyle(fontFamily: 'Roboto',color: ThemeApp.darkGreyColor),
         decoration: InputDecoration(
           hintText: 'Do not enter country code',
           counterText: "",
@@ -497,43 +657,143 @@ class _MobileNumberTextFormFieldState extends State<MobileNumberTextFormField> {
           ),
           fillColor: Colors.white,
           hintStyle: TextStyle(
+              fontFamily: 'Roboto',
               color: Colors.grey,
-              fontSize: MediaQuery.of(context).size.height * 0.015),
+              fontSize: 14,
+              fontWeight: FontWeight.w400),
           errorStyle: TextStyle(
+              fontFamily: 'Roboto',
               color: ThemeApp.redColor,
               fontSize: MediaQuery.of(context).size.height * 0.020),
           contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(5),
               borderSide: const BorderSide(
-                color: ThemeApp.textFieldBorderColor,
+                color: ThemeApp.separatedLineColor,
               )),
           focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(5),
               borderSide: const BorderSide(
-                  color: ThemeApp.textFieldBorderColor, width: 1)),
+                  color: ThemeApp.separatedLineColor, width: 1)),
           disabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(5),
               borderSide: const BorderSide(
-                  color: ThemeApp.textFieldBorderColor, width: 1)),
+                  color: ThemeApp.separatedLineColor, width: 1)),
           errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(5),
               borderSide: const BorderSide(color: ThemeApp.redColor, width: 1)),
           enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(5),
               borderSide: const BorderSide(
-                  color: ThemeApp.textFieldBorderColor, width: 1)),
+                  color: ThemeApp.separatedLineColor, width: 1)),
         ),
-        onChanged: (phone) {
-          print(phone.completeNumber);
-        },
+        validator: widget.validator,
+        // onChanged: (phone) {   print(phone.completeNumber);
+        //   if (phone.countryCode == "IN") {
+        //     print("india selected");
+        //     print(phone.completeNumber);
+        //   } else {
+        //     print("india not selected");
+        //   }
+        // },
+        onChanged: widget.onChanged,
         onCountryChanged: (country) {
           print('Country changed to: ' + country.name);
+          print('Country changed to: ' + country.dialCode);
+          print('Country changed to: ' + country.dialCode);
         },
       ),
     );
   }
 }
+// class MobileNumberTextFormField extends StatefulWidget {
+//   TextEditingController controller;
+//   bool enable = true;
+//
+//   MobileNumberTextFormField(
+//       {Key? key, required this.controller,  })
+//       : super(key: key);
+//
+//   @override
+//   State<MobileNumberTextFormField> createState() =>
+//       _MobileNumberTextFormFieldState();
+// }
+//
+// class _MobileNumberTextFormFieldState extends State<MobileNumberTextFormField> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+//       child: IntlPhoneField(
+//         dropdownIconPosition: IconPosition.trailing,
+//         // showCountryFlag: false,
+//         enabled: true,
+//         controller: widget.controller,
+//         flagsButtonPadding: EdgeInsets.only(
+//           left: 20,
+//         ),
+//         dropdownDecoration: const BoxDecoration(
+//             border: Border(
+//               right: BorderSide(
+//                 //                   <--- left side
+//                   color: ThemeApp.textFieldBorderColor,
+//                   width: 1),
+//             )),
+//         initialCountryCode: "IN",
+//         inputFormatters: [
+//           FilteringTextInputFormatter.digitsOnly,
+//           LengthLimitingTextInputFormatter(10),
+//         ],
+//         style: TextStyle(color: ThemeApp.darkGreyColor),
+//         decoration: InputDecoration(
+//           hintText: 'Do not enter country code',
+//           counterText: "",
+//           suffixIconConstraints: BoxConstraints(
+//               maxWidth: MediaQuery.of(context).size.width * .3,
+//               minWidth: MediaQuery.of(context).size.width * .3),
+//           filled: true,
+//           prefix: const Padding(
+//             padding: EdgeInsets.fromLTRB(0, 0, 10.0, 0),
+//           ),
+//           fillColor: Colors.white,
+//           hintStyle: TextStyle(
+//               color: Colors.grey,
+//               fontSize: MediaQuery.of(context).size.height * 0.015),
+//           errorStyle: TextStyle(
+//               color: ThemeApp.redColor,
+//               fontSize: MediaQuery.of(context).size.height * 0.020),
+//           contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+//           border: OutlineInputBorder(
+//               borderRadius: BorderRadius.circular(10),
+//               borderSide: const BorderSide(
+//                 color: ThemeApp.textFieldBorderColor,
+//               )),
+//           focusedBorder: OutlineInputBorder(
+//               borderRadius: BorderRadius.circular(10),
+//               borderSide: const BorderSide(
+//                   color: ThemeApp.textFieldBorderColor, width: 1)),
+//           disabledBorder: OutlineInputBorder(
+//               borderRadius: BorderRadius.circular(10),
+//               borderSide: const BorderSide(
+//                   color: ThemeApp.textFieldBorderColor, width: 1)),
+//           errorBorder: OutlineInputBorder(
+//               borderRadius: BorderRadius.circular(10),
+//               borderSide: const BorderSide(color: ThemeApp.redColor, width: 1)),
+//           enabledBorder: OutlineInputBorder(
+//               borderRadius: BorderRadius.circular(10),
+//               borderSide: const BorderSide(
+//                   color: ThemeApp.textFieldBorderColor, width: 1)),
+//         ),
+//         onChanged: (phone) {
+//           print(phone.completeNumber);
+//         },
+//         onCountryChanged: (country) {
+//           print('Country changed to: ' + country.name);
+//         },
+//       ),
+//     );
+//   }
+// }
 
 class CardNumberTextFormFieldsWidget extends StatefulWidget {
   TextEditingController controller;
@@ -719,7 +979,7 @@ class TextFieldUtils {
             TextSpan(
               text: text,
               style:TextStyle(
-                  fontSize: MediaQuery.of(context).size.height * .021,
+                  fontSize: 14,
                   fontWeight: FontWeight.w400,
                 overflow: TextOverflow.ellipsis,
                   ),

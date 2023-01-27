@@ -64,7 +64,7 @@ class _OrderDeliveryScreenState extends State<OrderDeliveryScreen> {
         .width;
 
     return Scaffold(
-      backgroundColor: ThemeApp.appBackgrounColor,
+      backgroundColor: ThemeApp.appBackgroundColor,
       key: scaffoldGlobalKey,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(height * .09),
@@ -570,7 +570,7 @@ class _OrderDeliveryScreenState extends State<OrderDeliveryScreen> {
               controller: controller,
               hideCharacter: true,
               highlight: false,
-              defaultBorderColor: ThemeApp.appBackgrounColor,
+              defaultBorderColor: ThemeApp.appBackgroundColor,
               hasTextBorderColor:
               controller.text.length <= 5 ? Colors.red : ThemeApp.appColor,
 
@@ -721,7 +721,7 @@ class OrderCompletedSuccessful extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ThemeApp.appBackgrounColor,
+      backgroundColor: ThemeApp.appBackgroundColor,
       body: SafeArea(
         child: Container(
           width: MediaQuery

@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/otp_field_style.dart';
+import 'package:otp_text_field/style.dart';
 import 'package:provider/provider.dart';
 import 'package:velocit_merchant/utils/GlobalWidgets/proceedButtons.dart';
 import '../../../utils/constants.dart';
@@ -13,8 +15,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../utils/GlobalWidgets/appBar.dart';
 import '../../utils/GlobalWidgets/textFormFields.dart';
 import 'Order_delivery_screen.dart';
-import 'package:otp_text_field/otp_field.dart';
-import 'package:otp_text_field/style.dart';
+
 
 class OrderReviewSubActivity extends StatefulWidget {
   OrderReviewSubActivity({Key? key, required this.order}) : super(key: key);
@@ -60,7 +61,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
     width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: ThemeApp.appBackgrounColor,
+      backgroundColor: ThemeApp.appBackgroundColor,
       key: scaffoldGlobalKey,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(height * .09),
@@ -110,7 +111,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
             ),
       body: SafeArea(
           child: Container(
-        color: ThemeApp.appBackgrounColor,
+        color: ThemeApp.appBackgroundColor,
         width: width,
         child: ListView(
             // mainAxisAlignment: MainAxisAlignment.start,

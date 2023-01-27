@@ -41,7 +41,7 @@ class _CancelOrderScreenState extends State<CancelOrderScreen> {
     width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: ThemeApp.appBackgrounColor,
+      backgroundColor: ThemeApp.appBackgroundColor,
       key: scaffoldGlobalKey,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(height * .09),
@@ -50,7 +50,7 @@ class _CancelOrderScreenState extends State<CancelOrderScreen> {
       ),
       body: SafeArea(
           child: Container(
-        color: ThemeApp.appBackgrounColor,
+        color: ThemeApp.appBackgroundColor,
         width: width,
         child: ListView(
             // mainAxisAlignment: MainAxisAlignment.start,

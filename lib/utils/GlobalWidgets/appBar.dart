@@ -42,17 +42,17 @@ Widget appBarWidget(
       children: [
         Container(
           width: MediaQuery.of(context).size.width,
-          color: ThemeApp.appBackgrounColor,
+          color: ThemeApp.appBackgroundColor,
           child: AppBar(
             centerTitle: true,
             // elevation: 1,
-            shadowColor:ThemeApp.appBackgrounColor ,
-            backgroundColor: ThemeApp.appBackgrounColor,
+            shadowColor:ThemeApp.appBackgroundColor ,
+            backgroundColor: ThemeApp.appBackgroundColor,
             flexibleSpace: Container(
               height: height * .08,
               width: width,
               decoration: const BoxDecoration(
-                color: ThemeApp.appBackgrounColor,
+                color: ThemeApp.appBackgroundColor,
               ),
             ),
             leading: InkWell(
@@ -115,16 +115,16 @@ Widget appBar_backWidget(
     children: [
       Container(
         width: MediaQuery.of(context).size.width,
-        color: ThemeApp.appBackgrounColor,
+        color: ThemeApp.appBackgroundColor,
         child: AppBar(
           centerTitle: false,
           elevation: 0,
-          backgroundColor: ThemeApp.appBackgrounColor,
+          backgroundColor: ThemeApp.appBackgroundColor,
           flexibleSpace: Container(
             height: height * .08,
             width: width,
             decoration: const BoxDecoration(
-              color: ThemeApp.appBackgrounColor,
+              color: ThemeApp.appBackgroundColor,
               borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(15),
                   bottomRight: Radius.circular(15)),

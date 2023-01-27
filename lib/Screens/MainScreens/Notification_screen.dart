@@ -32,7 +32,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-        backgroundColor: ThemeApp.appBackgrounColor,
+        backgroundColor: ThemeApp.appBackgroundColor,
         key: scaffoldGlobalKey,
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(height * .09),

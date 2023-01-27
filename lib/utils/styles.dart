@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class ThemeApp {
   static const appColor =  Color(0xff00A7BF);
-  static const appBackgrounColor =  Color(0xffE3FCFF);
+  static const appBackgroundColor =  Color(0xffE3FCFF);
   static const innerBoxesColor =  Color(0xffCFF9FF);
   static const primaryNavyBlackColor =  Color(0xff0C1A30);
   static const subIconColor =  Color(0xff79757F);
@@ -14,6 +14,7 @@ class ThemeApp {
   static const packedButtonColor =  Color(0xff0DCCF0);
   static const activeOrderColor =  Color(0xff34C759);
   static const shippedOrderColor =  Color(0xffF59B40);
+  static const separatedLineColor =  Color(0xffD9D9D9);
 
 
   static const textFieldBorderColor = const Color.fromRGBO(199, 195, 195, 1);

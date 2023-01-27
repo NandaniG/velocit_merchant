@@ -10,10 +10,27 @@ class StringConstant {
 
   static String apiMerchantBasket_findby_merchant = '/merchantbasket/findby_merchant';
 
+//login users
+  static String loginUserName = '';
+  static String loginUserEmail = '';
 
+
+
+  static String CurrentPinCode = '';
+  static String FINALPINCODE = '';
+
+  static int isUserLoggedIn = 0;
+  static String UserLoginId = '';
+  static String RandomUserLoginId = '';
+  static String UserCartID = '';
+  static String BadgeCounterValue = '';
+  static String ScannedProductId = '';
+  static String ProfilePhoto = '';
 
   static String placesFromCurrentLocation = '';
   static bool isLogIn = false;
+  static String isUserNavigateFromDetailScreen = '';
+
   static bool IsActiveOrderList = true;
   static String testId = '';
   static String addressFromCurrentLocation = 'Maninagar BRTS stand, Punit Maharaj Road, Maninagar, Ahmedabad, Gujarat, India - 380021';
@@ -103,22 +120,37 @@ class StringConstant {
   static String budgetBuys = 'Budget Buys';
 
   ///auth Strings
-  static String signin = 'Sign In';
-  static String signinSubTitle =
-      'Provide below details to continue your shopping';
-  static String usingPass = "Using Password";
-  static String usingOTP = "Using OTP";
-  static String emailORMobile = "Email Address / Mobile Number";
-  static String password = 'Password';
-  static String email = 'Email';
+  // static String signin = 'Sign In';
+  // static String signinSubTitle =
+  //     'Provide below details to continue your shopping';
+  // static String usingPass = "Using Password";
+  // static String usingOTP = "Using OTP";
+  // static String emailORMobile = "Email Address / Mobile Number";
+  // static String password = 'Password';
+  // static String email = 'Email';
 
   //error text
   static String emailError = 'please enter email';
-  static String passwordError = 'please enter password';
-  static String validEmailError = 'Please enter a valid email or phone number.';
-  static String validPasswordError = 'Please enter a valid password.';
-  static String forgotPassword = 'Forgot Password?';
-  static String sendOtp = 'Send OTP';
+
+
+
+  static String mobileError = "Mobile field cannot be blank.";
+  static String passwordError = "Password field cannot be blank.";
+  static String confirmPasswordError = "Confirm Password field cannot be blank.";
+  static String validEmailError = "Please enter a valid email.";
+  static String validUserNameError = "Please enter a valid name.";
+  static String validemailORMobileError = "Please enter a valid email or mobile.";
+  static String validPasswordError = "Please enter a valid password.";
+  static String validConfirmPasswordError = "Please enter a valid confirm password.";
+  static String forgotPassword = "Forgot Password?";
+  static String sendOtp = "Send OTP";
+  static String verification = "Verification";
+  static String emailORMobile = "Email Address / Mobile Number";
+  static String emailORMobileHint = "Email / Mobile";
+
+  static String password = "Password";  static String signin = "Sign In";  static String setOtp = 'setOtpPref';
+
+
 
   ///validations
   String emailRegExp =
@@ -151,11 +183,11 @@ class StringConstant {
   static JsonDecoder decoder = JsonDecoder();
   static JsonEncoder encoder = JsonEncoder.withIndent('  ');
 
-  static void prettyPrintJson(String input) {
+  static void prettyPrintJson(String input,String apiName) {
     var object = decoder.convert(input);
     var prettyString = encoder.convert(object);
     print(
-        "_______________________________Json Printer_______________________________________");
+        "________________________________${apiName}____________________________________");
 
     prettyString.split('\n').forEach((element) {
       print(element);

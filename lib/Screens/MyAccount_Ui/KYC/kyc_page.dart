@@ -41,7 +41,7 @@ class _KYCActivityState extends State<KYCActivity> {
         return Future.value(true);
       },
       child: Scaffold(
-        backgroundColor: ThemeApp.appBackgrounColor,
+        backgroundColor: ThemeApp.appBackgroundColor,
         key: scaffoldGlobalKey,
    appBar: PreferredSize(
       preferredSize: Size.fromHeight(height * .09),
@@ -64,7 +64,7 @@ class _KYCActivityState extends State<KYCActivity> {
         // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         body: SafeArea(
           child:Container(
-              color: ThemeApp.appBackgrounColor,
+              color: ThemeApp.appBackgroundColor,
               width: width,
               margin: EdgeInsets.only(left: 10,right: 10),
               child: Column(

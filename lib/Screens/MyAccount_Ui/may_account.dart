@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:velocit_merchant/Screens/Auth_Screens/sign_in.dart';
 import 'package:velocit_merchant/Screens/MyAccount_Ui/KYC/kyc_page.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/styles.dart';
@@ -41,7 +42,7 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
         return Future.value(true);
       },
       child: Scaffold(
-        backgroundColor: ThemeApp.appBackgrounColor,
+        backgroundColor: ThemeApp.appBackgroundColor,
         key: scaffoldGlobalKey,
    appBar: PreferredSize(
       preferredSize: Size.fromHeight(height * .09),
@@ -52,7 +53,7 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         body: SafeArea(
           child:Container(
-              color: ThemeApp.appBackgrounColor,
+              color: ThemeApp.appBackgroundColor,
               width: width,
               child: Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20,top: 0),
@@ -167,7 +168,7 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
                                           width: 50.0,
                                           height: 50.0,
                                           decoration: new BoxDecoration(
-                                              shape: BoxShape.circle,color: ThemeApp.appBackgrounColor
+                                              shape: BoxShape.circle,color: ThemeApp.appBackgroundColor
                                              /* image: new DecorationImage(
                                                   fit: BoxFit.fill,
                                                   image: new AssetImage(
@@ -226,7 +227,7 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
                                           width: 50.0,
                                           height: 50.0,
                                           decoration: new BoxDecoration(
-                                              shape: BoxShape.circle,color: ThemeApp.appBackgrounColor
+                                              shape: BoxShape.circle,color: ThemeApp.appBackgroundColor
                                             /* image: new DecorationImage(
                                                   fit: BoxFit.fill,
                                                   image: new AssetImage(
@@ -261,12 +262,12 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  // Navigator.of(context).push(
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) =>
-                                  //     const MyOrdersActivity(),
-                                  //   ),
-                                  // );
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                       SignIn_Screen(),
+                                    ),
+                                  );
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(10),
@@ -276,7 +277,7 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
                                           width: 50.0,
                                           height: 50.0,
                                           decoration: new BoxDecoration(
-                                              shape: BoxShape.circle,color: ThemeApp.appBackgrounColor
+                                              shape: BoxShape.circle,color: ThemeApp.appBackgroundColor
                                             /* image: new DecorationImage(
                                                   fit: BoxFit.fill,
                                                   image: new AssetImage(

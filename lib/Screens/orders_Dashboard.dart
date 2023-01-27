@@ -58,7 +58,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
     width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: ThemeApp.appBackgrounColor,
+      backgroundColor: ThemeApp.appBackgroundColor,
       key: scaffoldGlobalKey,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(height * .19),
@@ -137,7 +137,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: SafeArea(
         child: Container(
-          color: ThemeApp.appBackgrounColor,
+          color: ThemeApp.appBackgroundColor,
           width: width,
           height: MediaQuery.of(context).size.height,
           child: Padding(

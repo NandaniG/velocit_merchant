@@ -101,10 +101,14 @@ class _SplashScreenState extends State<SplashScreen> {
     return Container(
       height: 500,
       color: Colors.white,
-      child: Image.asset(
+      child: SizedBox(
+        height: 120,
+        width: 100,
+        child: Image.asset(
         'assets/images/VelocIT_Icon_512.png',
         height: 120,
         width: 100,
+      ),
       ),
     );
   }

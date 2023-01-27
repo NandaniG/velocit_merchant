@@ -27,7 +27,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
   bool viewMore = false;
   var data;
   bool isNewNotifications = false;
-  bool isActiveOrders = false;
+  bool isActiveOrders = true;
   bool isLogIn = StringConstant.isLogIn;
 
   @override
@@ -35,7 +35,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
     // TODO: implement initState
     viewMore = false;
     isNewNotifications = true;
-    isActiveOrders = false;
+    isActiveOrders = true;
     data = Provider.of<HomeProvider>(context, listen: false).loadJson();
     super.initState();
     setPram();
@@ -63,7 +63,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(height * .19),
         child: Container(
-          height: height * .19,
+          height: height * .22,
           child: Column(
             children: [
               appBarWidget(
@@ -81,7 +81,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                           onTap: () {
                             setState(() {
                               isActiveOrders = true;
-                              isActiveOrders = !isActiveOrders;
+                              // isActiveOrders = !isActiveOrders;
                               // email.clear();
                               // _usingPassVisible==true ? _validateEmail = true:_validateEmail=false;
                             });
@@ -90,15 +90,15 @@ class _OrderDashboardState extends State<OrderDashboard> {
                               height: height - 10,
                               decoration: BoxDecoration(
                                 color: isActiveOrders
-                                    ? ThemeApp.whiteColor
-                                    : ThemeApp.appColor,
+                                    ? ThemeApp.appColor
+                                    : ThemeApp.whiteColor,
                               ),
                               child: Center(
                                 child: TextFieldUtils().usingPassTextFields(
                                     'Active Orders',
                                     isActiveOrders
-                                        ? ThemeApp.blackColor
-                                        : ThemeApp.whiteColor,
+                                        ? ThemeApp.whiteColor
+                                        : ThemeApp.blackColor,
                                     context),
                               ))),
                     ),
@@ -113,14 +113,14 @@ class _OrderDashboardState extends State<OrderDashboard> {
                           child: Container(
                               height: height - 10,
                               decoration: BoxDecoration(
-                                color: isActiveOrders
+                                color: !isActiveOrders
                                     ? ThemeApp.appColor
                                     : ThemeApp.whiteColor,
                               ),
                               child: Center(
                                 child: TextFieldUtils().usingPassTextFields(
                                     "Past Orders",
-                                    isActiveOrders
+                                    !isActiveOrders
                                         ? ThemeApp.whiteColor
                                         : ThemeApp.blackColor,
                                     context),
@@ -153,7 +153,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
       return (value.jsonData.isNotEmpty && value.jsonData['error'] == null)
           ? Stack(
               children: [
-                isActiveOrders != true
+                isActiveOrders == true
                     ? Column(
                         children: [
                           SizedBox(height: 5,),
@@ -441,7 +441,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
             ),
             style: TextStyle(
                 color: ThemeApp.lightFontColor,
-                fontSize: height * .02,
+                fontSize: 12,
                 fontWeight: FontWeight.w400,
                 overflow: TextOverflow.ellipsis),
 
@@ -459,7 +459,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                     context,
                     TextStyle(
                         color: ThemeApp.lightFontColor,
-                        fontSize: height * .02,
+                        fontSize: 12,
                         fontWeight: FontWeight.w400,
                         overflow: TextOverflow.ellipsis)),
               );
@@ -484,8 +484,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                 itemCount: value.jsonData['payload']['merchant_baskets'].length,
                 itemBuilder: (_, index) {
                   List orderList = value
-                      .jsonData['payload']['merchant_baskets'].values
-                      .toList();
+                      .jsonData['payload']['merchant_baskets'];
                   Map order = orderList[index];
                   DateFormat format = DateFormat('dd MMM yyyy hh:mm aaa');
                   DateTime date =
@@ -561,7 +560,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           TextFieldUtils().dynamicText(
-                                              order['id'].toString(),
+                                             'Order ID - ' + order['id'].toString(),
                                               context,
                                               TextStyle(
                                                 color: ThemeApp
@@ -624,9 +623,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                           itemBuilder:
                                               (context, indexOrderDetails) {
                                             indexForItems = indexOrderDetails;
-                                            Map subOrders = (order['orders']
-                                                .values
-                                                .toList())[indexForItems];
+                                            Map subOrders = order['orders'][indexForItems];
                                             return Container(
                                                 child: Row(
                                               mainAxisAlignment:

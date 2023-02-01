@@ -12,7 +12,7 @@ import 'package:velocit_merchant/utils/GlobalWidgets/textFormFields.dart';
 
 import '../../Screens/MainScreens/Stock_screen.dart';
 import '../../Screens/MainScreens/report_screen.dart';
-import '../../Screens/MyAccount_Ui/may_account.dart';
+import '../../Screens/MyAccount_Ui/my_account.dart';
 import '../../utils/constants.dart';
 import '../../utils/styles.dart';
 import 'package:speech_to_text/speech_to_text.dart' as speechToText;

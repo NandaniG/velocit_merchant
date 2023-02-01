@@ -79,9 +79,9 @@ bool isOutOfStock = false;
                                           MainAxisAlignment.center,
                                           children: [
                                             TextFieldUtils().dynamicText(
-                                                value.budgetBuyList[
+                                                value.budgetBuyList?[
                                                 index][
-                                                "budgetBuyDescription"]!,
+                                                "budgetBuyDescription"] ?? "",
                                                 context,
                                                 TextStyle(
                                                     color:
@@ -117,9 +117,9 @@ bool isOutOfStock = false;
                                             scale: 1.3,
                                             child: Switch(
                                               // This bool value toggles the switch.
-                                              value:  value.budgetBuyList[
+                                              value:  value.budgetBuyList?[
                                               index][
-                                              "isActive"]!,
+                                              "isActive"] ?? false,
                                               activeColor: ThemeApp.greenappcolor,
                                               inactiveTrackColor: ThemeApp.redColor,
 

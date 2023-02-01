@@ -159,7 +159,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                           SizedBox(height: 5,),
                           dropdownShow(),
                           SizedBox(
-                            height: height * .02,
+                            height: 20,
                           ),
                           StringConstant.isLogIn
                               ? Container()
@@ -342,7 +342,8 @@ class _OrderDashboardState extends State<OrderDashboard> {
           decoration: BoxDecoration(
             color: ThemeApp.whiteColor, //<-- SEE HERE
           ),
-          width: MediaQuery.of(context).size.width * .51,
+          width: MediaQuery.of(context).size.width * 0.4,
+          // MediaQuery.of(context).size.width * .51,
           // height: 35,
           child: DropdownButtonFormField(
             decoration: InputDecoration(
@@ -364,7 +365,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
             ),
             style: TextStyle(
                 color: ThemeApp.lightFontColor,
-                fontSize: height * .02,
+                fontSize: 12,
                 fontWeight: FontWeight.w400,
                 overflow: TextOverflow.ellipsis),
 
@@ -382,7 +383,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                     context,
                     TextStyle(
                         color: ThemeApp.lightFontColor,
-                        fontSize: height * .02,
+                        fontSize: 12,
                         fontWeight: FontWeight.w400,
                         overflow: TextOverflow.ellipsis)),
               );
@@ -481,14 +482,14 @@ class _OrderDashboardState extends State<OrderDashboard> {
     return (value.jsonData.length > 0 && value.jsonData['status'] == 'OK')
         ? Expanded(
             child: ListView.builder(
-                itemCount: value.jsonData['payload']['merchant_baskets'].length,
+                itemCount: value.jsonData['payload'].length,
                 itemBuilder: (_, index) {
                   List orderList = value
-                      .jsonData['payload']['merchant_baskets'];
+                      .jsonData['payload'];
                   Map order = orderList[index];
                   DateFormat format = DateFormat('dd MMM yyyy hh:mm aaa');
                   DateTime date =
-                      DateTime.parse(order['earliest_delivery_date']);
+                      DateTime.parse((order['earliest_delivery_date'] ?? DateTime.now().toString()));
                   var earliest_delivery_date = format.format(date);
                   Color colorsStatus = ThemeApp.appColor;
                   if (order["overall_status"] == "Acceptance Pending") {
@@ -605,7 +606,11 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                       child: FittedBox(
                                         child: Image(
                                           image: NetworkImage(
-                                              order['image_url'] ?? ''),
+                                              order['image_url'] ?? '',
+                                              ),
+                                              errorBuilder: (context, error, stackTrace) {
+                                                return Icon(Icons.error);
+                                              },
                                           fit: BoxFit.fill,
                                           height: 50,
                                           width: 50,

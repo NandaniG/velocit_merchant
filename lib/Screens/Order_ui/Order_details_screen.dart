@@ -134,7 +134,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                               fontFamily: 'Roboto',
                               fontWeight: FontWeight.w400),
                         ),
-                        Text(widget.order['overall_status'],
+                        Text(widget.order['overall_status'] ?? "",
                             style: TextStyle(
                                 color: ThemeApp.primaryNavyBlackColor,
                                 fontSize: 12,
@@ -194,7 +194,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                             height: height * .02,
                           ),
                           TextFieldUtils().dynamicText(
-                              widget.order["customer_name"],
+                              widget.order["customer_name"] ?? "",
                               context,
                               TextStyle(
                                   color: ThemeApp.primaryNavyBlackColor,
@@ -604,7 +604,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
             children: [
               TextFieldUtils().titleTextFields("Total Amount", context),
               TextFieldUtils().titleTextFields(
-                  "${indianRupeesFormat.format(widget.order['total_payable'])} ",
+                  "${indianRupeesFormat.format(widget.order['total_payable'] ?? 0)} ",
                   context),
             ],
           ),

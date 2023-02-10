@@ -10,6 +10,7 @@ import 'package:velocit_merchant/Screens/Auth_Screens/sign_in.dart';
 import 'package:velocit_merchant/Screens/orders_Dashboard.dart';
 import 'package:velocit_merchant/utils/constants.dart';
 
+import 'Routes/Routes.dart';
 import 'Screens/Auth_Screens/forgot_password.dart';
 import 'Services/Provider/Home_Provider.dart';
 import 'l10n/l10n.dart';
@@ -58,7 +59,9 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               primarySwatch: Colors.blue,
             ),
-            initialRoute: '/',
+            // initialRoute: '/',
+             initialRoute: RoutesName.splashScreenRoute,
+             onGenerateRoute: Routes.generateRoute,
             routes: {
               "/":(context)=>SplashScreen(),
               // "/":(context)=>OrderDashboard(),
@@ -98,17 +101,43 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 500,
-      color: Colors.white,
-      child: SizedBox(
-        height: 120,
-        width: 100,
-        child: Image.asset(
-        'assets/images/VelocIT_Icon_512.png',
-        height: 120,
-        width: 100,
-      ),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: FractionalOffset.topCenter,
+              end: FractionalOffset.bottomCenter,
+              // end: Alignment(0.8, 1),
+              colors: <Color>[
+                Color(0xff95EAF1),
+                Color(0xff75E4ED),
+                Color(0xff02D3E3),
+                Color(0xff00A7BF),
+                Color(0xff007896),
+                // Color(0xff3AA17E),
+                // Color(0xff3AA17E),
+              ],
+              // Gradient from https://learnui.design/tools/gradient-generator.html
+              tileMode: TileMode.mirror,
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Center(
+                child: Image.asset(
+                  'assets/appImages/splashScreen.png',
+                  alignment: Alignment.center,
+                  height: 173,
+                  width: 253,
+                  // height: 300,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

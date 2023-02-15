@@ -86,7 +86,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ),
             Expanded(
                 child: ListView.builder(
-                    itemCount: value.notificationDataList.length,
+                    itemCount: value.notificationDataList?.length ?? 0,
                     itemBuilder: (_, index) {
                       return value.notificationDataList[index]
                       ["isOffersOnlyNotification"]==true? InkWell(
@@ -180,7 +180,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ),
             Expanded(
                 child: ListView.builder(
-                    itemCount: value.notificationDataList.length,
+                    itemCount: value.notificationDataList?.length ?? 0,
                     itemBuilder: (_, index) {
                       return value.notificationDataList[index]["isOffersOnlyNotification"]==false? InkWell(
 

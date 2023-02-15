@@ -74,7 +74,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
           ? Container(
               height: 0,
             )
-          : Container(
+          : SafeArea(child: Container(
               height: 45,
               child: Row(
                 children: [
@@ -108,7 +108,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                   ))
                 ],
               ),
-            ),
+            )),
       body: SafeArea(
           child: Container(
         color: ThemeApp.appBackgroundColor,

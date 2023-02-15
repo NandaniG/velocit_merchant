@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:velocit_merchant/Screens/MainScreens/Notification_screen.dart';
+import 'package:velocit_merchant/Screens/MainScreens/raise_view_tickets.dart';
 import 'package:velocit_merchant/Screens/orders_Dashboard.dart';
 import 'package:velocit_merchant/utils/GlobalWidgets/proceedButtons.dart';
 import 'package:velocit_merchant/utils/GlobalWidgets/textFormFields.dart';
@@ -162,8 +163,9 @@ Widget appTitle(BuildContext context, String text) {
         context,
         const TextStyle(
             color: ThemeApp.blackColor,
-            fontSize: 22,
-            fontWeight: FontWeight.w500)),
+            fontSize: 16,
+            fontFamily: "Roboto",
+            fontWeight: FontWeight.w400)),
   );
 }
 
@@ -359,6 +361,13 @@ Widget bottomNavBarItems(BuildContext context) {
                 (route) => false);
       }
       if (_currentIndex == 3) {
+
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const TicketsPageActivity(),
+            ),
+                (route) => false);
         // Navigator.pushAndRemoveUntil(
         //     context,
         //     MaterialPageRoute(

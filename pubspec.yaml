@@ -60,6 +60,8 @@ dependencies:
   flutter_svg: ^1.1.6
   url_launcher: ^6.1.7
   flutter_barcode_scanner: ^2.0.0
+  expansion_widget: ^0.0.3
+  dropdown_button2: ^1.9.2
 
 dev_dependencies:
   flutter_test:

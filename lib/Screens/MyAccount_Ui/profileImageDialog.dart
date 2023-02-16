@@ -14,7 +14,6 @@ import '../../../../utils/styles.dart';
 import '../../../../utils/utils.dart';
 import '../../utils/GlobalWidgets/proceedButtons.dart';
 import '../../utils/GlobalWidgets/textFormFields.dart';
-import 'may_account.dart';
 import 'my_account.dart';
 
 class ProfileImageDialogBox extends StatefulWidget {

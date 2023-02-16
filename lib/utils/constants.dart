@@ -7,14 +7,12 @@ class StringConstant {
   static TextEditingController controllerSpeechToText =
       new TextEditingController();
 
-
-  static String apiMerchantBasket_findby_merchant = '/merchantbasket/findby_merchant';
+  static String apiMerchantBasket_findby_merchant =
+      '/merchantbasket/findby_merchant';
 
 //login users
   static String loginUserName = '';
   static String loginUserEmail = '';
-
-
 
   static String CurrentPinCode = '';
   static String FINALPINCODE = '';
@@ -26,6 +24,9 @@ class StringConstant {
   static String BadgeCounterValue = '';
   static String ScannedProductId = '';
   static String ProfilePhoto = '';
+  static String userProfileName = '';
+  static String userProfileEmail = '';
+  static String userProfileMobile = '';
 
   static String placesFromCurrentLocation = '';
   static bool isLogIn = false;
@@ -33,7 +34,8 @@ class StringConstant {
 
   static bool IsActiveOrderList = true;
   static String testId = '';
-  static String addressFromCurrentLocation = 'Maninagar BRTS stand, Punit Maharaj Road, Maninagar, Ahmedabad, Gujarat, India - 380021';
+  static String addressFromCurrentLocation =
+      'Maninagar BRTS stand, Punit Maharaj Road, Maninagar, Ahmedabad, Gujarat, India - 380021';
   static var getCartList_FromPref;
   static String selectedFullName = 'David Wong';
   static String selectedFullNamePref = 'selectedfullNamePref';
@@ -44,7 +46,6 @@ class StringConstant {
   static String selectedMobile = '7898285852';
   static String selectedMobilePref = 'selectedMobilePref';
 
-
   // static String speechToText='';
 //user account pref
 
@@ -53,11 +54,13 @@ class StringConstant {
   static String userAccountMobilePref = 'userAccountMobilePref';
   static String userAccountPassPref = 'userAccountPassPref';
 
-  static String userAccountName = 'use name';
-  static String userAccountEmail = 'test@gmail.com';
-  static String userAccountMobile = '5248632252';
+  static String userAccountName = '';
+  static String userAccountEmail = '';
+  static String userAccountMobile = '';
   static String userAccountPass = '';
 
+  static String userAccountImagePicker = '';
+  static String userAccountImagePickerPref = 'userAccountImagePickerPref';
   //shared preferences
   static String emailPref = 'emailPref';
   static String userNamePref = 'userNamePref';
@@ -132,25 +135,26 @@ class StringConstant {
   //error text
   static String emailError = 'please enter email';
 
-
-
   static String mobileError = "Mobile field cannot be blank.";
   static String passwordError = "Password field cannot be blank.";
-  static String confirmPasswordError = "Confirm Password field cannot be blank.";
+  static String confirmPasswordError =
+      "Confirm Password field cannot be blank.";
   static String validEmailError = "Please enter a valid email.";
   static String validUserNameError = "Please enter a valid name.";
-  static String validemailORMobileError = "Please enter a valid email or mobile.";
+  static String validemailORMobileError =
+      "Please enter a valid email or mobile.";
   static String validPasswordError = "Please enter a valid password.";
-  static String validConfirmPasswordError = "Please enter a valid confirm password.";
+  static String validConfirmPasswordError =
+      "Please enter a valid confirm password.";
   static String forgotPassword = "Forgot Password?";
   static String sendOtp = "Send OTP";
   static String verification = "Verification";
   static String emailORMobile = "Email Address / Mobile Number";
   static String emailORMobileHint = "Email / Mobile";
 
-  static String password = "Password";  static String signin = "Sign In";  static String setOtp = 'setOtpPref';
-
-
+  static String password = "Password";
+  static String signin = "Sign In";
+  static String setOtp = 'setOtpPref';
 
   ///validations
   String emailRegExp =
@@ -164,14 +168,11 @@ class StringConstant {
   //         .hasMatch(input);
 
   //10digit validation
-  bool isPhone(String input) =>
-      RegExp(r"^[0-9]{10}$")
-          .hasMatch(input);
+  bool isPhone(String input) => RegExp(r"^[0-9]{10}$").hasMatch(input);
 
   bool isPass(String input) => RegExp(
           "^(?=.{6,19}\$)(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%^&*(),.?:{}|<>]).*")
       .hasMatch(input);
-
 
   bool isNumeric(String s) {
     if (s == null) {
@@ -183,7 +184,7 @@ class StringConstant {
   static JsonDecoder decoder = JsonDecoder();
   static JsonEncoder encoder = JsonEncoder.withIndent('  ');
 
-  static void prettyPrintJson(String input,String apiName) {
+  static void prettyPrintJson(String input, String apiName) {
     var object = decoder.convert(input);
     var prettyString = encoder.convert(object);
     print(
@@ -193,6 +194,7 @@ class StringConstant {
       print(element);
     });
   }
+
   static void printObject(Object object) {
     // Encode your object and then decode your object to Map variable
     Map jsonMapped = json.decode(json.encode(object));
@@ -206,6 +208,7 @@ class StringConstant {
     // print or debugPrint your object
     debugPrint(prettyPrint);
   }
+
   static var indianRupeesFormat = NumberFormat.currency(
     name: "INR",
     locale: 'en_IN',

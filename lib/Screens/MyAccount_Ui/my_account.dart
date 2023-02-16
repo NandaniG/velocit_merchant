@@ -16,6 +16,7 @@ import '../../../utils/utils.dart';
 import '../../Routes/Routes.dart';
 import '../../utils/GlobalWidgets/appBar.dart';
 import '../../utils/GlobalWidgets/textFormFields.dart';
+import 'EditAccount/EditAccountActivity.dart';
 
 class MyAccountActivity extends StatefulWidget {
   const MyAccountActivity({Key? key}) : super(key: key);
@@ -34,6 +35,36 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    getPreference();
+  }
+
+  getPreference() async {
+    StringConstant.userAccountName =
+        (await Prefs.instance.getToken(StringConstant.userAccountNamePref))!;
+    StringConstant.userAccountEmail =
+        (await Prefs.instance.getToken(StringConstant.userAccountEmailPref))!;
+    StringConstant.userAccountMobile =
+        (await Prefs.instance.getToken(StringConstant.userAccountMobilePref))!;
+    StringConstant.userAccountPass =
+        (await Prefs.instance.getToken(StringConstant.userAccountPassPref))!;
+    print(StringConstant.userAccountName);
+
+    StringConstant.userAccountImagePicker = (await Prefs.instance
+        .getToken(StringConstant.userAccountImagePickerPref))!;
+
+    print("StringConstant.userAccountImagePicker");
+    print(StringConstant.userAccountImagePicker);
+    setState(() {});
+
+    final prefs = await SharedPreferences.getInstance();
+    bool check = prefs.containsKey('profileImagePrefs');
+    if (check) {
+      setState(() {
+        print("yes/./././.");
+        StringConstant.ProfilePhoto = prefs.getString('profileImagePrefs')!;
+      });
+      return;
+    }
   }
 
   @override
@@ -304,146 +335,12 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
                                   ),
                                 ],
                               ),
-                        /*        Center(
-                            child: Container(
-                              width: 100.0,
-                              height: 100.0,
-                              decoration: new BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: ThemeApp.appBackgroundColor,
-                                      spreadRadius: 1,
-                                      blurRadius: 20)
-                                ],
-                                border: Border.all(
-                                    color: ThemeApp.whiteColor, width: 7),
-                                shape: BoxShape.circle,
-                                */ /*   image: new DecorationImage(
-                                            fit: BoxFit.fill,
-                                            image: new AssetImage(
-                                              'assets/images/laptopImage.jpg',
-                                            ))*/ /*
-                              ),
-                              child: ClipRRect(
-                                  borderRadius:
-                                  const BorderRadius.all(
-                                      Radius.circular(100)),
-                                  child: Image.file(
-                                    File(StringConstant
-                                        .ProfilePhoto ??
-                                        ""),
-                                    fit: BoxFit.fill,
-                                    width: 100.0,
-                                    height: 100.0,
-                                    errorBuilder: (context, error,
-                                        stackTrace) {
-                                      return Icon(
-                                        Icons.image,
-                                        color:
-                                        ThemeApp.whiteColor,
-                                      );
-                                    },
-                                  ) ??
-                                      Container()) ??
-                                  SizedBox(),
-                            ),
-                          ),*/
-                        //with edit icon
-                        /*      Stack(
-                            // alignment: Alignment.center,
-                            children: [
-                              Center(
-                                child: Container(
-                                  width: 100.0,
-                                  height: 100.0,
-                                  decoration: new BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: ThemeApp.appBackgroundColor,
-                                          spreadRadius: 1,
-                                          blurRadius: 20)
-                                    ],
-                                    border: Border.all(
-                                        color: ThemeApp.whiteColor, width: 7),
-                                    shape: BoxShape.circle,
-                                    */ /*   image: new DecorationImage(
-                                            fit: BoxFit.fill,
-                                            image: new AssetImage(
-                                              'assets/images/laptopImage.jpg',
-                                            ))*/ /*
-                                  ),
-                                  child: ClipRRect(
-                                          borderRadius:
-                                              const BorderRadius.all(
-                                                  Radius.circular(100)),
-                                          child: Image.file(
-                                                File(StringConstant
-                                                        .ProfilePhoto ??
-                                                    ""),
-                                                fit: BoxFit.fill,
-                                                width: 100.0,
-                                                height: 100.0,
-                                                errorBuilder: (context, error,
-                                                    stackTrace) {
-                                                  return Icon(
-                                                    Icons.image,
-                                                    color:
-                                                        ThemeApp.whiteColor,
-                                                  );
-                                                },
-                                              ) ??
-                                              Container()) ??
-                                      SizedBox(),
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 0, right: 160,
-                                // width: 130.0,
-
-                                // height: 40.0,
-                                child: InkWell(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const EditAccountActivity(),
-                                        ),
-                                      );
-                                    },
-                                    child: Container(
-                                      height: 32,
-                                      width: 32,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                          color: ThemeApp.appColor),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(7),
-                                        child: SvgPicture.asset(
-                                          'assets/appImages/editIcon.svg',
-                                          color: ThemeApp.whiteColor,
-                                          semanticsLabel: 'Acme Logo',
-
-                                          // height: height * .03,
-                                        ),
-                                      ),
-                                    ) */ /*; Container(
-                                    // alignment: Alignment.bottomCenter,
-                                    color: ThemeApp.primaryNavyBlackColor,
-                                    alignment: const Alignment(-2, -0.1),
-                                    child: iconsUtils(
-                                        'assets/appImages/editIcon.svg'),
-                                  ),*/ /*
-                                    ),
-                              ),
-                            ],
-                          ),*/
                         SizedBox(
                           height: 20,
                         ),
                         TextFieldUtils().dynamicText(
                             // StringConstant.userAccountName,
-                            StringConstant.loginUserName,
+                            "Name",
                             context,
                             TextStyle(
                                 fontFamily: 'Roboto',
@@ -456,14 +353,14 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
                         ),
                         TextFieldUtils().dynamicText(
                             // StringConstant.userAccountEmail,
-                            StringConstant.loginUserEmail,
+                            "Email",
                             context,
                             TextStyle(
                                 fontFamily: 'Roboto',
-                                color: ThemeApp.lightFontColor,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                                letterSpacing: 0.5)),
+                                color: ThemeApp.blackColor,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16,
+                                letterSpacing: -0.25)),
                       ],
                     ),
                   ),
@@ -484,63 +381,23 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
                       children: [
                         InkWell(
                           onTap: () {
-                            // Navigator.of(context).push(
-                            //   MaterialPageRoute(
-                            //     builder: (context) =>
-                            //     const MyOrdersActivity(),
-                            //   ),
-                            // );
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => KYCActivity(),
+                              ),
+                            );
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(10),
                             child: Row(
                               children: [
-                                Container(
-                                    width: 50.0,
-                                    height: 50.0,
-                                    decoration: new BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: ThemeApp.appBackgroundColor
-                                        /* image: new DecorationImage(
-                                                fit: BoxFit.fill,
-                                                image: new AssetImage(
-                                                  'assets/images/laptopImage.jpg',
-                                                ))*/
-                                        ),
-                                    child: Icon(
-                                      Icons.hide_image_rounded,
-                                    )),
+                                iconsUtils(
+                                    'assets/appImages/KYCIcon.svg', 18.65, 18),
                                 SizedBox(
-                                  width: width * .03,
+                                  width: 10,
                                 ),
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => KYCActivity(),
-                                      ),
-                                    );
-                                  },
-                                  child: TextFieldUtils().dynamicText(
-                                      'KYC',
-                                      context,
-                                      TextStyle(
-                                        color: ThemeApp.blackColor,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: height * .023,
-                                      )),
-                                ),
+                                accountTextList('KYC'),
                               ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: width,
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              top: BorderSide(
-                                  color: ThemeApp.backgroundColor, width: 1),
-                              // bottom: BorderSide(color: Colors.grey, width: 1),
                             ),
                           ),
                         ),
@@ -556,51 +413,24 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
                             padding: const EdgeInsets.all(10),
                             child: Row(
                               children: [
-                                Container(
-                                    width: 50.0,
-                                    height: 50.0,
-                                    decoration: new BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: ThemeApp.appBackgroundColor
-                                        /* image: new DecorationImage(
-                                                fit: BoxFit.fill,
-                                                image: new AssetImage(
-                                                  'assets/images/laptopImage.jpg',
-                                                ))*/
-                                        ),
-                                    child: Icon(
-                                      Icons.hide_image_rounded,
-                                    )),
+                                iconsUtils('assets/appImages/headPhoneIcon.svg',
+                                    18.65, 18),
                                 SizedBox(
-                                  width: width * .03,
+                                  width: 10,
                                 ),
-                                TextFieldUtils().dynamicText(
-                                    'Frequently asked questions',
-                                    context,
-                                    TextStyle(
-                                      color: ThemeApp.blackColor,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: height * .023,
-                                    )),
+                                accountTextList('Frequently asked questions'),
                               ],
                             ),
                           ),
                         ),
-                        Container(
-                          width: width,
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              top: BorderSide(
-                                  color: ThemeApp.backgroundColor, width: 1),
-                              // bottom: BorderSide(color: Colors.grey, width: 1),
-                            ),
-                          ),
-                        ),
                         InkWell(
-                          onTap: () {
+                          onTap: () async {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => SignIn_Screen(),
+                                builder: (context) => EditAccountActivity(
+                                    // payload:
+                                    //     snapshot.data!.payload,
+                                    ),
                               ),
                             );
                           },
@@ -608,36 +438,49 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
                             padding: const EdgeInsets.all(10),
                             child: Row(
                               children: [
-                                Container(
-                                    width: 50.0,
-                                    height: 50.0,
-                                    decoration: new BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: ThemeApp.appBackgroundColor
-                                        /* image: new DecorationImage(
-                                                fit: BoxFit.fill,
-                                                image: new AssetImage(
-                                                  'assets/images/laptopImage.jpg',
-                                                ))*/
-                                        ),
-                                    child: Icon(
-                                      Icons.hide_image_rounded,
-                                    )),
+                                iconsUtils(
+                                    'assets/appImages/settingIcon.svg', 20, 18),
                                 SizedBox(
-                                  width: width * .03,
+                                  width: 10,
                                 ),
-                                TextFieldUtils().dynamicText(
-                                    'Sign out',
-                                    context,
-                                    TextStyle(
-                                      color: ThemeApp.blackColor,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: height * .023,
-                                    )),
+                                accountTextList('Edit profile'),
                               ],
                             ),
                           ),
-                        ),
+                        ), //change password
+
+                        //sign out
+                        InkWell(
+                          onTap: () async {
+                            final prefs = await SharedPreferences.getInstance();
+                            prefs.setInt('isUserLoggedIn', 0);
+                            prefs.setString('RandomUserId', '');
+                            StringConstant.UserLoginId = '';
+                            StringConstant.RandomUserLoginId = '';
+                            StringConstant.UserCartID = '';
+                            StringConstant.BadgeCounterValue = '';
+                            StringConstant.ScannedProductId = '';
+                            final pref = await SharedPreferences.getInstance();
+                            Utils.successToast('You are signed out');
+                            await pref.clear();
+
+                            Navigator.pushReplacementNamed(
+                                context, RoutesName.dashboardRoute);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Row(
+                              children: [
+                                iconsUtils(
+                                    'assets/appImages/signOutIcon.svg', 18, 18),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                accountTextList('Sign Out'),
+                              ],
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -648,22 +491,55 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
     );
   }
 
-  Future _getFromCamera() async {
-    var image = await picker.getImage(source: ImageSource.camera);
-    final prefs = await SharedPreferences.getInstance();
-    // StringConstant.CurrentPinCode = (prefs.getString('CurrentPinCodePref') ?? '');
-    String imagePath = image!.path;
-
-    await prefs.setString('profileImagePrefs', imagePath);
-
-    setState(() {
-      imageFile1 = File(image.path);
-
-      // final   file = File(image!.path);
-      //    final bytes =
-      //    file!.readAsBytesSync();
-      //   final img64 = base64Encode(bytes);
-    });
-    // Navigator.pop(this.context);
+  Widget iconsUtils(String svgIcon, double height, double width) {
+    return Container(
+      height: 32,
+      width: 32,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5), color: ThemeApp.appColor),
+      child: Padding(
+        padding: const EdgeInsets.all(7),
+        child: SvgPicture.asset(
+          svgIcon,
+          color: ThemeApp.whiteColor,
+          semanticsLabel: 'Acme Logo',
+          height: height,
+          width: width,
+          // height: height * .03,
+        ),
+      ),
+    );
   }
+
+  Widget accountTextList(String text) {
+    return TextFieldUtils().dynamicText(
+        text,
+        context,
+        TextStyle(
+            fontFamily: 'Roboto',
+            color: ThemeApp.blackColor,
+            fontWeight: FontWeight.w700,
+            fontSize: 16,
+            letterSpacing: -0.25));
+  }
+
+  // Future _getFromCamera() async {
+  //   var image = await picker.getImage(source: ImageSource.camera);
+  //   final prefs = await SharedPreferences.getInstance();
+  //   // StringConstant.CurrentPinCode = (prefs.getString('CurrentPinCodePref') ?? '');
+  //   String imagePath = image!.path;
+
+  //   await prefs.setString('profileImagePrefs', imagePath);
+
+  //   setState(() {
+  //     imageFile1 = File(image.path);
+
+  //     // final   file = File(image!.path);
+  //     //    final bytes =
+  //     //    file!.readAsBytesSync();
+  //     //   final img64 = base64Encode(bytes);
+  //   });
+  //   // Navigator.pop(this.context);
+  // }
+
 }

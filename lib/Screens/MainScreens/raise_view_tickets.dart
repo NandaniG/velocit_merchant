@@ -66,7 +66,7 @@ class _TicketsPageActivityState extends State<TicketsPageActivity> {
     //   child: Text("Submit Documents",style: TextStyle(fontSize: 16,color: Colors.white),),
     //   ),
     // )),
-        bottomNavigationBar: bottomNavigationBarWidget(context),
+        bottomNavigationBar: bottomNavigationBarWidget(context,3),
         floatingActionButton: InkWell(
           onTap: () {
             Navigator.of(context).push(

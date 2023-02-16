@@ -68,72 +68,118 @@ class _OrderDashboardState extends State<OrderDashboard> {
             children: [
               appBarWidget(
                   context, searchBar(context), SizedBox(), setState(() {})),
+              SizedBox(
+                height: 10,
+              ),
               Container(
-                height: height * .075,
-                // margin: EdgeInsets.only(top: 1),
+                width: 350,
                 decoration: BoxDecoration(
-                    border: Border.all(color: ThemeApp.appColor, width: 1)),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(100),
+                  ),
+                  color: ThemeApp.whiteColor,
+                ),
                 child: Row(
                   children: [
                     Expanded(
                       flex: 1,
                       child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              isActiveOrders = true;
-                              // isActiveOrders = !isActiveOrders;
-                              // email.clear();
-                              // _usingPassVisible==true ? _validateEmail = true:_validateEmail=false;
-                            });
-                          },
-                          child: Container(
-                              height: height - 10,
-                              decoration: BoxDecoration(
-                                color: isActiveOrders
-                                    ? ThemeApp.appColor
-                                    : ThemeApp.whiteColor,
+                        onTap: () {
+                          setState(() {
+                            isActiveOrders = true;
+                            // isActiveOrders = !isActiveOrders;
+                            // email.clear();
+                            // _usingPassVisible==true ? _validateEmail = true:_validateEmail=false;
+                          });
+                        },
+                        child: Container(
+                            padding: const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(100),
                               ),
-                              child: Center(
-                                child: TextFieldUtils().usingPassTextFields(
-                                    'Active Orders',
-                                    isActiveOrders
-                                        ? ThemeApp.whiteColor
-                                        : ThemeApp.blackColor,
-                                    context),
-                              ))),
+                              color: isActiveOrders
+                                  ? ThemeApp.appColor
+                                  : ThemeApp.whiteColor,
+                            ),
+                            child: Center(
+                              child: TextFieldUtils().usingPassTextFields(
+                                  'Active Orders',
+                                  isActiveOrders
+                                      ? ThemeApp.whiteColor
+                                      : ThemeApp.blackColor,
+                                  context),
+                            )),
+                      ),
                     ),
                     Expanded(
                       flex: 1,
                       child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              isActiveOrders = false;
-                            });
-                          },
-                          child: Container(
-                              height: height - 10,
-                              decoration: BoxDecoration(
-                                color: !isActiveOrders
-                                    ? ThemeApp.appColor
-                                    : ThemeApp.whiteColor,
+                        onTap: () {
+                          setState(() {
+                            isActiveOrders = false;
+                            // isActiveOrders = !isActiveOrders;
+                            // email.clear();
+                            // _usingPassVisible==true ? _validateEmail = true:_validateEmail=false;
+                          });
+                        },
+                        child: Container(
+                            padding: const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(100),
                               ),
-                              child: Center(
-                                child: TextFieldUtils().usingPassTextFields(
-                                    "Past Orders",
-                                    !isActiveOrders
-                                        ? ThemeApp.whiteColor
-                                        : ThemeApp.blackColor,
-                                    context),
-                              ))),
+                              color: !isActiveOrders
+                                  ? ThemeApp.appColor
+                                  : ThemeApp.whiteColor,
+                            ),
+                            child: Center(
+                              child: TextFieldUtils().usingPassTextFields(
+                                  'Past Orders',
+                                  !isActiveOrders
+                                      ? ThemeApp.whiteColor
+                                      : ThemeApp.blackColor,
+                                  context),
+                            )),
+                      ),
                     ),
+
+                    // Expanded(
+                    //   flex: 1,
+                    //   child: InkWell(
+                    //       onTap: () {
+                    //         setState(() {
+                    //           isActiveOrders = false;
+                    //         });
+                    //       },
+                    //       child: Container(
+                    //           padding:
+                    //               const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
+                    //           decoration: BoxDecoration(
+                    //             borderRadius: const BorderRadius.all(
+                    //               Radius.circular(100),
+                    //             ),
+                    //             color: !isActiveOrders
+                    //                 ? ThemeApp.appColor
+                    //                 : ThemeApp.whiteColor,
+                    //           ),
+                    //           child: Center(
+                    //             child: TextFieldUtils().usingPassTextFields(
+                    //                 "Past Orders",
+                    //                 !isActiveOrders
+                    //                     ? ThemeApp.whiteColor
+                    //                     : ThemeApp.blackColor,
+                    //                 context),
+                    //           ))),
+                    // ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: bottomNavigationBarWidget(context),
+      bottomNavigationBar: bottomNavigationBarWidget(context, 0),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: SafeArea(
         child: Container(
@@ -141,7 +187,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
           width: width,
           height: MediaQuery.of(context).size.height,
           child: Padding(
-              padding: const EdgeInsets.only(left:10,right: 10),
+              padding: const EdgeInsets.only(left: 10, right: 10),
               child: data == '' ? CircularProgressIndicator() : mainUI()),
         ),
       ),
@@ -156,10 +202,9 @@ class _OrderDashboardState extends State<OrderDashboard> {
                 isActiveOrders == true
                     ? Column(
                         children: [
-                          SizedBox(height: 5,),
                           dropdownShow(),
                           SizedBox(
-                            height: 20,
+                            height: height * .02,
                           ),
                           StringConstant.isLogIn
                               ? Container()
@@ -342,7 +387,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
           decoration: BoxDecoration(
             color: ThemeApp.whiteColor, //<-- SEE HERE
           ),
-          width: MediaQuery.of(context).size.width * 0.4,
+          width: MediaQuery.of(context).size.width * 0.5,
           // MediaQuery.of(context).size.width * .51,
           // height: 35,
           child: DropdownButtonFormField(
@@ -383,7 +428,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                     context,
                     TextStyle(
                         color: ThemeApp.lightFontColor,
-                        fontSize: 12,
+                        fontSize: 16,
                         fontWeight: FontWeight.w400,
                         overflow: TextOverflow.ellipsis)),
               );
@@ -420,7 +465,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
           decoration: BoxDecoration(
             color: ThemeApp.whiteColor, //<-- SEE HERE
           ),
-          width: MediaQuery.of(context).size.width * .51,
+          width: MediaQuery.of(context).size.width * .5,
           // height: 35,
           child: DropdownButtonFormField(
             decoration: InputDecoration(
@@ -460,7 +505,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                     context,
                     TextStyle(
                         color: ThemeApp.lightFontColor,
-                        fontSize: 12,
+                        fontSize: 16,
                         fontWeight: FontWeight.w400,
                         overflow: TextOverflow.ellipsis)),
               );
@@ -484,12 +529,12 @@ class _OrderDashboardState extends State<OrderDashboard> {
             child: ListView.builder(
                 itemCount: value.jsonData['payload'].length,
                 itemBuilder: (_, index) {
-                  List orderList = value
-                      .jsonData['payload'];
+                  List orderList = value.jsonData['payload'];
                   Map order = orderList[index];
                   DateFormat format = DateFormat('dd MMM yyyy hh:mm aaa');
-                  DateTime date =
-                      DateTime.parse((order['earliest_delivery_date'] ?? DateTime.now().toString()));
+                  DateTime date = DateTime.parse(
+                      (order['earliest_delivery_date'] ??
+                          DateTime.now().toString()));
                   var earliest_delivery_date = format.format(date);
                   Color colorsStatus = ThemeApp.appColor;
                   if (order["overall_status"] == "Acceptance Pending") {
@@ -503,203 +548,206 @@ class _OrderDashboardState extends State<OrderDashboard> {
                   }
 
                   return InkWell(
-                    
                     child: Padding(
                       padding: const EdgeInsets.only(right: 10, bottom: 10),
                       child: Card(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)
-                        ),
+                            borderRadius: BorderRadius.circular(8)),
                         elevation: 10,
                         child: Container(
-                        padding: EdgeInsets.only(
-                          right: 10,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(8),
+                          padding: EdgeInsets.only(
+                            right: 10,
                           ),
-                          color: colorsStatus,
-                        ),
-                        child: Container(
-                            // height: height * 0.12,
-                            width: width * .8,
-                            alignment: Alignment.center,
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(8),
-                                bottomLeft: Radius.circular(8),
-                              ),
-                              color: ThemeApp.whiteColor,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8),
                             ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.only(
-                                      left: 15, right: 15, top: 15),
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(8),
-                                      topRight: Radius.circular(8),
-                                    ),
-                                    color: ThemeApp.whiteColor,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      // SizedBox(
-                                      //   width: width * .03,
-                                      // ),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          TextFieldUtils().dynamicText(
-                                             'Order ID - ' + order['id'].toString(),
-                                              context,
-                                              TextStyle(
-                                                color: ThemeApp
-                                                    .primaryNavyBlackColor,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                              )),
-                                          SizedBox(
-                                            height: height * .01,
-                                          ),
-                                          TextFieldUtils().dynamicText(
-                                              '${order['overall_status']}', // earliest_delivery_date,
-                                              context,
-                                              TextStyle(
-                                                color: ThemeApp.lightFontColor,
-                                                fontSize: 12,
-                                              )),
-                                        ],
+                            color: colorsStatus,
+                          ),
+                          child: Container(
+                              // height: height * 0.12,
+                              width: width * .8,
+                              alignment: Alignment.center,
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  bottomLeft: Radius.circular(8),
+                                ),
+                                color: ThemeApp.whiteColor,
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.only(
+                                        left: 15, right: 15, top: 15),
+                                    decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(8),
+                                        topRight: Radius.circular(8),
                                       ),
-                                      TextFieldUtils().dynamicText(
-                                          earliest_delivery_date,
-                                          context,
-                                          TextStyle(
-                                            color: ThemeApp.lightFontColor,
-                                            fontSize: 12,
-                                          )),
-                                    ],
-                                  ),
-                                ),
-                                Divider(
-                                  thickness: 1,
-                                ),
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 10,
+                                      color: ThemeApp.whiteColor,
                                     ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: ThemeApp.darkGreyTab)),
-                                      child: FittedBox(
-                                        child: Image(
-                                          image: NetworkImage(
-                                              order['image_url'] ?? '',
-                                              ),
-                                              errorBuilder: (context, error, stackTrace) {
-                                                return Icon(Icons.error);
-                                              },
-                                          fit: BoxFit.fill,
-                                          height: 50,
-                                          width: 50,
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          right: 10, left: 10),
-                                      child: Container(
-                                        height: height * .05,
-                                        width: width * .55,
-                                        child: ListView.builder(
-                                          itemCount: order['orders'].length,
-                                          itemBuilder:
-                                              (context, indexOrderDetails) {
-                                            indexForItems = indexOrderDetails;
-                                            Map subOrders = order['orders'][indexForItems];
-                                            return Container(
-                                                child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Flexible(
-                                                  child: Text(
-                                                      "${subOrders["short_name"]}",
-                                                      style: TextStyle(
-                                                          color: ThemeApp
-                                                              .blackColor,
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          overflow: TextOverflow
-                                                              .ellipsis)),
-                                                ),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                TextFieldUtils().dynamicText(
-                                                    "* ${subOrders['item_qty']}",
-                                                    context,
-                                                    TextStyle(
-                                                        color:
-                                                            ThemeApp.blackColor,
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        overflow: TextOverflow
-                                                            .ellipsis)),
-                                              ],
-                                            ));
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: height * .02,
-                                ),
-                                Divider(
-                                  thickness: 1,
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 10, left: 20, bottom: 20),
-                                  child: Container(
-                                    alignment: Alignment.centerLeft,
                                     child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
+                                        // SizedBox(
+                                        //   width: width * .03,
+                                        // ),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            TextFieldUtils().dynamicText(
+                                                'Order ID - ' +
+                                                    order['id'].toString(),
+                                                context,
+                                                TextStyle(
+                                                  color: ThemeApp
+                                                      .primaryNavyBlackColor,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14,
+                                                )),
+                                            SizedBox(
+                                              height: height * .01,
+                                            ),
+                                            TextFieldUtils().dynamicText(
+                                                '${order['overall_status']}', // earliest_delivery_date,
+                                                context,
+                                                TextStyle(
+                                                  color:
+                                                      ThemeApp.lightFontColor,
+                                                  fontSize: 12,
+                                                )),
+                                          ],
+                                        ),
                                         TextFieldUtils().dynamicText(
-                                            indianRupeesFormat.format(
-                                                order["total_payable"] ?? 0),
+                                            earliest_delivery_date,
                                             context,
                                             TextStyle(
-                                                color: ThemeApp.blackColor,
-                                                fontSize: height * .025,
-                                                fontWeight: FontWeight.w700)),
-                                        Row(
-                                          children: [
-                                            /*  value.myOrdersList[index]
+                                              color: ThemeApp.lightFontColor,
+                                              fontSize: 12,
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                  Divider(
+                                    thickness: 1,
+                                  ),
+                                  Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: ThemeApp.darkGreyTab)),
+                                        child: FittedBox(
+                                          child: Image(
+                                            image: NetworkImage(
+                                              order['image_url'] ?? '',
+                                            ),
+                                            errorBuilder:
+                                                (context, error, stackTrace) {
+                                              return Icon(Icons.error);
+                                            },
+                                            fit: BoxFit.fill,
+                                            height: 50,
+                                            width: 50,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            right: 10, left: 10),
+                                        child: Container(
+                                          height: height * .05,
+                                          width: width * .55,
+                                          child: ListView.builder(
+                                            itemCount: order['orders'].length,
+                                            itemBuilder:
+                                                (context, indexOrderDetails) {
+                                              indexForItems = indexOrderDetails;
+                                              Map subOrders = order['orders']
+                                                  [indexForItems];
+                                              return Container(
+                                                  child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Flexible(
+                                                    child: Text(
+                                                        "${subOrders["short_name"]}",
+                                                        style: TextStyle(
+                                                            color: ThemeApp
+                                                                .blackColor,
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis)),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  TextFieldUtils().dynamicText(
+                                                      "* ${subOrders['item_qty']}",
+                                                      context,
+                                                      TextStyle(
+                                                          color: ThemeApp
+                                                              .blackColor,
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          overflow: TextOverflow
+                                                              .ellipsis)),
+                                                ],
+                                              ));
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: height * .02,
+                                  ),
+                                  Divider(
+                                    thickness: 1,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        right: 10, left: 20, bottom: 20),
+                                    child: Container(
+                                      alignment: Alignment.centerLeft,
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          TextFieldUtils().dynamicText(
+                                              indianRupeesFormat.format(
+                                                  order["total_payable"] ?? 0),
+                                              context,
+                                              TextStyle(
+                                                  color: ThemeApp.blackColor,
+                                                  fontSize: height * .025,
+                                                  fontWeight: FontWeight.w700)),
+                                          Row(
+                                            children: [
+                                              /*  value.myOrdersList[index]
                                                         ["myOrderStatus"] ==
                                                     "Acceptance Pending"
                                                 ? SizedBox()
@@ -722,40 +770,43 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                             SizedBox(
                                               width: width * .02,
                                             ),*/
-                                            Container(
-                                              // margin: EdgeInsets.all(10),
-                                              height: 40,
-                                              decoration: BoxDecoration(
-                                                  color: ThemeApp.appColor,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              child: MaterialButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              OrderReviewSubActivity(
-                                                                order: order,
-                                                              )));
-                                                },
-                                                child: Text(
-                                                  "View",
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      color: Colors.white),
+                                              Container(
+                                                // margin: EdgeInsets.all(10),
+                                                // height: 40,
+                                                decoration: BoxDecoration(
+                                                    // color: ThemeApp.appColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                child: MaterialButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                OrderReviewSubActivity(
+                                                                  order: order,
+                                                                )));
+                                                  },
+                                                  child: Text(
+                                                    "View",
+                                                    style: TextStyle(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        color: ThemeApp
+                                                            .tealButtonColor),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            )),
-                      ),
+                                ],
+                              )),
+                        ),
                       ),
                     ),
                   );

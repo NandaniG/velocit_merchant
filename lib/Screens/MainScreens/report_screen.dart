@@ -51,7 +51,7 @@ class _ReportScreenState extends State<ReportScreen> {
                 ),
               ),
             ),
-            bottomNavigationBarWidget(context)
+            bottomNavigationBarWidget(context,4)
           ],
         ),
       ),

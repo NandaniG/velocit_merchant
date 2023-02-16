@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:velocit_merchant/Screens/MainScreens/Notification_screen.dart';
 import 'package:velocit_merchant/Screens/MainScreens/raise_view_tickets.dart';
@@ -47,7 +48,7 @@ Widget appBarWidget(
           child: AppBar(
             centerTitle: true,
             // elevation: 1,
-            shadowColor:ThemeApp.appBackgroundColor ,
+            shadowColor: ThemeApp.appBackgroundColor,
             backgroundColor: ThemeApp.appBackgroundColor,
             flexibleSpace: Container(
               height: height * .08,
@@ -73,13 +74,13 @@ Widget appBarWidget(
             title: titleWidget,
             actions: [
               InkWell(
-                onTap:(){
+                onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => NotificationScreen(),
                     ),
                   );
-              },
+                },
                 child: Container(
                   alignment: Alignment.center,
                   margin: const EdgeInsets.only(right: 10),
@@ -414,10 +415,14 @@ final List<Widget> _tabs = List.unmodifiable([
   Container(),
 ]);
 
-Widget bottomNavBarItems(BuildContext context) {
-  int _currentIndex = 0;
+Widget bottomNavBarItems(BuildContext context, int indexSelected) {
+  int _currentIndex = indexSelected;
+
   return BottomNavigationBar(
     type: BottomNavigationBarType.fixed,
+    backgroundColor: ThemeApp.whiteColor,
+    selectedItemColor: ThemeApp.appColor,
+    unselectedItemColor: ThemeApp.unSelectedBottomBarItemColor,
     currentIndex: _currentIndex,
     onTap: (int index) {
       _currentIndex = index;
@@ -438,16 +443,15 @@ Widget bottomNavBarItems(BuildContext context) {
             MaterialPageRoute(
               builder: (context) => const StockScreen(),
             ),
-                (route) => false);
+            (route) => false);
       }
       if (_currentIndex == 3) {
-
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
               builder: (context) => const TicketsPageActivity(),
             ),
-                (route) => false);
+            (route) => false);
         // Navigator.pushAndRemoveUntil(
         //     context,
         //     MaterialPageRoute(
@@ -473,25 +477,61 @@ Widget bottomNavBarItems(BuildContext context) {
           icon: _currentIndex == 0
               ? Padding(
                   padding: const EdgeInsets.only(top: 5.0),
-                  child: Icon(Icons.shopping_bag_outlined,  size: 35,color: ThemeApp.appColor,)
+                  child: SvgPicture.asset(
+                    'assets/appImages/OrderIconHome.svg',
+                    color: ThemeApp.appColor,
+                    semanticsLabel: 'Acme Logo',
+                    theme: SvgTheme(
+                      currentColor: ThemeApp.appColor,
+                    ),
+                    height: 25,
+                    width: 25,
+                  ),
                 )
               : Padding(
                   padding: const EdgeInsets.only(top: 5.0),
-                  child: Icon(Icons.shopping_bag_outlined,  size: 35)
+                  child: SvgPicture.asset(
+                    'assets/appImages/OrderIconHome.svg',
+                    color: ThemeApp.unSelectedBottomBarItemColor,
+                    semanticsLabel: 'Acme Logo',
+                    theme: SvgTheme(
+                      currentColor: ThemeApp.unSelectedBottomBarItemColor,
+                    ),
+                    height: 25,
+                    width: 25,
+                  ),
                 ),
-          label: ''),
+          label: 'Orders'),
       BottomNavigationBarItem(
           backgroundColor: Colors.white,
           icon: _currentIndex == 1
               ? Padding(
                   padding: const EdgeInsets.only(top: 5.0),
-                  child:   Icon(Icons.dashboard,  size: 35,color: ThemeApp.appColor,)
+                  child: SvgPicture.asset(
+                    'assets/appImages/InventoryIcon.svg',
+                    color: ThemeApp.appColor,
+                    semanticsLabel: 'Acme Logo',
+                    theme: SvgTheme(
+                      currentColor: ThemeApp.appColor,
+                    ),
+                    height: 25,
+                    width: 25,
+                  ),
                 )
               : Padding(
                   padding: const EdgeInsets.only(top: 5.0),
-                  child:  Icon(Icons.dashboard,  size: 35,color: ThemeApp.appColor,)
+                  child: SvgPicture.asset(
+                    'assets/appImages/InventoryIcon.svg',
+                    color: ThemeApp.unSelectedBottomBarItemColor,
+                    semanticsLabel: 'Acme Logo',
+                    theme: SvgTheme(
+                      currentColor: ThemeApp.unSelectedBottomBarItemColor,
+                    ),
+                    height: 25,
+                    width: 25,
+                  ),
                 ),
-          label: ''),
+          label: 'Inventory'),
       BottomNavigationBarItem(
           backgroundColor: Colors.white,
           icon: _currentIndex == 2
@@ -509,32 +549,60 @@ Widget bottomNavBarItems(BuildContext context) {
           icon: _currentIndex == 3
               ? Padding(
                   padding: const EdgeInsets.only(top: 5.0),
-                  child:
-                  Icon(Icons.post_add_outlined,  size: 35,color: ThemeApp.appColor,)/* Image.asset('assets/icons/shop.png', height: 30),*/
+                  child: SvgPicture.asset(
+                    'assets/appImages/ticketIcon.svg',
+                    color: ThemeApp.appColor,
+                    semanticsLabel: 'Acme Logo',
+                    theme: SvgTheme(
+                      currentColor: ThemeApp.appColor,
+                    ),
+                    height: 25,
+                    width: 25,
+                  ),
                 )
               : Padding(
                   padding: const EdgeInsets.only(top: 5.0),
-                  child: Icon(Icons.post_add_outlined,  size: 35,color: ThemeApp.appColor,)
-            /*Image.asset('assets/icons/shop.png', height: 30),*/
+                  child: SvgPicture.asset(
+                    'assets/appImages/ticketIcon.svg',
+                    color: ThemeApp.unSelectedBottomBarItemColor,
+                    semanticsLabel: 'Acme Logo',
+                    theme: SvgTheme(
+                      currentColor: ThemeApp.unSelectedBottomBarItemColor,
+                    ),
+                    height: 25,
+                    width: 25,
+                  ),
                 ),
-          label: ''),
+          label: 'Tickets'),
       BottomNavigationBarItem(
           backgroundColor: Colors.white,
-          icon: Stack(
-            children: <Widget>[
-              _currentIndex == 4
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Icon(Icons.event_note,  size: 35,color: ThemeApp.appColor,) /*Image.asset('assets/icons/shopping-cart.png',
-                          height: 35),*/
-                    )
-                  :  Padding(
+          icon: _currentIndex == 4
+              ? Padding(
                   padding: const EdgeInsets.only(top: 5.0),
-                  child: Icon(Icons.event_note,size: 35,color: ThemeApp.appColor,) /*Image.asset('assets/icons/shopping-cart.png',
-                          height: 35),*/
-              )
-            ],
-          ),
+                  child: SvgPicture.asset(
+                    'assets/appImages/ReportIcon.svg',
+                    color: ThemeApp.appColor,
+                    semanticsLabel: 'Acme Logo',
+                    theme: SvgTheme(
+                      currentColor: ThemeApp.appColor,
+                    ),
+                    height: 25,
+                    width: 25,
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.only(top: 5.0),
+                  child: SvgPicture.asset(
+                    'assets/appImages/ReportIcon.svg',
+                    color: ThemeApp.unSelectedBottomBarItemColor,
+                    semanticsLabel: 'Acme Logo',
+                    theme: SvgTheme(
+                      currentColor: ThemeApp.unSelectedBottomBarItemColor,
+                    ),
+                    height: 25,
+                    width: 25,
+                  ),
+                ),
 
           // _currentIndex == 4
           //     ? Padding(
@@ -547,17 +615,17 @@ Widget bottomNavBarItems(BuildContext context) {
           //         child: Image.asset('assets/icons/shopping-cart.png',
           //             height: 30),
           //       ),
-          label: ''),
+          label: 'Reports'),
     ],
   );
 }
 
-Widget bottomNavigationBarWidget(BuildContext context) {
+Widget bottomNavigationBarWidget(BuildContext context, int indexSelected) {
   final controller = BarcodeFinderController();
   return Stack(
     alignment: const FractionalOffset(.5, 1.0),
     children: [
-      bottomNavBarItems(context),
+      bottomNavBarItems(context, indexSelected),
       Padding(
         padding: const EdgeInsets.only(bottom: 0),
         child: Container(
@@ -623,9 +691,8 @@ class _ScannerWidgetState extends State<ScannerWidget> {
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        proceedButton(
-                            "Scan with Camera", ThemeApp.darkGreyColor, context,false,
-                            () {
+                        proceedButton("Scan with Camera",
+                            ThemeApp.darkGreyColor, context, false, () {
                           // Navigator.of(context).pop();
 
                           scanQR();

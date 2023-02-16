@@ -808,13 +808,15 @@ class OrderCompletedSuccessful extends StatelessWidget {
                           context, MaterialPageRoute(
                           builder: (context) => const OrderDashboard()));
 
-                    }),       proceedButton("Cancel Orders", ThemeApp.tealButtonColor,
+                    }),      
+                     proceedButton("Cancel Orders", ThemeApp.tealButtonColor,
                     context, false,() {
                       Navigator.pushReplacement(
                           context, MaterialPageRoute(
                           builder: (context) => const CancelOrderScreen()));
 
-                    }),  proceedButton("Delivered Orders", ThemeApp.tealButtonColor,
+                    }),
+                      proceedButton("Delivered Orders", ThemeApp.tealButtonColor,
                     context, false,() {
                       Navigator.pushReplacement(
                           context, MaterialPageRoute(

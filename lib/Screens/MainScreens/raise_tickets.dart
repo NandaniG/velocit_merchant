@@ -87,7 +87,7 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
                 ),
               ),
             ),
-            bottomNavigationBarWidget(context)
+            bottomNavigationBarWidget(context,3)
           ],
         ),
       ),

@@ -25,6 +25,9 @@ class Routes {
     case RoutesName.myAccountRoute:
         return MaterialPageRoute(
             builder: (BuildContext context) => MyAccountActivity());
+   case RoutesName.myAccountRoute:
+        return MaterialPageRoute(
+            builder: (BuildContext context) => MyAccountActivity());
 
       // case RoutesName.otpRoute:
       //   return MaterialPageRoute(
@@ -47,5 +50,7 @@ class RoutesName{
   static const String otpRoute = 'otpScreen';
   static const String dashboardRoute = 'dashBoardScreenRoute';
   static const String myAccountRoute = 'myAccountRouteRoute';
+  static const String changeForgotPassRoute = 'changeForgotPass';
+
 
 }

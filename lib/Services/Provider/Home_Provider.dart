@@ -290,15 +290,18 @@ var customerSupportList;
   //---------------------------------------------------------
   //----------------- My Orders--------------------
   var notificationDataList;
-  Future<List<dynamic>> notificationsListService() async {
+
+  Future<List<NotificationsList>> notificationsListService() async {
     final jsondata = await rootBundle.loadString('assets/jsonData.json');
     notificationDataList = json.decode(jsondata);
     notificationDataList = notificationDataList["notificationsList"];
 
-    print("-------------notificationsList Data-------------");
-    // print(notificationDataList.toString());
+    // print("-------------notificationsList Data-------------");
+    // // print(notificationDataList.toString());
 
-    return notificationDataList.map((e) => NotificationsList.fromJson(e)).toList();
+    return notificationDataList
+        .map((e) => NotificationsList.fromJson(e))
+        .toList();
   }
   //---------------------------------------------------------
   //----------------- My address--------------------

@@ -2,14 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:velocit_merchant/Screens/orders_Dashboard.dart';
-import 'package:velocit_merchant/utils/GlobalWidgets/textFormFields.dart';
 
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 import '../../Core/repository/auth_repository.dart';
+import '../../Routes/Routes.dart';
 import '../../utils/GlobalWidgets/proceedButtons.dart';
+import '../../utils/GlobalWidgets/textFormFields.dart';
 import '../../utils/StringUtils.dart';
 import '../../utils/constants.dart';
 import '../../utils/styles.dart';
@@ -18,18 +17,22 @@ import 'Sign_Up.dart';
 import 'forgot_password.dart';
 
 class SignIn_Screen extends StatefulWidget {
+  const SignIn_Screen({Key? key}) : super(key: key);
+
   @override
   State<SignIn_Screen> createState() => _SignIn_ScreenState();
 }
 
 class _SignIn_ScreenState extends State<SignIn_Screen> {
-  TextEditingController email = TextEditingController();
-  TextEditingController emailUsingOtpController = TextEditingController();
-  TextEditingController password = TextEditingController();
+  TextEditingController email = new TextEditingController();
+
+  // TextEditingController emailUsingOtpController = TextEditingController();
+  TextEditingController password = new TextEditingController();
   bool _usingPassVisible = false;
+
   // int? _radioIndex = 2;
   // String _radioVal = "";
-  bool isOtp =false;
+  bool isOtp = false;
   FocusNode focusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
   bool _validateEmail = false;
@@ -42,7 +45,7 @@ class _SignIn_ScreenState extends State<SignIn_Screen> {
     // TODO: implement initState
     super.initState();
     // _radioIndex = 1;
-    isOtp =false;
+    isOtp = false;
     _usingPassVisible = false;
   }
 
@@ -52,7 +55,7 @@ class _SignIn_ScreenState extends State<SignIn_Screen> {
     super.dispose();
 
     email.dispose();
-    emailUsingOtpController.dispose();
+    // emailUsingOtpController.dispose();
     password.dispose();
   }
 
@@ -266,11 +269,12 @@ class _SignIn_ScreenState extends State<SignIn_Screen> {
                     /* isOtp == false
                        ? TextFieldUtils().asteriskTextField(
                             StringUtils.emailAddress, context)
-                        :*/ TextFieldUtils().asteriskTextField(
-                        StringUtils.emailORMobile, context),
+                        :*/
+                    TextFieldUtils()
+                        .asteriskTextField(StringUtils.emailORMobile, context),
                     /*TextFieldUtils().asteriskTextField(
                             StringUtils.mobileNumber, context),*/
-                    isOtp == false?
+                    /*     isOtp == false?
                     TextFormFieldsWidget(
                         errorText:StringUtils.validemailORMobileError,
                         textInputType: TextInputType.emailAddress,
@@ -319,7 +323,62 @@ class _SignIn_ScreenState extends State<SignIn_Screen> {
                             _validateEmail = false;
                           }
                           return null;
-                        }):  TextFormFieldsWidget(
+                        }): */
+                    TextFormFieldsWidget(
+                        maxLength:
+                        StringConstant().isPhone(email.text) ? 10 : null,
+                        errorText: StringUtils.validemailORMobileError,
+                        textInputType: TextInputType.emailAddress,
+                        controller: email,
+                        autoValidation: AutovalidateMode.onUserInteraction,
+                        hintText: StringUtils.emailORMobileHint,
+                        preffixText: Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                              11.73, 12.73, 6.36, 12.73),
+                          child: SvgPicture.asset(
+                            'assets/appImages/Username.svg',
+                            width: 16.56,
+                            height: 16.56,
+                          ),
+                        ),
+                        suffixText: (!StringConstant().isEmail(email.text) &&
+                            !StringConstant().isPhone(email.text))
+                            ? SizedBox()
+                            : Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                              11.73, 12.73, 11.73, 12.73),
+                          child: SvgPicture.asset(
+                            'assets/appImages/emailValidateIcon.svg',
+                            width: 15.54,
+                            height: 15.54,
+                          ),
+                        ),
+                        onChange: (val) {
+                          setState(() {
+                            if (val.isEmpty && email.text.isEmpty) {
+                              _validateEmail = true;
+                            } else if (!StringConstant().isEmail(val) &&
+                                !StringConstant().isPhone(val)) {
+                              _validateEmail = true;
+                            } else {
+                              _validateEmail = false;
+                            }
+                          });
+                        },
+                        validator: (value) {
+                          if (value.isEmpty && email.text.isEmpty) {
+                            _validateEmail = true;
+                            return StringUtils.validemailORMobileError;
+                          } else if (!StringConstant().isEmail(value) &&
+                              !StringConstant().isPhone(value)) {
+                            _validateEmail = true;
+                            return StringUtils.validemailORMobileError;
+                          } else {
+                            _validateEmail = false;
+                          }
+                          return null;
+                        }),
+                    /* TextFormFieldsWidget(
                         errorText:StringUtils.validemailORMobileError,
                         textInputType: TextInputType.emailAddress,
                         controller: emailUsingOtpController,
@@ -367,190 +426,7 @@ class _SignIn_ScreenState extends State<SignIn_Screen> {
                             _validateEmail = false;
                           }
                           return null;
-                        }),
-                    // isOtp == false
-                    //     ? EmailTextFormFieldsWidget(
-                    //         errorText: StringUtils.validEmailError,
-                    //         textInputType: TextInputType.text,
-                    //         controller: email,
-                    //         autoValidation: AutovalidateMode.onUserInteraction,
-                    //         hintText: StringUtils.emailAddress,
-                    //         // preffixText: Padding(
-                    //         //   padding: const EdgeInsets.fromLTRB(11.73,12.73,6.36,12.73),
-                    //         //   child: SvgPicture.asset(
-                    //         //     'assets/appImages/Username.svg',
-                    //         //     width: 16.56,
-                    //         //     height: 16.56,
-                    //         //   ),
-                    //         // ),
-                    //         // suffixText:!StringConstant().isEmail(email.text)?SizedBox(): Padding(
-                    //         //   padding: const EdgeInsets.fromLTRB(11.73,12.73,11.73,12.73),
-                    //         //   child: SvgPicture.asset(
-                    //         //     'assets/appImages/emailValidateIcon.svg',
-                    //         //     width: 15.54,
-                    //         //     height: 15.54,
-                    //         //   ),
-                    //         // ),
-                    //         onChange: (val) {
-                    //           setState(() {
-                    //             if (val.isEmpty && email.text.isEmpty) {
-                    //               _validateEmail = true;
-                    //             } else if (!StringConstant().isEmail(val)) {
-                    //               _validateEmail = true;
-                    //             } else {
-                    //               _validateEmail = false;
-                    //             }
-                    //           });
-                    //         },
-                    //         validator: (value) {
-                    //           if (value.isEmpty && email.text.isEmpty) {
-                    //             _validateEmail = true;
-                    //             return StringUtils.validEmailError;
-                    //           } else if (!StringConstant().isEmail(value)) {
-                    //             _validateEmail = true;
-                    //             return StringUtils.validEmailError;
-                    //           } else {
-                    //             _validateEmail = false;
-                    //           }
-                    //           return null;
-                    //         })
-                    //     //both email and phone
-                    //
-                    //     /*      TextFormFieldsWidget(
-                    //     errorText:StringUtils.validEmailError,
-                    //     textInputType: TextInputType.emailAddress,
-                    //     controller: email,
-                    //     autoValidation: AutovalidateMode.onUserInteraction,
-                    //     hintText: StringUtils.emailAddress,
-                    //     preffixText: Padding(
-                    //       padding: const EdgeInsets.fromLTRB(11.73,12.73,6.36,12.73),
-                    //       child: SvgPicture.asset(
-                    //         'assets/appImages/Username.svg',
-                    //         width: 16.56,
-                    //         height: 16.56,
-                    //       ),
-                    //     ),
-                    //     suffixText:(!StringConstant().isEmail(email.text) &&
-                    //         !StringConstant().isPhone(email.text))?SizedBox(): Padding(
-                    //       padding:
-                    //       const EdgeInsets.fromLTRB(11.73, 12.73, 11.73, 12.73),
-                    //       child: SvgPicture.asset(
-                    //         'assets/appImages/emailValidateIcon.svg',
-                    //         width: 15.54,
-                    //         height: 15.54,
-                    //       ),
-                    //     ),
-                    //     onChange: (val) {
-                    //       setState(() {
-                    //         if (val.isEmpty && email.text.isEmpty) {
-                    //           _validateEmail = true;
-                    //         } else if (!StringConstant().isEmail(val) &&
-                    //             !StringConstant().isPhone(val)) {
-                    //           _validateEmail = true;
-                    //         } else {
-                    //           _validateEmail = false;
-                    //         }
-                    //       });
-                    //     },
-                    //     validator: (value) {
-                    //       if (value.isEmpty && email.text.isEmpty) {
-                    //         _validateEmail = true;
-                    //         return StringUtils.validEmailError;
-                    //       } else if (!StringConstant().isEmail(value) &&
-                    //           !StringConstant().isPhone(value)) {
-                    //         _validateEmail = true;
-                    //         return StringUtils.validEmailError;
-                    //       } else {
-                    //         _validateEmail = false;
-                    //       }
-                    //       return null;
-                    //     })*/
-                    //     : const SizedBox(
-                    //         height: 0,
-                    //       ),
-                    // isOtp == false
-                    //     ? const SizedBox(
-                    //         height: 0,
-                    //       )
-                    //     :
-                    //     //using both email phone
-                    //
-                    //     /* TextFormFieldsWidget(
-                    //     errorText:StringUtils.validemailORMobileError,
-                    //     textInputType: TextInputType.emailAddress,
-                    //     controller: mobileController,
-                    //     autoValidation: AutovalidateMode.onUserInteraction,
-                    //     hintText: StringUtils.emailORMobile,
-                    //     preffixText: Padding(
-                    //       padding: const EdgeInsets.fromLTRB(11.73,12.73,6.36,12.73),
-                    //       child: SvgPicture.asset(
-                    //         'assets/appImages/Username.svg',
-                    //         width: 16.56,
-                    //         height: 16.56,
-                    //       ),
-                    //     ),
-                    //     suffixText:(!StringConstant().isEmail(mobileController.text) &&
-                    //         !StringConstant().isPhone(mobileController.text))?SizedBox(): Padding(
-                    //       padding:
-                    //       const EdgeInsets.fromLTRB(11.73, 12.73, 11.73, 12.73),
-                    //       child: SvgPicture.asset(
-                    //         'assets/appImages/emailValidateIcon.svg',
-                    //         width: 15.54,
-                    //         height: 15.54,
-                    //       ),
-                    //     ),
-                    //     onChange: (val) {
-                    //       setState(() {
-                    //         if (val.isEmpty && mobileController.text.isEmpty) {
-                    //           _validateMobile = true;
-                    //         } else if (!StringConstant().isEmail(val) &&
-                    //             !StringConstant().isPhone(val)) {
-                    //           _validateMobile = true;
-                    //         } else {
-                    //           _validateMobile = false;
-                    //         }
-                    //       });
-                    //     },
-                    //     validator: (value) {
-                    //       if (value.isEmpty && mobileController.text.isEmpty) {
-                    //         _validateMobile = true;
-                    //         return StringUtils.validemailORMobileError;
-                    //       } else if (!StringConstant().isEmail(value) &&
-                    //           !StringConstant().isPhone(value)) {
-                    //         _validateMobile = true;
-                    //         return StringUtils.validemailORMobileError;
-                    //       } else {
-                    //         _validateMobile = false;
-                    //       }
-                    //       return null;
-                    //     }),*/
-                    //
-                    //     MobileNumberTextFormField(
-                    //         errorText: StringUtils.enterMobileNumber,
-                    //         controller: mobileController,
-                    //         enable: true,
-                    //         onChanged: (phone) {
-                    //           print(phone.completeNumber);
-                    //           if (phone.countryCode == "IN") {
-                    //             print("india selected");
-                    //             print(phone.completeNumber);
-                    //           } else {
-                    //             print("india not selected");
-                    //           }
-                    //         },
-                    //         validator: (value) {
-                    //           if (mobileController.text.isEmpty) {
-                    //             _validateMobile = true;
-                    //             return StringUtils.mobileError;
-                    //           } else if (!StringConstant()
-                    //               .isPhone(mobileController.text)) {
-                    //             _validateMobile = true;
-                    //             return StringUtils.mobileError;
-                    //           } else {
-                    //             _validateMobile = false;
-                    //           }
-                    //           return null;
-                    //         }),
+                        }),*/
 
                     isOtp == false
                         ? SizedBox(
@@ -585,7 +461,10 @@ class _SignIn_ScreenState extends State<SignIn_Screen> {
                               letterSpacing: 1.2,
                               fontWeight: FontWeight.w700,
                               color: Colors.white),
-                          child: Icon(Icons.info_outline,color: ThemeApp.appColor,),
+                          child: Icon(
+                            Icons.info_outline,
+                            color: ThemeApp.appColor,
+                          ),
                         )
                       ],
                     )
@@ -635,11 +514,14 @@ class _SignIn_ScreenState extends State<SignIn_Screen> {
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * .008,
-                    ),    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
-                            SizedBox(width: 20,
+                            SizedBox(
+                              width: 20,
                               child: Checkbox(
                                 value: isOtp,
                                 onChanged: (values) {
@@ -648,7 +530,10 @@ class _SignIn_ScreenState extends State<SignIn_Screen> {
                                   });
                                 },
                               ),
-                            ),SizedBox(width: 7,),
+                            ),
+                            SizedBox(
+                              width: 7,
+                            ),
                             Text("Request OTP",
                                 style: TextStyle(
                                   fontFamily: 'Roboto',
@@ -658,7 +543,8 @@ class _SignIn_ScreenState extends State<SignIn_Screen> {
                                   overflow: TextOverflow.ellipsis,
                                 ))
                           ],
-                        ),Container(
+                        ),
+                        Container(
                           alignment: Alignment.centerRight,
                           child: InkWell(
                             onTap: () {
@@ -703,14 +589,12 @@ class _SignIn_ScreenState extends State<SignIn_Screen> {
                       height: 50,
                     ),
 
-
                     isOtp == false
                         ? proceedButton(StringUtils.signin,
-                        ThemeApp.tealButtonColor, context,  () {
+                        ThemeApp.tealButtonColor, context,false, () {
                           if (_formKey.currentState!.validate() &&
                               email.text.isNotEmpty &&
                               password.text.isNotEmpty) {
-
                             Map emaildata = {
                               'email': email.text,
                               'password': password.text.trim()
@@ -723,12 +607,14 @@ class _SignIn_ScreenState extends State<SignIn_Screen> {
                             if (StringConstant().isNumeric(email.text)) {
                               AuthRepository()
                                   .postApiUsingEmailPasswordRequest(
-                                  mobileData, context).then((value) => setState((){}));
+                                  mobileData, context)
+                                  .then((value) => setState(() {}));
                               print("Digit found");
                             } else {
                               AuthRepository()
                                   .postApiUsingEmailPasswordRequest(
-                                  emaildata, context).then((value) => setState((){}));
+                                  emaildata, context)
+                                  .then((value) => setState(() {}));
 
                               print("Digit not found");
                               // email.clear();
@@ -741,28 +627,31 @@ class _SignIn_ScreenState extends State<SignIn_Screen> {
                           }
                         })
                         : proceedButton(StringUtils.sendOtp,
-                        ThemeApp.tealButtonColor, context,  () {
+                        ThemeApp.tealButtonColor, context,false,  () {
                           if (_formKey.currentState!.validate() &&
-                              emailUsingOtpController.text.isNotEmpty) {
+                              email.text.isNotEmpty) {
                             Map emaildata = {
-                              'email': emailUsingOtpController.text,
+                              'email': email.text,
                             };
                             Map mobileData = {
-                              'mobile': emailUsingOtpController.text,
+                              'mobile': email.text,
                             };
-                            if (StringConstant()
-                                .isNumeric(emailUsingOtpController.text)) {
+                            if (StringConstant().isNumeric(email.text)) {
                               print(mobileData);
 
-                              AuthRepository().postApiForMobileOTPRequest(
-                                  mobileData, context).then((value) => setState((){}));
+                              AuthRepository()
+                                  .postApiForMobileOTPRequest(
+                                  mobileData, false, context)
+                                  .then((value) => setState(() {}));
 
                               print("Digit found");
                             } else {
                               print(emaildata);
 
-                              AuthRepository().postApiForEmailOTPRequest(
-                                  emaildata, context).then((value) => setState((){}));
+                              AuthRepository()
+                                  .postApiForEmailOTPRequest(
+                                  emaildata, false, context)
+                                  .then((value) => setState(() {}));
                               // Navigator.of(context).push(
                               //     MaterialPageRoute(builder: (context) => OTPScreen(mobileNumber:    mobileController.text))).then((value) => setState((){}));
 
@@ -872,7 +761,6 @@ class _SignIn_ScreenState extends State<SignIn_Screen> {
                         InkWell(
                           onTap: () {
                             email.clear();
-                            emailUsingOtpController.clear();
                             password.clear();
                             Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
@@ -917,10 +805,13 @@ class _SignIn_ScreenState extends State<SignIn_Screen> {
                               fontWeight: FontWeight.w400),
                         ),
                         InkWell(
-                          onTap: (){
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) => OrderDashboard()));
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushNamedAndRemoveUntil(
+                                RoutesName.dashboardRoute, (route) => false)
+                                .then((value) {
+                              setState(() {});
+                            });
                           },
                           child: Text(
                             "Guest",

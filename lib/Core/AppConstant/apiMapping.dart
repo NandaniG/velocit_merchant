@@ -6,6 +6,7 @@ class ApiMapping {
   static String basePort = "443";
   static String apiVersion = "api/v1";
   static String username = "/v1/IAM/authenticateWithUID";
+  static String BaseAPI = 'https://velocitapiqa.fulgorithmapi.com:443/api/v1';
 
   static String ConstructURI(String path) {
     return baseProtocol +
@@ -30,7 +31,8 @@ class ApiMapping {
   static String loginViaEmailOTP = '/auth/login_via_email_otp';
   static String loginViaMobileOTP = '/auth/login_via_mobile_otp';
   static String validateOTP = '/auth/login_via_otp_stage_2';
-
+  static String forgotPasswordGenOtp = '/user/forgotpasswordgenotp';
+  static String resetPassword = '/user/resetpassword';
 
 
 //https://velocitapiqa.fulgorithmapi.com:443/v1/IAM/authenticate

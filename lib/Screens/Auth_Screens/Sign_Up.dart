@@ -296,9 +296,8 @@ class _SignUpState extends State<SignUp> {
                                   context,
                                   TextStyle(
                                     fontFamily: 'Roboto',
-                                    color: ThemeApp.blackColor,
-                                    fontSize: height * .018,
-                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400,
                                   )),
                               InkWell(
                                 onTap: () {
@@ -310,8 +309,8 @@ class _SignUpState extends State<SignUp> {
                                     TextStyle(
                                       fontFamily: 'Roboto',
                                       color: ThemeApp.tealButtonColor,
-                                      fontSize: height * .018,
-                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
                                       decoration: TextDecoration.underline,
                                       decorationThickness: 3,
                                     )),
@@ -337,7 +336,7 @@ class _SignUpState extends State<SignUp> {
                         child: proceedButton(
                             'Create an Account',
                             ThemeApp.tealButtonColor,
-                            context,
+                            context,false,
                         () {
                           FocusManager.instance.primaryFocus?.unfocus();
 

@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocit_merchant/Core/ViewModel/auth_view_model.dart';
 import 'package:velocit_merchant/Screens/Auth_Screens/sign_in.dart';
 import 'package:velocit_merchant/Screens/orders_Dashboard.dart';
 import 'package:velocit_merchant/utils/constants.dart';
+import 'package:velocit_merchant/utils/styles.dart';
 
 import 'Routes/Routes.dart';
 import 'Screens/Auth_Screens/forgot_password.dart';
@@ -56,9 +58,15 @@ class MyApp extends StatelessWidget {
             ],debugShowCheckedModeBanner: false,
             supportedLocales: L10n.all,
             title: 'Flutter Demo',
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-            ),
+             theme: ThemeData(
+
+               unselectedWidgetColor: ThemeApp.appColor,
+               textTheme: GoogleFonts.robotoTextTheme(
+                 Theme.of(context).textTheme,
+               ),
+               primarySwatch: colorCustomForMaterialApp,
+             ),
+             color: ThemeApp.appColor,
             // initialRoute: '/',
              initialRoute: RoutesName.splashScreenRoute,
              onGenerateRoute: Routes.generateRoute,
@@ -128,7 +136,7 @@ class _SplashScreenState extends State<SplashScreen> {
             children: <Widget>[
               Center(
                 child: Image.asset(
-                  'assets/appImages/splashScreen.png',
+                  'assets/appImages/splash_image.png',
                   alignment: Alignment.center,
                   height: 173,
                   width: 253,

@@ -2,21 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:velocit_merchant/utils/GlobalWidgets/textFormFields.dart';
 import '../../utils/styles.dart';
 
-Widget proceedButton(String name,Color color, BuildContext context, VoidCallback onTap) {
-
+Widget proceedButton(String name, Color color, BuildContext context,
+    bool loading, VoidCallback onTap) {
   return InkWell(
     onTap: onTap,
-    child: Container(width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+    child: Container(
+        width: MediaQuery.of(context).size.width,
+        padding: const EdgeInsets.fromLTRB(20.0, 12.0, 20.0, 12.0),
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(
-            Radius.circular(10),
+            Radius.circular(100),
           ),
-          border: Border.all(color: color== ThemeApp.whiteColor? ThemeApp.darkGreyTab: ThemeApp.whiteColor),
-          color: color,
+          border: Border.all(
+            color: color== ThemeApp.tealButtonColor?ThemeApp.tealButtonColor: ThemeApp.whiteColor,
+          ),
+          color: color== ThemeApp.tealButtonColor?ThemeApp.tealButtonColor: color,
         ),
-        child: TextFieldUtils()
-            .usingPassTextFields(name,color== ThemeApp.whiteColor? ThemeApp.blackColor: ThemeApp.whiteColor, context)),
+        child: loading
+            ? Center(
+          child: CircularProgressIndicator(color:color== ThemeApp.tealButtonColor?ThemeApp.whiteColor: ThemeApp.tealButtonColor),
+        )
+            : Text(
+          name,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontFamily: 'Roboto',
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              overflow: TextOverflow.ellipsis,
+              color: color== ThemeApp.tealButtonColor?ThemeApp.whiteColor: ThemeApp.whiteColor,
+              letterSpacing: -0.25
+          ),
+        )),
   );
 }
 Widget whiteProceedButton(String name, BuildContext context, VoidCallback onTap) {

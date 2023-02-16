@@ -486,7 +486,7 @@ class _OrderDeliveryScreenState extends State<OrderDeliveryScreen> {
                 ],
               ),
               proceedButton("Complete Order", ThemeApp.tealButtonColor,
-                  context, () {
+                  context,false, () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const OrderCompletedSuccessful()));
                   })
@@ -615,7 +615,7 @@ class _OrderDeliveryScreenState extends State<OrderDeliveryScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: proceedButton(
-                  'Verify OTP', ThemeApp.tealButtonColor, context, () {
+                  'Verify OTP', ThemeApp.tealButtonColor, context,false, () {
                 setState(() {});
                 isOtpisValid();
                 Navigator.pop(context);
@@ -803,19 +803,19 @@ class OrderCompletedSuccessful extends StatelessWidget {
                       .height * .04,
                 ),
                 proceedButton("Back to Active Orders", ThemeApp.tealButtonColor,
-                    context, () {
+                    context,false, () {
                       Navigator.pushReplacement(
                           context, MaterialPageRoute(
                           builder: (context) => const OrderDashboard()));
 
                     }),       proceedButton("Cancel Orders", ThemeApp.tealButtonColor,
-                    context, () {
+                    context, false,() {
                       Navigator.pushReplacement(
                           context, MaterialPageRoute(
                           builder: (context) => const CancelOrderScreen()));
 
                     }),  proceedButton("Delivered Orders", ThemeApp.tealButtonColor,
-                    context, () {
+                    context, false,() {
                       Navigator.pushReplacement(
                           context, MaterialPageRoute(
                           builder: (context) => const DeliveredOrderScreen()));

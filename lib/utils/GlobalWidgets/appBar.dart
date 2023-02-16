@@ -154,6 +154,86 @@ Widget appBar_backWidget(
   ));
 }
 
+class AppBar_BackWidget extends StatefulWidget {
+  final BuildContext context;
+  final Widget titleWidget;
+  final Widget location;
+
+  AppBar_BackWidget(
+      {Key? key,
+      required this.context,
+      required this.titleWidget,
+      required this.location})
+      : super(key: key);
+
+  @override
+  State<AppBar_BackWidget> createState() => _AppBar_BackWidgetState();
+}
+
+class _AppBar_BackWidgetState extends State<AppBar_BackWidget> {
+  double height = 0.0;
+  double width = 0.0;
+
+  @override
+  Widget build(BuildContext context) {
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.pop(context, () {
+          setState(() {});
+        });
+        return Future.value(true);
+      },
+      child: SafeArea(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            color: ThemeApp.darkGreyTab,
+            child: AppBar(
+              centerTitle: false,
+              elevation: 0,
+              backgroundColor: ThemeApp.appBackgroundColor,
+              flexibleSpace: Container(
+                height: height * .08,
+                width: width,
+                decoration: const BoxDecoration(
+                  color: ThemeApp.appBackgroundColor,
+                ),
+              ),
+
+              titleSpacing: 1,
+              leading: InkWell(
+                onTap: () {
+                  Navigator.pop(context, () {
+                    setState(() {});
+                  }); // Provider.of<ProductProvider>(context, listen: false);
+                },
+                child: Transform.scale(
+                  scale: 0.7,
+                  child: Image.asset(
+                    'assets/appImages/backArrow.png',
+                    color: ThemeApp.primaryNavyBlackColor,
+                    // height: height*.001,
+                  ),
+                ),
+              ),
+
+              // leadingWidth: width * .06,
+              title: widget.titleWidget,
+              // Row
+            ),
+          ),
+          widget.location
+        ],
+      )),
+    );
+  }
+}
+
 Widget appTitle(BuildContext context, String text) {
   return Container(
     alignment: Alignment.centerLeft,
@@ -535,7 +615,7 @@ class _ScannerWidgetState extends State<ScannerWidget> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         proceedButton(
-                            "Scan with Camera", ThemeApp.darkGreyColor, context,
+                            "Scan with Camera", ThemeApp.darkGreyColor, context,false,
                             () {
                           // Navigator.of(context).pop();
 

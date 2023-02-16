@@ -4,8 +4,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocit_merchant/Core/Enum/apiEndPointEnums.dart';
+import 'package:velocit_merchant/Screens/Auth_Screens/forgot_password.dart';
 import 'package:velocit_merchant/Screens/orders_Dashboard.dart';
+import '../../Routes/Routes.dart';
 import '../../Screens/Auth_Screens/OTP_Screen.dart';
+import '../../Screens/Auth_Screens/sign_in.dart';
 import '../../utils/constants.dart';
 import '../../utils/utils.dart';
 import '../data/network/baseApiServices.dart';
@@ -178,7 +181,7 @@ class AuthRepository {
 
   /// FINAL API FOR LOGIN USING MOBILE AND OTP
 
-  Future postApiForMobileOTPRequest(Map jsonMap, BuildContext context) async {
+  Future postApiForMobileOTPRequest(Map jsonMap,bool isForgotPass, BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     dynamic responseJson;
@@ -210,6 +213,8 @@ class AuthRepository {
             OTP: jsonData['payload']['otp'].toString(),
             Uname: jsonData['payload']['username'].toString(),
             UID: jsonData['payload']['user_id'].toString(),
+            isForgotPass: isForgotPass,
+
           )));
     } else {
       Utils.errorToast("Please enter valid details.");
@@ -221,7 +226,7 @@ class AuthRepository {
 
   /// FINAL API FOR LOGIN USING EMAIL AND OTP
 
-  Future postApiForEmailOTPRequest(Map jsonMap, BuildContext context) async {
+  Future postApiForEmailOTPRequest(Map jsonMap, bool isForgotPass,  BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     dynamic responseJson;
@@ -253,6 +258,8 @@ class AuthRepository {
             OTP: jsonData['payload']['otp'].toString(),
             Uname: jsonData['payload']['username'].toString(),
             UID: jsonData['payload']['user_id'].toString(),
+            isForgotPass: isForgotPass,
+
           )));
     } else {
       Utils.errorToast("Please enter valid details.");
@@ -264,7 +271,7 @@ class AuthRepository {
 
   /// FINAL API FOR VALIDATING OTP
 
-  Future postApiForValidateOTP(Map jsonMap, BuildContext context) async {
+  Future postApiForValidateOTP(Map jsonMap, bool isForgotPass,  BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     dynamic responseJson;
@@ -306,9 +313,15 @@ class AuthRepository {
         Utils.successToast('User login successfully');
 
 
-
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => OrderDashboard()));
+        if (isForgotPass == true) {
+          Navigator.of(context)
+              .pushReplacementNamed(RoutesName.changeForgotPassRoute)
+              .then((value) {});
+        } else {
+          Navigator.of(context)
+              .pushReplacementNamed(RoutesName.dashboardRoute)
+              .then((value) {});
+        }
 
       } else {
         Utils.errorToast("Please enter valid details.");
@@ -378,5 +391,94 @@ class AuthRepository {
     }*/
   }
 
+
+  //Forgot password
+  Future forgotPassRequest(Map jsonMap, BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    dynamic responseJson;
+    var url = ApiMapping.BaseAPI + ApiMapping.forgotPasswordGenOtp;
+    print(url);
+    print(jsonMap);
+    HttpClient httpClient = new HttpClient();
+    HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
+    request.headers.set('content-type', 'application/json');
+    request.add(utf8.encode(json.encode(jsonMap)));
+
+    HttpClientResponse response = await request.close();
+    // todo - you should check the response.statusCode
+    responseJson = await response.transform(utf8.decoder).join();
+
+    var jsonData = json.decode(responseJson);
+
+    StringConstant.prettyPrintJson(
+        responseJson.toString(), 'Forgot Password Response:');
+
+    if (jsonData['status'].toString() == 'OK') {
+      String mobile = jsonMap['cred'].toString();
+
+      String result =jsonData['payload'].toString().replaceAll("'", "");
+      String result1 =result.toString().replaceAll("{", "");
+      String result2 =result1.toString().replaceAll("}", "");
+      String OTP =result2.toString().replaceAll("newOtp:", "");
+      print(mobile);
+      print(OTP);
+      // var jsonOtp = json.decode(result3);
+
+      Utils.successToast(OTP.toString());
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => ForgotPassOTP(
+            mobileNumber: mobile.toString(),
+            OTP: OTP.toString(),
+          )));
+    } else {
+      Utils.errorToast("Please enter valid details.");
+      httpClient.close();
+      return responseJson;
+    }
+  }
+
+//Reset Password
+  Future resetPassRequest(Map jsonMap,bool isFromForgotPass, BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    dynamic responseJson;
+    var url = ApiMapping.BaseAPI + ApiMapping.resetPassword;
+    print(url);
+    print(jsonMap);
+    HttpClient httpClient = new HttpClient();
+    HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
+    request.headers.set('content-type', 'application/json');
+    request.add(utf8.encode(json.encode(jsonMap)));
+
+    HttpClientResponse response = await request.close();
+    // todo - you should check the response.statusCode
+    responseJson = await response.transform(utf8.decoder).join();
+
+    var jsonData = json.decode(responseJson);
+
+
+    if (jsonData['status'].toString() == 'OK') {
+
+      StringConstant.prettyPrintJson(
+          responseJson.toString(), 'Reset Password Response:');
+      if(isFromForgotPass==true){
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => SignIn_Screen(
+
+            )));
+      }else{
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  OrderDashboard(),
+            ),
+                (route) => false);
+      }
+    } else {
+      Utils.errorToast("Please enter valid details.");
+      httpClient.close();
+      return responseJson;
+    }
+  }
 
 }

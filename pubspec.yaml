@@ -60,6 +60,7 @@ dependencies:
   flutter_svg: ^1.1.6
   url_launcher: ^6.1.7
   flutter_barcode_scanner: ^2.0.0
+  google_fonts: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -119,5 +120,12 @@ flutter:
 #    - family: AppIcons
 #      fonts:
 #        - asset: fonts/MyFlutterApp.ttf
+
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto/Roboto-Regular.ttf
+
+
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

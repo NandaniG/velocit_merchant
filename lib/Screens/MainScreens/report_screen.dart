@@ -28,7 +28,33 @@ class _ReportScreenState extends State<ReportScreen> {
         child: appBarWidget(
             context, appTitle(context, 'Reports'), SizedBox(), setState(() {})),
       ),
-      bottomNavigationBar: bottomNavigationBarWidget(context),
+      bottomNavigationBar: Container(
+        height: 200,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: Container(
+                margin: EdgeInsets.only(left: 10, right: 10),
+                decoration: BoxDecoration(
+                    color: Color(0xff056C84),
+                    borderRadius: BorderRadius.circular(100)),
+                child: MaterialButton(
+                  onPressed: () {},
+                  height: 50,
+                  child: Text(
+                    "Share Reports",
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+            bottomNavigationBarWidget(context)
+          ],
+        ),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: SafeArea(
           child: Container(
@@ -53,7 +79,8 @@ class _ReportScreenState extends State<ReportScreen> {
                         side: BorderSide(
                           color: ThemeApp.appColor, //your desire colour here
                           width: 1.5,
-                        ),                        controlAffinity: ListTileControlAffinity.leading,
+                        ),
+                        controlAffinity: ListTileControlAffinity.leading,
                         title: TextFieldUtils().dynamicText(
                             t.title,
                             context,

@@ -95,7 +95,6 @@ class AuthRepository {
         if (merchantId != -1) {
           prefs.setInt('merchant_id', merchantId);
           prefs.setBool('isLogin', true);
-          StringConstant.isLogIn = true;
           prefs.setString('jwt_token', map['jwt_token'].toString());
         }
         // Prefs.instance.setToken(StringConstant.userId, id.toString());

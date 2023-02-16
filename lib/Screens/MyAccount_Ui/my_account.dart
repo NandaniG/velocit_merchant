@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocit_merchant/Screens/Auth_Screens/sign_in.dart';
+import 'package:velocit_merchant/Screens/MyAccount_Ui/FAQs/frequently_asked_questions.dart';
 import 'package:velocit_merchant/Screens/MyAccount_Ui/KYC/kyc_page.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/styles.dart';
@@ -539,12 +540,12 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
                             ),
                             InkWell(
                               onTap: () {
-                                // Navigator.of(context).push(
-                                //   MaterialPageRoute(
-                                //     builder: (context) =>
-                                //     const MyOrdersActivity(),
-                                //   ),
-                                // );
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                    const FAQsActivity(),
+                                  ),
+                                );
                               },
                               child: Padding(
                                 padding: const EdgeInsets.all(10),

@@ -126,30 +126,28 @@ class _NotificationScreenState extends State<NotificationScreen> {
             SizedBox(
               height: 10,
             ),
-            isGridView == true
-                ? Expanded(
-                    child: ListView.builder(
-                        itemCount: value.notificationDataList.length,
-                        itemBuilder: (_, index) {
-                          return value.notificationDataList[index]
-                                      ["isOffersOnlyNotification"] ==
-                                  true
-                              ? InkWell(
-                                  onTap: () {
-                                    // Navigator.of(context).push(
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) =>
-                                    //         ProductListByCategoryActivity(
-                                    //             productList: value.jsonData[
-                                    //                             "shopByCategoryList"]
-                                    //                         [index][
-                                    //                     "subShopByCategoryList"]
-                                    //                 [index]),
-                                    //   ),
-                                    // );
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(bottom: 10),
+            Expanded(
+                child: ListView.builder(
+                    itemCount: value.notificationDataList?.length ?? 0,
+                    itemBuilder: (_, index) {
+                      return value.notificationDataList[index]
+                      ["isOffersOnlyNotification"]==true? InkWell(
+
+                        onTap: (){
+
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: ThemeApp.whiteColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Row(
+                                children: [
+                                  Expanded(
                                     child: Container(
                                       decoration: BoxDecoration(
                                         color: ThemeApp.whiteColor,
@@ -247,22 +245,39 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                       ),
                                     ),
                                   ),
-                                )
-                              : SizedBox();
-                        }))
-                : Expanded(
-                    child: ListView.builder(
-                        itemCount: value.notificationDataList.length,
-                        itemBuilder: (_, index) {
-                          return InkWell(
-                            onTap: () {
-                              // Navigator.of(context).push(
-                              //   MaterialPageRoute(
-                              //     builder: (context) =>  ProductListByCategoryActivity(productList: value
-                              //         .jsonData["shopByCategoryList"][index]["subShopByCategoryList"][index]),
-                              //   ),
-                              // );
-                            },
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ):  SizedBox();
+                    })),
+            TextFieldUtils().dynamicText('Old Notifications',
+                context,
+                TextStyle(
+                  color: ThemeApp.blackColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: height * .028,
+                )),
+            SizedBox(
+              height: height * .02,
+            ),
+            Expanded(
+                child: ListView.builder(
+                    itemCount: value.notificationDataList?.length ?? 0,
+                    itemBuilder: (_, index) {
+                      return value.notificationDataList[index]["isOffersOnlyNotification"]==false? InkWell(
+
+                        onTap: (){
+
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: ThemeApp.whiteColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 10),
                               child: Container(
@@ -351,7 +366,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 ),
                               ),
                             ),
-                          );
+                          ))):SizedBox();
                         }))
           ],
         );

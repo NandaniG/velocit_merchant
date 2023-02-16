@@ -132,8 +132,11 @@ class _TicketsDetailPageActivityState extends State<TicketsDetailPageActivity> {
                       style: TextStyle(fontSize: 20),
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: 10),
-                      height: (MediaQuery.of(context).size.height * 0.2) * 0.7,
+                      margin: EdgeInsets.only(
+                        top: 10,
+                      ),
+
+                      height: (MediaQuery.of(context).size.height * 0.2) * 0.6,
                       // color: Colors.yellow,
                       child: Row(
                         children: [

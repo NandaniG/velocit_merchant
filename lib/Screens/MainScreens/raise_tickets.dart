@@ -65,32 +65,32 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
               appTitle(context, "Order ID - 1234567"), const SizedBox()),
         ),
         bottomNavigationBar: Container(
-        height: 200,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              height: 50,
-              width: MediaQuery.of(context).size.width,
-              child: Container(
-                margin: EdgeInsets.only(left: 10, right: 10),
-                decoration: BoxDecoration(
-                    color: Color(0xff056C84),
-                    borderRadius: BorderRadius.circular(100)),
-                child: MaterialButton(
-                  onPressed: () {},
-                  height: 50,
-                  child: Text(
-                    "Raise Ticket",
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+          height: 160,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                height: 50,
+                width: MediaQuery.of(context).size.width,
+                child: Container(
+                  margin: EdgeInsets.only(left: 10, right: 10),
+                  decoration: BoxDecoration(
+                      color: Color(0xff056C84),
+                      borderRadius: BorderRadius.circular(100)),
+                  child: MaterialButton(
+                    onPressed: () {},
+                    height: 50,
+                    child: Text(
+                      "Raise Ticket",
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
                   ),
                 ),
               ),
-            ),
-            bottomNavigationBarWidget(context,3)
-          ],
+              bottomNavigationBarWidget(context, 3)
+            ],
+          ),
         ),
-      ),
         // floatingActionButton: InkWell(
         //   onTap: () {
 
@@ -118,12 +118,11 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
                   buttonWidth: MediaQuery.of(context).size.width,
                   dropdownWidth: MediaQuery.of(context).size.width,
                   buttonDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                    border: Border.all(
-                      width: 1,
-                    )
-                  ),
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                      border: Border.all(
+                        width: 1,
+                      )),
                   hint: 'Choose Subject',
                   dropdownItems: items,
                   value: selectedValue,
@@ -149,20 +148,17 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
                 child: TextField(
                   expands: true,
                   maxLines: null,
-                      decoration: InputDecoration(
-                          labelText: "Write description here",
-                          labelStyle: TextStyle(color: Colors.black),
-                          fillColor: Colors.white,
-                          filled: true,
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.black,
-                                width: 1)),
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                width: 1))
-                                ),
-                    ),
+                  decoration: InputDecoration(
+                      labelText: "Write description here",
+                      labelStyle: TextStyle(color: Colors.black),
+                      fillColor: Colors.white,
+                      filled: true,
+                      focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.black, width: 1)),
+                      border:
+                          OutlineInputBorder(borderSide: BorderSide(width: 1))),
+                ),
               ),
               SizedBox(
                 height: 30,
@@ -185,7 +181,7 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 10),
-                      height: (MediaQuery.of(context).size.height * 0.2) * 0.7,
+                      height: (MediaQuery.of(context).size.height * 0.2) * 0.6,
                       // color: Colors.yellow,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -201,8 +197,8 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
                                   borderType: BorderType.RRect,
                                   radius: Radius.circular(10),
                                   child: Container(
-                                    height: 100,
-                                    width: 100,
+                                    height: 80,
+                                    width: 80,
                                     child: Center(
                                       child: Column(
                                         mainAxisAlignment:
@@ -210,7 +206,7 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
                                         children: [
                                           Icon(
                                             Icons.image,
-                                            size: 50,
+                                            size: 45,
                                           ),
                                           // Text("Click to upload",style: TextStyle(fontSize: 16),)
                                         ],
@@ -227,22 +223,24 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               TextFieldUtils().dynamicText(
-                  'Browse File', // earliest_delivery_date,
-                  context,
-                  TextStyle(
-                      color: Color(0xff0C1A30),
-                      fontSize: 14,
-                      fontFamily: "Roboto",
-                      fontWeight: FontWeight.w700)),
-                      SizedBox(height: 5,),
-                      TextFieldUtils().dynamicText(
-                  'Max file size allowed 2MB', // earliest_delivery_date,
-                  context,
-                  TextStyle(
-                      color: Color(0xff0C1A30),
-                      fontSize: 12,
-                      fontFamily: "Roboto",
-                      fontWeight: FontWeight.w400)),
+                                  'Browse File', // earliest_delivery_date,
+                                  context,
+                                  TextStyle(
+                                      color: Color(0xff0C1A30),
+                                      fontSize: 14,
+                                      fontFamily: "Roboto",
+                                      fontWeight: FontWeight.w700)),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              TextFieldUtils().dynamicText(
+                                  'Max file size allowed 2MB', // earliest_delivery_date,
+                                  context,
+                                  TextStyle(
+                                      color: Color(0xff0C1A30),
+                                      fontSize: 12,
+                                      fontFamily: "Roboto",
+                                      fontWeight: FontWeight.w400)),
                             ],
                           )
                         ],

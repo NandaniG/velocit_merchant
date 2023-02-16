@@ -1219,6 +1219,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                               child: Material(
                                 color: Colors.transparent,
                                 child: OTPTextField(
+                                  controller: OtpFieldController(),
                                   length: 5,
                                   width: 50,
                                   fieldWidth: 40,

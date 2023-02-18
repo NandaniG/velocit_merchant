@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,6 +26,17 @@ class _StockScreenState extends State<StockScreen> {
     'Apple',
     'One Plus',
   ];
+  final List<String> items = [
+    'Item1',
+    'Item2',
+    'Item3',
+    'Item4',
+    'Item5',
+    'Item6',
+    'Item7',
+    'Item8',
+  ];
+  String? selectedValue;
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +58,10 @@ class _StockScreenState extends State<StockScreen> {
           padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
           child: Column(
             children: [
-              // dropdownShow(),
-
+              dropdownShow(),
+              SizedBox(
+                height: 20,
+              ),
               Expanded(
                   child: ListView.builder(
                       itemCount: 2,
@@ -168,80 +182,90 @@ class _StockScreenState extends State<StockScreen> {
   }
 
   Widget dropdownShow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        // TextFieldUtils().dynamicText(
-        //     "Show",
-        //     context,
-        //     TextStyle(
-        //         color: ThemeApp.blackColor,
-        //         fontSize: height * .022,
-        //         fontWeight: FontWeight.w500,
-        //         overflow: TextOverflow.ellipsis)),
-        // SizedBox(
-        //   width: width * .03,
-        // ),
-        Container(
-          decoration: BoxDecoration(
-            color: ThemeApp.whiteColor, //<-- SEE HERE
-          ),
-          width: MediaQuery.of(context).size.width * 0.5,
-          // MediaQuery.of(context).size.width * .51,
-          // height: 35,
-          child: DropdownButtonFormField(
-            decoration: InputDecoration(
-              fillColor: ThemeApp.whiteColor,
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(0),
-                  borderSide: BorderSide(color: ThemeApp.whiteColor)),
-              disabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(0),
-                  borderSide: BorderSide(color: ThemeApp.whiteColor)),
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(0),
-                  borderSide: BorderSide(color: ThemeApp.whiteColor)),
-              focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(0),
-                  borderSide: BorderSide(color: ThemeApp.whiteColor)),
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: Container(
+              child: CustomDropdownButton2(
+                // buttonWidth: MediaQuery.of(context).size.width,
+                // dropdownWidth: MediaQuery.of(context).size.width,
+                buttonDecoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: ThemeApp.buttonShade2,
+                ),
+                icon: Icon(Icons.arrow_drop_down_outlined,
+                    color: ThemeApp.blackColor),
+                iconSize: 30,
+                hint: 'Choose Subject',
+                dropdownItems: items,
+                value: selectedValue,
+                onChanged: (value) {
+                  setState(() {
+                    selectedValue = value;
+                  });
+                },
+              ),
             ),
-            style: TextStyle(
-                color: ThemeApp.lightFontColor,
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                overflow: TextOverflow.ellipsis),
-
-            value: activeDropdownValue,
-
-            // Down Arrow Icon
-            // icon: const Icon(Icons.arrow_drop_down,size: 30),
-
-            // Array list of items
-            items: activeItems.map((String items) {
-              return DropdownMenuItem(
-                value: items,
-                child: TextFieldUtils().dynamicText(
-                    items,
-                    context,
-                    TextStyle(
-                        color: ThemeApp.lightFontColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        overflow: TextOverflow.ellipsis)),
-              );
-            }).toList(),
-            // After selecting the desired option,it will
-            // change button value to selected value
-            onChanged: (String? newValue) {
-              setState(() {
-                activeDropdownValue = newValue!;
-              });
-            },
           ),
-        ),
-      ],
+          SizedBox(
+            width: 5,
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              child: CustomDropdownButton2(
+                // buttonWidth: MediaQuery.of(context).size.width,
+                // dropdownWidth: MediaQuery.of(context).size.width,
+                buttonDecoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: ThemeApp.buttonShade2,
+                ),
+                icon: Icon(Icons.arrow_drop_down_outlined,
+                    color: ThemeApp.blackColor),
+                iconSize: 30,
+                hint: 'Choose Subject',
+                dropdownItems: items,
+                value: selectedValue,
+                onChanged: (value) {
+                  setState(() {
+                    selectedValue = value;
+                  });
+                },
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 5,
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              child: CustomDropdownButton2(
+                // buttonWidth: MediaQuery.of(context).size.width,
+                // dropdownWidth: MediaQuery.of(context).size.width,
+                buttonDecoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: ThemeApp.buttonShade2,
+                ),
+                icon: Icon(Icons.arrow_drop_down_outlined,
+                    color: ThemeApp.blackColor),
+                iconSize: 30,
+                hint: 'Choose Subject',
+                dropdownItems: items,
+                value: selectedValue,
+                onChanged: (value) {
+                  setState(() {
+                    selectedValue = value;
+                  });
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

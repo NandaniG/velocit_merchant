@@ -321,8 +321,10 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                                         ),
                                         child: Center(
                                           child: TextFieldUtils()
-                                              .usingPassTextFields('Accept',
-                                                  ThemeApp.whiteColor, context),
+                                              .usingPassTextFields(
+                                                  'Accept Orders',
+                                                  ThemeApp.whiteColor,
+                                                  context),
                                         )),
                                   ),
                                 ),
@@ -354,7 +356,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                                         child: Center(
                                           child: TextFieldUtils()
                                               .usingPassTextFields(
-                                                  'Reject',
+                                                  'Reject Orders',
                                                   ThemeApp.tealButtonColor,
                                                   context),
                                         )),

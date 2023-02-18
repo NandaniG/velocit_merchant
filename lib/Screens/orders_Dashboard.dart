@@ -77,6 +77,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                   borderRadius: const BorderRadius.all(
                     Radius.circular(100),
                   ),
+                  border: Border.all(color: ThemeApp.appColor),
                   color: ThemeApp.whiteColor,
                 ),
                 child: Row(
@@ -617,6 +618,14 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                               height: height * .01,
                                             ),
                                             TextFieldUtils().dynamicText(
+                                                earliest_delivery_date,
+                                                context,
+                                                TextStyle(
+                                                  color:
+                                                      ThemeApp.lightFontColor,
+                                                  fontSize: 12,
+                                                )),
+                                            TextFieldUtils().dynamicText(
                                                 '${order['overall_status']}', // earliest_delivery_date,
                                                 context,
                                                 TextStyle(
@@ -626,13 +635,6 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                                 )),
                                           ],
                                         ),
-                                        TextFieldUtils().dynamicText(
-                                            earliest_delivery_date,
-                                            context,
-                                            TextStyle(
-                                              color: ThemeApp.lightFontColor,
-                                              fontSize: 12,
-                                            )),
                                       ],
                                     ),
                                   ),

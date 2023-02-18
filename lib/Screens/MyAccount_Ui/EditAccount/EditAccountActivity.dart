@@ -152,7 +152,7 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
                           decoration: new BoxDecoration(
                             boxShadow: [
                               BoxShadow(
-                                  color: Colors.grey.shade600,
+                                  color: ThemeApp.buttonShade2,
                                   spreadRadius: 1,
                                   blurRadius: 5)
                             ],
@@ -224,11 +224,11 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
                           decoration: new BoxDecoration(
                             boxShadow: [
                               BoxShadow(
-                                  color: ThemeApp.appBackgroundColor,
+                                  color: ThemeApp.buttonShade2,
                                   spreadRadius: 1,
                                   blurRadius: 15)
                             ],
-                            color: ThemeApp.appBackgroundColor,
+                            color: ThemeApp.buttonShade2,
                             border: Border.all(
                                 color: ThemeApp.whiteColor, width: 7),
                             shape: BoxShape.circle,
@@ -581,7 +581,6 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
         StringUtils.update, ThemeApp.tealButtonColor, context, false, () {
       FocusManager.instance.primaryFocus?.unfocus();
 
-  
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -590,14 +589,12 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
     });
   }
 
-
-
-  // String images='';
-  Future<String> getBase64Image(PickedFile img) async {
-    List<int> imageBytes = File(img.path).readAsBytesSync();
-    String img64 = base64Encode(imageBytes);
-    // print(img.path);
-    // print(img64);
-    return img64;
-  }
+  // // String images='';
+  // Future<String> getBase64Image(PickedFile img) async {
+  //   List<int> imageBytes = File(img.path).readAsBytesSync();
+  //   String img64 = base64Encode(imageBytes);
+  //   // print(img.path);
+  //   // print(img64);
+  //   return img64;
+  // }
 }

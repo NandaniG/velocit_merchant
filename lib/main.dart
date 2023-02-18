@@ -19,59 +19,59 @@ import 'l10n/l10n.dart';
 import 'l10n/localeProvider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-void main()  {
-  
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context)  {
-    return  MultiProvider(
-        providers: [
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
         ChangeNotifierProvider(
-        create: (_) => AuthViewModel(),
-    ), ChangeNotifierProvider(
-            create: (_) => LocaleProvider(),
-          ),
-          ChangeNotifierProvider(
-        create: (_) => HomeProvider(),
-    ),],
+          create: (_) => AuthViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => LocaleProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => HomeProvider(),
+        ),
+      ],
       child: Consumer<LocaleProvider>(
           builder: (context, localeProvider, snapshot) {
         return ScreenUtilInit(
-          designSize: const Size(360, 640 ),
-
-          builder:  (_,child) =>
-           MaterialApp(
-            locale: localeProvider.locale,
-            localizationsDelegates: const [
-              //AppLocalizationsDelegate(),
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-              AppLocalizations.delegate,
-            ],debugShowCheckedModeBanner: false,
-            supportedLocales: L10n.all,
+          designSize: const Size(360, 640),
+          builder: (_, child) => MaterialApp(
+            // locale: localeProvider.locale,
+            // localizationsDelegates: const [
+            //   //AppLocalizationsDelegate(),
+            //   GlobalMaterialLocalizations.delegate,
+            //   GlobalWidgetsLocalizations.delegate,
+            //   GlobalCupertinoLocalizations.delegate,
+            //   AppLocalizations.delegate,
+            // ],
+            debugShowCheckedModeBanner: false,
+            // supportedLocales: L10n.all,
             title: 'Flutter Demo',
-             theme: ThemeData(
-
-               unselectedWidgetColor: ThemeApp.appColor,
-               textTheme: GoogleFonts.robotoTextTheme(
-                 Theme.of(context).textTheme,
-               ),
-               primarySwatch: colorCustomForMaterialApp,
-             ),
-             color: ThemeApp.appColor,
+            theme: ThemeData(
+              unselectedWidgetColor: ThemeApp.appColor,
+              textTheme: GoogleFonts.robotoTextTheme(
+                Theme.of(context).textTheme,
+              ),
+              primarySwatch: colorCustomForMaterialApp,
+            ),
+            color: ThemeApp.appColor,
             // initialRoute: '/',
-             initialRoute: RoutesName.splashScreenRoute,
-             onGenerateRoute: Routes.generateRoute,
+            initialRoute: RoutesName.splashScreenRoute,
+            onGenerateRoute: Routes.generateRoute,
             routes: {
-              "/":(context)=>SplashScreen(),
+              "/": (context) => SplashScreen(),
               // "/":(context)=>OrderDashboard(),
               // '/': (context) =>StringConstant.isLogIn==true?  const OrderDashboard():SignIn_Screen(),
               '/forgotPasswordScreen': (context) => const ForgotPassword(),
@@ -96,15 +96,19 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   setScreen() async {
-    SharedPreferences pref = await SharedPreferences.getInstance(); 
-  StringConstant.isLogIn = pref.getBool('isLogin') ?? false;
-  //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-  //  Provider.of<HomeProvider>(context,).loadJson();
-  //   });
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    StringConstant.isLogIn = pref.getBool('isLogin') ?? false;
+    //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //  Provider.of<HomeProvider>(context,).loadJson();
+    //   });
     Timer(
         const Duration(seconds: 3),
         () => Navigator.push(
-            context, MaterialPageRoute(builder: (context) => StringConstant.isLogIn ? const OrderDashboard() : SignIn_Screen())));
+            context,
+            MaterialPageRoute(
+                builder: (context) => StringConstant.isLogIn
+                    ? const OrderDashboard()
+                    : SignIn_Screen())));
   }
 
   @override

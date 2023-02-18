@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/styles.dart';
@@ -63,7 +64,7 @@ class _TicketsDetailPageActivityState extends State<TicketsDetailPageActivity> {
         //   child: Text("Submit Documents",style: TextStyle(fontSize: 16,color: Colors.white),),
         //   ),
         // )),
-        bottomNavigationBar: bottomNavigationBarWidget(context, 4),
+        bottomNavigationBar: bottomNavigationBarWidget(context, 3),
         // floatingActionButton: InkWell(
         //   onTap: () {
 
@@ -136,73 +137,165 @@ class _TicketsDetailPageActivityState extends State<TicketsDetailPageActivity> {
                         top: 10,
                       ),
 
-                      height: (MediaQuery.of(context).size.height * 0.2) * 0.6,
+                      // height: (MediaQuery.of(context).size.height * 0.2) * 0.6,
                       // color: Colors.yellow,
                       child: Row(
                         children: [
-                          Expanded(
-                              child: Column(
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               // Text("GST Cert.(Optional)",style: TextStyle(fontSize: 12),),
                               SizedBox(
                                 height: 10,
                               ),
-                              DottedBorder(
-                                  borderType: BorderType.RRect,
-                                  radius: Radius.circular(10),
-                                  child: Container(
-                                    height: 80,
-                                    width: 70 * 2.5,
+
+                              Stack(
+                                children: [
+                                  Container(
+                                    height: 93,
+                                    width: 93,
+                                    decoration: BoxDecoration(
+                                      color: ThemeApp.emptyImageColor,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
                                     child: Center(
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
                                           Icon(
-                                            Icons.picture_as_pdf,
+                                            Icons.image_outlined,
                                             size: 50,
+                                            color: ThemeApp.separatedLineColor,
                                           ),
                                           // Text("Click to upload",style: TextStyle(fontSize: 16),)
                                         ],
                                       ),
                                     ),
-                                  ))
+                                  ),
+                                  Positioned(
+                                    bottom: 5,
+                                    right: 5,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: ThemeApp.appColor,
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: SvgPicture.asset(
+                                          'assets/appImages/uploadImageIcon.svg',
+                                          // color: ThemeApp.primaryNavyBlackColor,
+                                          semanticsLabel: 'Acme Logo',
+
+                                          height: 15, width: 15,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              )
+                              // DottedBorder(
+                              //     borderType: BorderType.RRect,
+                              //     radius: Radius.circular(10),
+                              //     child: Container(
+                              //       height: 80,
+                              //       width: 70 * 2.5,
+                              //       child: Center(
+                              //         child: Column(
+                              //           mainAxisAlignment:
+                              //               MainAxisAlignment.center,
+                              //           children: [
+                              //             Icon(
+                              //               Icons.picture_as_pdf,
+                              //               size: 50,
+                              //             ),
+                              //             // Text("Click to upload",style: TextStyle(fontSize: 16),)
+                              //           ],
+                              //         ),
+                              //       ),
+                              //     ))
                             ],
-                          )),
-                          SizedBox(
-                            width: 20,
                           ),
-                          Expanded(
-                              child: Column(
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               // Text("Company InCorpration Cert.",style: TextStyle(fontSize: 12),),
                               SizedBox(
                                 height: 10,
                               ),
-                              DottedBorder(
-                                  borderType: BorderType.RRect,
-                                  radius: Radius.circular(10),
-                                  child: Container(
-                                    height: 80,
-                                    width: 70 * 2.5,
+                              Stack(
+                                children: [
+                                  Container(
+                                    height: 93,
+                                    width: 93,
+                                    decoration: BoxDecoration(
+                                      color: ThemeApp.emptyImageColor,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
                                     child: Center(
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
                                           Icon(
-                                            Icons.picture_as_pdf,
+                                            Icons.picture_as_pdf_outlined,
                                             size: 50,
+                                            color: ThemeApp.separatedLineColor,
                                           ),
                                           // Text("Click to upload",style: TextStyle(fontSize: 16),)
                                         ],
                                       ),
                                     ),
-                                  ))
+                                  ),
+                                  Positioned(
+                                    bottom: 5,
+                                    right: 5,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: ThemeApp.appColor,
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: SvgPicture.asset(
+                                          'assets/appImages/uploadImageIcon.svg',
+                                          // color: ThemeApp.primaryNavyBlackColor,
+                                          semanticsLabel: 'Acme Logo',
+
+                                          height: 15, width: 15,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              )
+
+                              // DottedBorder(
+                              //     borderType: BorderType.RRect,
+                              //     radius: Radius.circular(10),
+                              //     child: Container(
+                              //       height: 80,
+                              //       width: 70 * 2.5,
+                              //       child: Center(
+                              //         child: Column(
+                              //           mainAxisAlignment:
+                              //               MainAxisAlignment.center,
+                              //           children: [
+                              //             Icon(
+                              //               Icons.picture_as_pdf,
+                              //               size: 50,
+                              //             ),
+                              //             // Text("Click to upload",style: TextStyle(fontSize: 16),)
+                              //           ],
+                              //         ),
+                              //       ),
+                              //     ))
                             ],
-                          ))
+                          )
                         ],
                       ),
                     )

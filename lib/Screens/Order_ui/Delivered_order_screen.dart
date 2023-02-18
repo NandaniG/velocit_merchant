@@ -5,7 +5,7 @@ import '../../utils/GlobalWidgets/appBar.dart';
 import '../../utils/GlobalWidgets/textFormFields.dart';
 import '../../utils/constants.dart';
 import '../../utils/styles.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DeliveredOrderScreen extends StatefulWidget {
   const DeliveredOrderScreen({Key? key}) : super(key: key);
@@ -80,8 +80,7 @@ class _DeliveredOrderScreenState extends State<DeliveredOrderScreen> {
                                     MainAxisAlignment.spaceBetween,
                                     children: [
                                       TextFieldUtils().dynamicText(
-                                          AppLocalizations.of(context)
-                                              .deliveryDetails,
+                                          'Delivery Details',
                                           context,
                                           TextStyle(
                                               color: ThemeApp.primaryNavyBlackColor,
@@ -178,7 +177,7 @@ class _DeliveredOrderScreenState extends State<DeliveredOrderScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 TextFieldUtils().dynamicText(
-                                    AppLocalizations.of(context).orderSummary,
+                                  'Order Summery',
                                     context,
                                     TextStyle(
                                         color: ThemeApp.primaryNavyBlackColor,

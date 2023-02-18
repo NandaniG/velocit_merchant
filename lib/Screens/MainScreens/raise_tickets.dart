@@ -100,8 +100,8 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
         body: SafeArea(
             child: Container(
           padding: EdgeInsets.only(left: 10, right: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: ListView(
+            // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 10),
               TextFieldUtils().dynamicText(
@@ -118,7 +118,7 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
                   buttonWidth: MediaQuery.of(context).size.width,
                   dropdownWidth: MediaQuery.of(context).size.width,
                   buttonDecoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(5),
                       color: Colors.white,
                       border: Border.all(
                         width: 1,
@@ -150,7 +150,9 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
                   maxLines: null,
                   decoration: InputDecoration(
                       labelText: "Write description here",
-                      labelStyle: TextStyle(color: Colors.black),
+                      labelStyle: TextStyle(
+                        color: Colors.black,
+                      ),
                       fillColor: Colors.white,
                       filled: true,
                       focusedBorder: OutlineInputBorder(
@@ -177,7 +179,8 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
                     ),
                     Text(
                       "Attachment",
-                      style: TextStyle(fontSize: 20),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 10),
@@ -193,26 +196,48 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
                               SizedBox(
                                 height: 10,
                               ),
-                              DottedBorder(
-                                  borderType: BorderType.RRect,
-                                  radius: Radius.circular(10),
-                                  child: Container(
-                                    height: 80,
-                                    width: 80,
-                                    child: Center(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.image,
-                                            size: 45,
-                                          ),
-                                          // Text("Click to upload",style: TextStyle(fontSize: 16),)
-                                        ],
+                              Container(
+                                height: 80,
+                                width: 80,
+                                decoration: BoxDecoration(
+                                  color: ThemeApp.emptyImageColor,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.image_outlined,
+                                        size: 50,
+                                        color: ThemeApp.separatedLineColor,
                                       ),
-                                    ),
-                                  ))
+                                      // Text("Click to upload",style: TextStyle(fontSize: 16),)
+                                    ],
+                                  ),
+                                ),
+                              ),
+
+                              // DottedBorder(
+                              //     borderType: BorderType.RRect,
+                              //     radius: Radius.circular(10),
+                              //     child: Container(
+                              //       height: 80,
+                              //       width: 80,
+                              //       child: Center(
+                              //         child: Column(
+                              //           mainAxisAlignment:
+                              //               MainAxisAlignment.center,
+                              //           children: [
+                              //             Icon(
+                              //               Icons.image,
+                              //               size: 45,
+                              //             ),
+                              //             // Text("Click to upload",style: TextStyle(fontSize: 16),)
+                              //           ],
+                              //         ),
+                              //       ),
+                              //     ))
                             ],
                           ),
                           SizedBox(

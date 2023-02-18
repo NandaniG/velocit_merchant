@@ -16,7 +16,7 @@ import 'Order_details_screen.dart';
 class ReturnOrderActivity extends StatefulWidget {
   // final MyOrdersModel values;
   final dynamic values;
-  bool isSingleOrderReject;
+  final bool isSingleOrderReject;
 
   ReturnOrderActivity(
       {Key? key, required this.values, required this.isSingleOrderReject})
@@ -83,6 +83,9 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
                             provider.jsonData['error'] == null)
                         ? ListView(
                             children: [
+                              SizedBox(
+                                height: 15,
+                              ),
                               Padding(
                                 padding:
                                     const EdgeInsets.only(left: 20, right: 20),
@@ -98,9 +101,11 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
                                     )),
                               ),
                               SizedBox(
-                                height: 5,
+                                height: 15,
                               ),
-                              mainUI(provider),
+                              widget.isSingleOrderReject == false
+                                  ? isSingleOrderOnly()
+                                  : isMultipleOrders(),
                             ],
                           )
                         : provider.jsonData['error'] != null
@@ -113,7 +118,7 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
     );
   }
 
-  Widget mainUI(HomeProvider value) {
+  Widget isMultipleOrders() {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: /*Column(
@@ -150,70 +155,64 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      widget.isSingleOrderReject == true
-                                          ? Text(
-                                              "Order ID : " +
-                                                  orders["id"].toString(),
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                  fontFamily: 'Roboto',
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  color: ThemeApp
-                                                      .primaryNavyBlackColor,
-                                                  fontSize: 15,
-                                                  letterSpacing: -0.25,
-                                                  fontWeight: FontWeight.w700))
-                                          : SizedBox(),
+                                      Text(
+                                          "Order ID : " +
+                                              orders["id"].toString(),
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                              fontFamily: 'Roboto',
+                                              overflow: TextOverflow.ellipsis,
+                                              color: ThemeApp
+                                                  .primaryNavyBlackColor,
+                                              fontSize: 15,
+                                              letterSpacing: -0.25,
+                                              fontWeight: FontWeight.w700)),
                                       SizedBox(
                                         height: 17,
                                       ),
-                                      widget.isSingleOrderReject == true
-                                          ? Row(
-                                              children: [
-                                                Container(
-                                                  height: 79,
-                                                  width: 79,
-                                                  child: ClipRRect(
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                      Radius.circular(10),
-                                                    ),
-                                                    child: Image.network(
-                                                        orders['image_url'] ??
-                                                            "",
-                                                        fit: BoxFit.fill,
-                                                        errorBuilder: ((context,
-                                                            error, stackTrace) {
-                                                      return Container(
-                                                          height: 79,
-                                                          width: 79,
-                                                          child: Icon(Icons
-                                                              .image_outlined));
-                                                    })),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 12,
-                                                ),
-                                                Flexible(
-                                                  child: Text(
-                                                      orders["oneliner"] ?? "",
-                                                      maxLines: 2,
-                                                      style: TextStyle(
-                                                          fontFamily: 'Roboto',
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          color: ThemeApp
-                                                              .primaryNavyBlackColor,
-                                                          fontSize: 12,
-                                                          letterSpacing: -0.25,
-                                                          fontWeight:
-                                                              FontWeight.w700)),
-                                                ),
-                                              ],
-                                            )
-                                          : SizedBox(),
+                                      Row(
+                                        children: [
+                                          Container(
+                                            height: 79,
+                                            width: 79,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                Radius.circular(10),
+                                              ),
+                                              child: Image.network(
+                                                  orders['image_url'] ?? "",
+                                                  fit: BoxFit.fill,
+                                                  errorBuilder: ((context,
+                                                      error, stackTrace) {
+                                                return Container(
+                                                    height: 79,
+                                                    width: 79,
+                                                    child: Icon(
+                                                        Icons.image_outlined));
+                                              })),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 12,
+                                          ),
+                                          Flexible(
+                                            child: Text(
+                                                orders["oneliner"] ?? "",
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                    fontFamily: 'Roboto',
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    color: ThemeApp
+                                                        .primaryNavyBlackColor,
+                                                    fontSize: 12,
+                                                    letterSpacing: -0.25,
+                                                    fontWeight:
+                                                        FontWeight.w700)),
+                                          ),
+                                        ],
+                                      ),
                                       SizedBox(
                                         height: 17,
                                       ),
@@ -252,7 +251,7 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
                                                   width: 25,
                                                   height: 30,
                                                   child: Radio(
-                                                    value: 3,
+                                                    value: 1,
                                                     groupValue: _radioIndex,
                                                     activeColor:
                                                         ThemeApp.appColor,
@@ -293,7 +292,7 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
                                                   width: 25,
                                                   height: 30,
                                                   child: Radio(
-                                                    value: 3,
+                                                    value: 2,
                                                     groupValue: _radioIndex,
                                                     activeColor:
                                                         ThemeApp.appColor,
@@ -334,7 +333,7 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
                                                   width: 25,
                                                   height: 30,
                                                   child: Radio(
-                                                    value: 4,
+                                                    value: 3,
                                                     groupValue: _radioIndex,
                                                     activeColor:
                                                         ThemeApp.appColor,
@@ -375,7 +374,7 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
                                                   width: 25,
                                                   height: 30,
                                                   child: Radio(
-                                                    value: 5,
+                                                    value: 4,
                                                     groupValue: _radioIndex,
                                                     activeColor:
                                                         ThemeApp.appColor,
@@ -416,7 +415,7 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
                                                   width: 25,
                                                   height: 30,
                                                   child: Radio(
-                                                    value: 2,
+                                                    value: 5,
                                                     groupValue: _radioIndex,
                                                     activeColor:
                                                         ThemeApp.appColor,
@@ -567,6 +566,280 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
                 }))
           ],
         ),*/
+    );
+  }
+
+  Widget isSingleOrderOnly() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: ThemeApp.lightBorderColor),
+                color: ThemeApp.whiteColor),
+            padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text("Why you want to Reject?",
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontFamily: 'Roboto',
+                      color: ThemeApp.blackColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      overflow: TextOverflow.ellipsis,
+                    )),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 25,
+                      height: 30,
+                      child: Radio(
+                        value: 1,
+                        groupValue: _radioIndex,
+                        activeColor: ThemeApp.appColor,
+                        onChanged: (value) {
+                          setState(() {
+                            _radioIndex = value as int;
+                            _radioVal = 'Unable to fulfil order on time';
+                            print(_radioVal);
+                          });
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Flexible(
+                      child: const Text('Unable to fulfil order on time',
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontFamily: 'Roboto',
+                            color: ThemeApp.blackColor,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            overflow: TextOverflow.ellipsis,
+                          )),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 25,
+                      height: 30,
+                      child: Radio(
+                        value: 2,
+                        groupValue: _radioIndex,
+                        activeColor: ThemeApp.appColor,
+                        onChanged: (value) {
+                          setState(() {
+                            _radioIndex = value as int;
+                            _radioVal = 'Reason of order rejection';
+                            print(_radioVal);
+                          });
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Flexible(
+                      child: const Text('Reason of order rejection',
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontFamily: 'Roboto',
+                            color: ThemeApp.blackColor,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            overflow: TextOverflow.ellipsis,
+                          )),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 25,
+                      height: 30,
+                      child: Radio(
+                        value: 3,
+                        groupValue: _radioIndex,
+                        activeColor: ThemeApp.appColor,
+                        onChanged: (value) {
+                          setState(() {
+                            _radioIndex = value as int;
+                            _radioVal = 'Reason for rejecting order';
+                            print(_radioVal);
+                          });
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Flexible(
+                      child: const Text("Reason for rejecting order",
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontFamily: 'Roboto',
+                            color: ThemeApp.blackColor,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            overflow: TextOverflow.ellipsis,
+                          )),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 25,
+                      height: 30,
+                      child: Radio(
+                        value: 4,
+                        groupValue: _radioIndex,
+                        activeColor: ThemeApp.appColor,
+                        onChanged: (value) {
+                          setState(() {
+                            _radioIndex = value as int;
+                            _radioVal = 'Fourth reason will go here';
+                            print(_radioVal);
+                          });
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Flexible(
+                      child: const Text("Fourth reason will go here",
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontFamily: 'Roboto',
+                            color: ThemeApp.blackColor,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            overflow: TextOverflow.ellipsis,
+                          )),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 25,
+                      height: 30,
+                      child: Radio(
+                        value: 5,
+                        groupValue: _radioIndex,
+                        activeColor: ThemeApp.appColor,
+                        onChanged: (value) {
+                          setState(() {
+                            _radioIndex = value as int;
+                            _radioVal = 'Other';
+                            print(_radioVal);
+                          });
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    const Flexible(
+                      child: const Text('Other',
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontFamily: 'Roboto',
+                            color: ThemeApp.blackColor,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            overflow: TextOverflow.ellipsis,
+                          )),
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextFieldUtils().dynamicText(
+                  'Write your reason for rejection order',
+                  context,
+                  TextStyle(
+                      fontFamily: 'Roboto',
+                      color: ThemeApp.blackColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: -0.25)),
+            ],
+          ),
+          SizedBox(
+            height: 16,
+          ),
+          TextFormField(
+            controller: vendorReviewController,
+            style: TextStyle(
+              fontFamily: 'Roboto',
+              fontSize: 12,
+              color: ThemeApp.blackColor,
+            ),
+            validator: (value) {
+              return null;
+            },
+            maxLines: 4,
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: ThemeApp.whiteColor,
+              hintStyle: TextStyle(
+                  fontFamily: 'Roboto',
+                  color: ThemeApp.lightBorderColor,
+                  fontSize: 12),
+              contentPadding: EdgeInsets.fromLTRB(10.0, 10, 10.0, 10),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: ThemeApp.lightBorderColor)),
+              focusedBorder: OutlineInputBorder(
+                  borderSide:
+                      BorderSide(color: ThemeApp.lightBorderColor, width: 1)),
+              disabledBorder: OutlineInputBorder(
+                  borderSide:
+                      BorderSide(color: ThemeApp.lightBorderColor, width: 1)),
+              errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: ThemeApp.redColor, width: 1)),
+              enabledBorder: OutlineInputBorder(
+                  borderSide:
+                      BorderSide(color: ThemeApp.lightBorderColor, width: 1)),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          proceedButton(
+              "Reject Order", ThemeApp.tealButtonColor, context, false,
+              () async {
+            FocusManager.instance.primaryFocus?.unfocus();
+
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => OrderReviewSubActivity(
+                      order: widget.values,
+                    )));
+          }),
+        ],
+      ),
     );
   }
 

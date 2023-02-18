@@ -64,6 +64,8 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
         StringConstant.ProfilePhoto = prefs.getString('profileImagePrefs')!;
       });
       return;
+    } else {
+      StringConstant.ProfilePhoto = '';
     }
   }
 
@@ -74,8 +76,8 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
 
     return WillPopScope(
       onWillPop: () {
-        Navigator.pushReplacementNamed(context, '/dashBoardScreen');
-
+        // Navigator.pushReplacementNamed(context, '/dashBoardScreen');
+        Navigator.of(context).pop();
         return Future.value(true);
       },
       child: Scaffold(
@@ -169,7 +171,7 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        imageFile1 != null
+                        StringConstant.ProfilePhoto.toString() != null
                             ? Stack(
                                 // alignment: Alignment.center,
                                 children: [
@@ -180,7 +182,7 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
                                       decoration: new BoxDecoration(
                                         boxShadow: [
                                           BoxShadow(
-                                              color: Colors.grey.shade600,
+                                              color: ThemeApp.buttonShade2,
                                               spreadRadius: 1,
                                               blurRadius: 5)
                                         ],
@@ -193,7 +195,7 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
                                         borderRadius: const BorderRadius.all(
                                             Radius.circular(100)),
                                         child: Image.file(
-                                          imageFile1!,
+                                          File(StringConstant.ProfilePhoto),
                                           fit: BoxFit.fitWidth,
                                           width: 90.0,
                                           height: 90.0,
@@ -258,12 +260,11 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
                                       decoration: new BoxDecoration(
                                         boxShadow: [
                                           BoxShadow(
-                                              color:
-                                                  ThemeApp.appBackgroundColor,
+                                              color: ThemeApp.buttonShade2,
                                               spreadRadius: 1,
                                               blurRadius: 15)
                                         ],
-                                        color: ThemeApp.appBackgroundColor,
+                                        color: ThemeApp.buttonShade2,
                                         border: Border.all(
                                             color: ThemeApp.whiteColor,
                                             width: 7),

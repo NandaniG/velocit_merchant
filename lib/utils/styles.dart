@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 class ThemeApp {
   static const appColor = Color(0xff00A7BF);
   static const appBackgroundColor = Color(0xffE3FCFF);
+    static const appBarShadowColor = const Color.fromRGBO(0, 167, 191, 0.07);
+
   static const appLightColor = Color(0xff75E4ED);
   static const buttonShade2 = Color(0xff95EAF1);
   static const lightBorderColor = Color(0xffDADADA);
@@ -24,6 +26,8 @@ class ThemeApp {
   static const deliveredOrderColor = Color(0xff2400FF);
 
   static const separatedLineColor = Color(0xffD9D9D9);
+    static const emptyImageColor = Color(0xffEDEDED);
+
 
   static const textFieldBorderColor = const Color.fromRGBO(199, 195, 195, 1);
   static const backgroundColor = const Color.fromRGBO(240, 237, 237, 1);

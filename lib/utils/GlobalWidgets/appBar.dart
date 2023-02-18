@@ -119,8 +119,10 @@ Widget appBar_backWidget(
         width: MediaQuery.of(context).size.width,
         color: ThemeApp.appBackgroundColor,
         child: AppBar(
+          shadowColor: ThemeApp.appBackgroundColor,
+
           centerTitle: false,
-          elevation: 0,
+          // elevation: 0,
           backgroundColor: ThemeApp.appBackgroundColor,
           flexibleSpace: Container(
             height: height * .08,
@@ -194,10 +196,9 @@ class _AppBar_BackWidgetState extends State<AppBar_BackWidget> {
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
-            color: ThemeApp.darkGreyTab,
+            color: ThemeApp.appBackgroundColor,
             child: AppBar(
               centerTitle: false,
-              elevation: 0,
               backgroundColor: ThemeApp.appBackgroundColor,
               flexibleSpace: Container(
                 height: height * .08,

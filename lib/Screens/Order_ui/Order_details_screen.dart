@@ -11,10 +11,11 @@ import 'package:velocit_merchant/utils/GlobalWidgets/proceedButtons.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/styles.dart';
 import '../../../utils/utils.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../utils/GlobalWidgets/appBar.dart';
 import '../../utils/GlobalWidgets/textFormFields.dart';
+import '../../utils/StringUtils.dart';
 import 'Cancel_order_screen.dart';
 import 'Order_delivery_screen.dart';
 
@@ -168,7 +169,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               TextFieldUtils().dynamicText(
-                                  AppLocalizations.of(context).deliveryDetails,
+                                  StringUtils.deliveryDetails,
                                   context,
                                   TextStyle(
                                       color: ThemeApp.primaryNavyBlackColor,
@@ -263,7 +264,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             TextFieldUtils().dynamicText(
-                                AppLocalizations.of(context).orderSummary,
+                                StringUtils.orderSummary,
                                 context,
                                 TextStyle(
                                   fontFamily: 'Roboto',

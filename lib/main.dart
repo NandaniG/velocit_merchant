@@ -17,7 +17,7 @@ import 'Screens/Auth_Screens/forgot_password.dart';
 import 'Services/Provider/Home_Provider.dart';
 import 'l10n/l10n.dart';
 import 'l10n/localeProvider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,16 +36,16 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => AuthViewModel(),
         ),
-        ChangeNotifierProvider(
-          create: (_) => LocaleProvider(),
-        ),
+        // ChangeNotifierProvider(
+        //   create: (_) => LocaleProvider(),
+        // ),
         ChangeNotifierProvider(
           create: (_) => HomeProvider(),
         ),
       ],
-      child: Consumer<LocaleProvider>(
+      child: /*Consumer<LocaleProvider>(
           builder: (context, localeProvider, snapshot) {
-        return ScreenUtilInit(
+        return*/ ScreenUtilInit(
           designSize: const Size(360, 640),
           builder: (_, child) => MaterialApp(
             // locale: localeProvider.locale,
@@ -77,8 +77,8 @@ class MyApp extends StatelessWidget {
               '/forgotPasswordScreen': (context) => const ForgotPassword(),
             },
           ),
-        );
-      }),
+        )
+      // }),
     );
   }
 }
@@ -140,7 +140,7 @@ class _SplashScreenState extends State<SplashScreen> {
             children: <Widget>[
               Center(
                 child: Image.asset(
-                  'assets/appImages/splash_image.png',
+                  'assets/appImages/splashScreen.png',
                   alignment: Alignment.center,
                   height: 173,
                   width: 253,

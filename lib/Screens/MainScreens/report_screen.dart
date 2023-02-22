@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../utils/GlobalWidgets/appBar.dart';
+import '../../utils/GlobalWidgets/proceedButtons.dart';
 import '../../utils/GlobalWidgets/textFormFields.dart';
 import '../../utils/styles.dart';
 
@@ -33,25 +34,12 @@ class _ReportScreenState extends State<ReportScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox(
-              height: 50,
-              width: MediaQuery.of(context).size.width,
-              child: Container(
-                margin: EdgeInsets.only(left: 10, right: 10),
-                decoration: BoxDecoration(
-                    color: Color(0xff056C84),
-                    borderRadius: BorderRadius.circular(100)),
-                child: MaterialButton(
-                  onPressed: () {},
-                  height: 50,
-                  child: Text(
-                    "Share Reports",
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                  ),
-                ),
-              ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: proceedButton("Share Reports", ThemeApp.tealButtonColor,
+                  context, false, () {}),
             ),
-            bottomNavigationBarWidget(context,4)
+            bottomNavigationBarWidget(context, 4)
           ],
         ),
       ),

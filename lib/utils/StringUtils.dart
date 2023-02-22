@@ -17,6 +17,7 @@ class StringUtils {
   static String emailORMobile = "Email Address / Mobile Number";
   static String emailORMobileHint = "Email / Mobile";
   static String email = "Email";
+  static String otp = "OTP";
   static String password = "Password";
   // static String emailError = "Email ID field cannot be blank.";
   static String mobileError = "Mobile field cannot be blank.";

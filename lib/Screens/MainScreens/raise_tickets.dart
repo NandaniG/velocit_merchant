@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:velocit_merchant/utils/GlobalWidgets/proceedButtons.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/styles.dart';
 import '../../../utils/utils.dart';
@@ -69,23 +70,27 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
-                height: 50,
-                width: MediaQuery.of(context).size.width,
-                child: Container(
-                  margin: EdgeInsets.only(left: 10, right: 10),
-                  decoration: BoxDecoration(
-                      color: Color(0xff056C84),
-                      borderRadius: BorderRadius.circular(100)),
-                  child: MaterialButton(
-                    onPressed: () {},
-                    height: 50,
-                    child: Text(
-                      "Raise Ticket",
-                      style: TextStyle(fontSize: 16, color: Colors.white),
-                    ),
-                  ),
-                ),
+              // SizedBox(
+              //   height: 50,
+              //   width: MediaQuery.of(context).size.width,
+              //   child: Container(
+              //     margin: EdgeInsets.only(left: 10, right: 10),
+              //     decoration: BoxDecoration(
+              //         color: Color(0xff056C84),
+              //         borderRadius: BorderRadius.circular(100)),
+              //     child: MaterialButton(
+              //       onPressed: () {},
+              //       height: 50,
+              //       child: Text(
+              //         "Raise Ticket",
+              //         style: TextStyle(fontSize: 16, color: Colors.white),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20,right: 20),
+                child: proceedButton('Raise Ticket', ThemeApp.tealButtonColor, context, false, () { }),
               ),
               bottomNavigationBarWidget(context, 3)
             ],

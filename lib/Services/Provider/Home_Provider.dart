@@ -22,6 +22,12 @@ class HomeProvider with ChangeNotifier {
     "IsActiveOrderList":StringConstant.IsActiveOrderList,
     "from_days_in_past":7
 });
+      Map data={
+        "merchant_id":pref.getInt('merchant_id') ?? 4,
+        "IsActiveOrderList":StringConstant.IsActiveOrderList,
+        "from_days_in_past":0
+      };
+      print("Active order Map:" +data.toString());
       // rootBundle.loadString("assets/jsonData.json");
       jsonData = json.decode(jsonContent);
       notifyListeners();

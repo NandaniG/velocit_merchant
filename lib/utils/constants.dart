@@ -9,6 +9,7 @@ class StringConstant {
 
   static String apiMerchantBasket_findby_merchant =
       '/merchantbasket/findby_merchant';
+  static String userId = 'userId';
 
 //login users
   static String loginUserName = '';

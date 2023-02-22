@@ -211,7 +211,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                               ? Container()
                               : Center(
                                   child: Text(
-                                    "For OwnBoarding\nPlease connect to Sales Team",
+                                    "For OnBoarding\nPlease connect to Sales Team",
                                     style: TextStyle(
                                         fontSize: 16, color: ThemeApp.appColor),
                                     textAlign: TextAlign.center,
@@ -428,7 +428,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                     items,
                     context,
                     TextStyle(
-                        color: ThemeApp.lightFontColor,
+                        color: ThemeApp.blackColor,
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
                         overflow: TextOverflow.ellipsis)),
@@ -485,9 +485,9 @@ class _OrderDashboardState extends State<OrderDashboard> {
                   borderSide: BorderSide(color: ThemeApp.whiteColor)),
               contentPadding:
                   EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            ),
+           ),
             style: TextStyle(
-                color: ThemeApp.lightFontColor,
+                color: ThemeApp.blackColor,
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
                 overflow: TextOverflow.ellipsis),
@@ -505,7 +505,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                     items,
                     context,
                     TextStyle(
-                        color: ThemeApp.lightFontColor,
+                        color: ThemeApp.blackColor,
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
                         overflow: TextOverflow.ellipsis)),

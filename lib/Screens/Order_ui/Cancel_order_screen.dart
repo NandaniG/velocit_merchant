@@ -4,9 +4,10 @@ import 'package:intl/intl.dart';
 import '../../utils/GlobalWidgets/appBar.dart';
 import '../../utils/GlobalWidgets/proceedButtons.dart';
 import '../../utils/GlobalWidgets/textFormFields.dart';
+import '../../utils/StringUtils.dart';
 import '../../utils/constants.dart';
 import '../../utils/styles.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CancelOrderScreen extends StatefulWidget {
   const CancelOrderScreen({Key? key}) : super(key: key);
@@ -81,8 +82,7 @@ class _CancelOrderScreenState extends State<CancelOrderScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   TextFieldUtils().dynamicText(
-                                      AppLocalizations.of(context)
-                                          .deliveryDetails,
+                                      StringUtils.deliveryDetails,
                                       context,
                                       TextStyle(
                                           color: ThemeApp.primaryNavyBlackColor,
@@ -181,7 +181,7 @@ class _CancelOrderScreenState extends State<CancelOrderScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             TextFieldUtils().dynamicText(
-                                AppLocalizations.of(context).orderSummary,
+                                StringUtils.orderSummary,
                                 context,
                                 TextStyle(
                                     color: ThemeApp.primaryNavyBlackColor,

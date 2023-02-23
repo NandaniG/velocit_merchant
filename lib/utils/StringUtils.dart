@@ -101,9 +101,12 @@ class StringUtils {
   static String pushNotifications = "Push Notifications";
   static String notifications = "Notifications";
   static String offersOnly = "Offers only";
+  static String businessName = "Business Name*";
   static String fullName = "Full Name";
   static String mobileNumber = "Mobile Number";
   static String emailAddress = "Email Address";
+  static String enterBusinessName = "Please enter Business name.";
+
   static String enterFullName = "Please enter full name.";
   static String enterEmailAddress = "Please enter email address.";
   static String enterMobileNumber = "Please enter valid mobile number.";

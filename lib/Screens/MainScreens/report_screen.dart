@@ -16,7 +16,7 @@ class _ReportScreenState extends State<ReportScreen> {
   GlobalKey<ScaffoldState> scaffoldGlobalKey = GlobalKey<ScaffoldState>();
   double height = 0.0;
   double width = 0.0;
-
+bool isAnySelected=false;
   @override
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
@@ -25,9 +25,12 @@ class _ReportScreenState extends State<ReportScreen> {
       backgroundColor: ThemeApp.appBackgroundColor,
       key: scaffoldGlobalKey,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(height * .09),
-        child: appBarWidget(
-            context, appTitle(context, 'Reports'), SizedBox(), setState(() {})),
+        preferredSize: Size.fromHeight(height * .08),
+        child:
+        AppBarWidget(
+            context: context,
+            titleWidget:  appTitle(context, 'Reports'),
+            location: SizedBox()),
       ),
       bottomNavigationBar: Container(
         height: 200,
@@ -36,8 +39,8 @@ class _ReportScreenState extends State<ReportScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
-              child: proceedButton("Share Reports", ThemeApp.tealButtonColor,
-                  context, false, () {}),
+              child: isAnySelected ==true?proceedButton("Share Reports", ThemeApp.tealButtonColor,
+                  context, false, () {}):inActiveButton("Share Reports", context, () { }),
             ),
             bottomNavigationBarWidget(context, 4)
           ],
@@ -81,6 +84,7 @@ class _ReportScreenState extends State<ReportScreen> {
                         onChanged: (val) {
                           setState(() {
                             t.isChecked = val!;
+                            isAnySelected = val;
                             if (val == true) {
                               _currText = t.title;
                             }

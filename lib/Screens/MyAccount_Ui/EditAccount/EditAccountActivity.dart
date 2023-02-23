@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -102,14 +103,15 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
           onTap: () {
             Navigator.pushNamed(context, RoutesName.myAccountRoute);
           },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(
-              Icons.arrow_back,
-              color: ThemeApp.blackColor,
-            ),
+          child:    Transform.scale(
+          scale: 0.7,
+          child: Image.asset(
+            'assets/appImages/backArrow.png',
+            color: ThemeApp.primaryNavyBlackColor,
+            // height: height*.001,
           ),
         ),
+      ),
         title: TextFieldUtils().dynamicText(
             'Edit my Account',
             context,
@@ -185,7 +187,50 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
                         // height: 40.0,
                         child: InkWell(
                             onTap: () {
-                              // _getFromCamera();
+                              showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  backgroundColor:
+                                  Colors.transparent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(60.0),
+                                  ),
+                                  builder: (context) {
+                                    return Stack(
+                                      alignment: Alignment
+                                          .center, // <---------
+
+                                      children: [
+                                        Container(
+                                          width: width,
+                                          padding:
+                                          const EdgeInsets.only(
+                                              top: 30.0),
+                                          child:
+                                          bottomSheetForImagePicker(),
+                                        ),
+                                        Positioned(
+                                          top: 0,
+                                          child: InkWell(
+                                            onTap: () {
+                                              Navigator.pop(
+                                                  context);
+                                            },
+                                            child: Container(
+                                                alignment: Alignment
+                                                    .center,
+                                                child: const Icon(
+                                                  Icons.close,
+                                                  size: 30,
+                                                  color: ThemeApp
+                                                      .whiteColor,
+                                                )),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  });       // _getFromCamera();
                               showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -258,13 +303,49 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
                         // height: 40.0,
                         child: InkWell(
                             onTap: () {
-                              // _getFromCamera();
-                              showDialog(
+                              showModalBottomSheet(
                                   context: context,
-                                  builder: (BuildContext context) {
-                                    return ProfileImageDialogBox(
-                                        imageFile1: imageFile1,
-                                        isEditAccount: false);
+                                  isScrollControlled: true,
+                                  backgroundColor:
+                                  Colors.transparent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(60.0),
+                                  ),
+                                  builder: (context) {
+                                    return Stack(
+                                      alignment: Alignment
+                                          .center, // <---------
+
+                                      children: [
+                                        Container(
+                                          width: width,
+                                          padding:
+                                          const EdgeInsets.only(
+                                              top: 30.0),
+                                          child:
+                                          bottomSheetForImagePicker(),
+                                        ),
+                                        Positioned(
+                                          top: 0,
+                                          child: InkWell(
+                                            onTap: () {
+                                              Navigator.pop(
+                                                  context);
+                                            },
+                                            child: Container(
+                                                alignment: Alignment
+                                                    .center,
+                                                child: const Icon(
+                                                  Icons.close,
+                                                  size: 30,
+                                                  color: ThemeApp
+                                                      .whiteColor,
+                                                )),
+                                          ),
+                                        ),
+                                      ],
+                                    );
                                   });
                             },
                             child: Container(
@@ -338,17 +419,16 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
               height: height * .03,
             ),
             TextFieldUtils().asteriskTextField(
-              StringUtils.fullName,
+              StringUtils.businessName,
               context,
             ),
             CharacterTextFormFieldsWidget(
                 // isEnable: true,
-                errorText: StringUtils.enterFullName,
+                errorText: StringUtils.enterBusinessName,
                 textInputType: TextInputType.name,
                 controller: userNameController,
                 autoValidation: AutovalidateMode.onUserInteraction,
-                intialvalue: 'Testing Name',
-                hintText: 'Full Name',
+                hintText: 'Business Name',
                 onChange: (val) {
                   setState(() {
                     if (val.isEmpty && userNameController.text.isEmpty) {
@@ -420,13 +500,22 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
             SizedBox(
               height: 5,
             ),
-            Text(
-              "In order to prevent unauthorized access of personal information, request you to contact admin for changing the registered mobile number and email address.",
-              style: SafeGoogleFont(
-                'Roboto',
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                color: ThemeApp.lightFontColor,
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: ThemeApp.appColor),
+                  color: ThemeApp.appBackgroundColor),
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Text(
+                  "In order to prevent unauthorized access of personal information, request you to contact admin for changing the registered mobile number and email address.",
+                  style: SafeGoogleFont(
+                    'Roboto',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: ThemeApp.appColor,
+                  ),
+                ),
               ),
             ),
             SizedBox(
@@ -443,44 +532,127 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
   }
 
   File? imageFile1;
-
-  // _getFromCamera() async {
-  //
-  //   final picker = ImagePicker();
-  //   final pickedImage = await picker.pickImage(
-  //     source: ImageSource.camera,
-  //     maxWidth: 1800,
-  //     maxHeight: 1800,
-  //   );
-  //   if (pickedImage != null) {
-  //     setState(() {
-  //       imageFile1 = File(pickedImage.path);
-  //       // isEnable = true;
-  //
-  //     });
-  //   }
-  // }
-
-  Future _getFromCamera() async {
-    var image = await picker.pickImage(source: ImageSource.camera);
-    final prefs = await SharedPreferences.getInstance();
-    // StringConstant.CurrentPinCode = (prefs.getString('CurrentPinCodePref') ?? '');
-    String imagePath = image!.path;
-
-    await prefs.setString('profileImagePrefs', imagePath);
-
-    setState(() {
-      imageFile1 = File(image.path);
-
-      // final   file = File(image!.path);
-      //    final bytes =
-      //    file!.readAsBytesSync();
-      //   final img64 = base64Encode(bytes);
-    });
-    // Navigator.pop(this.context);
+  Widget accountTextList(String text) {
+    return TextFieldUtils().dynamicText(
+        text,
+        context,
+        TextStyle(
+            fontFamily: 'Roboto',
+            color: ThemeApp.blackColor,
+            fontWeight: FontWeight.w700,
+            fontSize: 16,
+            letterSpacing: -0.25));
   }
 
-  bool isEnable = false;
+  Widget bottomSheetForImagePicker() {
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(16, 20, 24, 20),
+        decoration: const BoxDecoration(
+            color: ThemeApp.whiteColor,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0))),
+        // padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            accountTextList('Change Profile Photo'),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: [
+                InkWell(
+                  onTap: () async {
+                    final prefs = await SharedPreferences.getInstance();
+
+                    FilePickerResult? pickedFile =
+                    await FilePicker.platform.pickFiles();
+                    if (pickedFile != null) {
+                      String? filePath = pickedFile.files.single.path;
+                      if (filePath != null) {
+                        final file = File(filePath);
+                        await prefs.setString('profileImagePrefs', filePath);
+
+                        imageFile1 = file;
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) =>  EditAccountActivity(),
+                          ),
+                        );
+                      }
+                    }
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: ThemeApp.boxLightColor,
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      // border: Border.all(color: ThemeApp.lightBorderColor)
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: SvgPicture.asset(
+                        'assets/appImages/imageIcon.svg',
+                        color: ThemeApp.subIconColor,
+                        semanticsLabel: 'Acme Logo',
+                        height: 37,
+                        // height: height * .03,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                InkWell(
+                  onTap: () async {
+                    var image =
+                    await picker.getImage(source: ImageSource.camera);
+                    final prefs = await SharedPreferences.getInstance();
+                    // StringConstant.CurrentPinCode = (prefs.getString('CurrentPinCodePref') ?? '');
+                    String imagePath = image!.path;
+
+                    await prefs.setString('profileImagePrefs', imagePath);
+                    Map data = {
+                      "imgUrl": image.path,
+                    };
+
+                    setState(() {
+                      imageFile1 = File(image.path);
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) =>  EditAccountActivity(),
+                        ),
+                      );
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: ThemeApp.boxLightColor,
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      // border: Border.all(color: ThemeApp.lightBorderColor)
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: SvgPicture.asset(
+                        'assets/appImages/cameraIconGrey.svg',
+                        color: ThemeApp.subIconColor,
+                        semanticsLabel: 'Acme Logo',
+                        height: 37,
+                        // height: height * .03,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
 /*  Widget fullName(ProductProvider provider) {
     return Column(
@@ -589,12 +761,12 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
     });
   }
 
-  // // String images='';
-  // Future<String> getBase64Image(PickedFile img) async {
-  //   List<int> imageBytes = File(img.path).readAsBytesSync();
-  //   String img64 = base64Encode(imageBytes);
-  //   // print(img.path);
-  //   // print(img64);
-  //   return img64;
-  // }
+// // String images='';
+// Future<String> getBase64Image(PickedFile img) async {
+//   List<int> imageBytes = File(img.path).readAsBytesSync();
+//   String img64 = base64Encode(imageBytes);
+//   // print(img.path);
+//   // print(img64);
+//   return img64;
+// }
 }

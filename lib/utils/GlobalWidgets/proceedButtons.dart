@@ -94,6 +94,52 @@ Widget proceedButton(String name, Color color, BuildContext context,
     ),
   );
 }
+Widget inActiveButton(String name, BuildContext context,
+ VoidCallback onTap) {
+  return Container( width: MediaQuery.of(context).size.width,
+    // padding: const EdgeInsets.fromLTRB(20.0, 12.0, 20.0, 12.0),
+    decoration: BoxDecoration(
+      // borderRadius: const BorderRadius.all(
+      //   Radius.circular(100),
+      // ),
+      // border: Border.all(
+      //   color: color== ThemeApp.tealButtonColor?ThemeApp.tealButtonColor: ThemeApp.whiteColor,
+      // ),
+      // color: color== ThemeApp.tealButtonColor?ThemeApp.tealButtonColor: color,
+    ),
+    child: ElevatedButton(style:
+    ButtonStyle(
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(100),
+              side: BorderSide(color: ThemeApp.lightFontColor)
+          )
+      ),
+      padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(10)),
+      foregroundColor: MaterialStateProperty.all<Color>(ThemeApp.whiteColor),
+      backgroundColor: MaterialStateProperty.all<Color>(ThemeApp.lightFontColor),
+
+      // overlayColor: MaterialStateProperty.all<Color>(ThemeApp.tealButtonColor)
+    ),
+      onPressed: onTap,
+      child: Container(
+
+          child:Text(
+            name,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontFamily: 'Roboto',
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                overflow: TextOverflow.ellipsis,
+                color: ThemeApp.whiteColor,
+                letterSpacing: -0.25
+            ),
+          )),
+    ),
+  );
+}
+
+
 
 Widget whiteProceedButton(String name, BuildContext context, VoidCallback onTap) {
 

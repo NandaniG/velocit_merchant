@@ -40,8 +40,7 @@ class _TicketsDetailPageActivityState extends State<TicketsDetailPageActivity> {
 
     return WillPopScope(
       onWillPop: () {
-        Navigator.pushReplacementNamed(context, '/dashBoardScreen');
-
+Navigator.pop(context);
         return Future.value(true);
       },
       child: Scaffold(
@@ -73,11 +72,11 @@ class _TicketsDetailPageActivityState extends State<TicketsDetailPageActivity> {
         // ),
         body: SafeArea(
             child: Container(
-          padding: EdgeInsets.only(left: 10, right: 10),
+          padding: EdgeInsets.only(left: 20, right: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 10),
+              SizedBox(height: 15),
               TextFieldUtils().dynamicText(
                   'Subject', // earliest_delivery_date,
                   context,
@@ -106,7 +105,8 @@ class _TicketsDetailPageActivityState extends State<TicketsDetailPageActivity> {
                       fontWeight: FontWeight.w400)),
               SizedBox(height: 10),
               TextFieldUtils().dynamicText(
-                  'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled', // earliest_delivery_date,
+                  'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled',
+                  // earliest_delivery_date,
                   context,
                   TextStyle(
                       color: Color(0xff0C1A30),
@@ -120,21 +120,20 @@ class _TicketsDetailPageActivityState extends State<TicketsDetailPageActivity> {
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10)),
-                padding: EdgeInsets.only(left: 5, right: 5),
-                height: MediaQuery.of(context).size.height * 0.2,
+                padding:
+                    EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
+                // height: MediaQuery.of(context).size.height * 0.2,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: 20,
-                    ),
                     Text(
                       "Attachment",
-                      style: TextStyle(fontSize: 20),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                     ),
                     Container(
                       margin: EdgeInsets.only(
-                        top: 10,
+                        top: 5,
                       ),
 
                       // height: (MediaQuery.of(context).size.height * 0.2) * 0.6,
@@ -298,19 +297,19 @@ class _TicketsDetailPageActivityState extends State<TicketsDetailPageActivity> {
                           )
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               Container(
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10)),
                 padding:
-                    EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+                    EdgeInsets.all(13),
                 width: MediaQuery.of(context).size.width,
 
                 // margin: EdgeInsets.all(10),

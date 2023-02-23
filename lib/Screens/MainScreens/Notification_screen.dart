@@ -252,13 +252,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         ),
                       ):  SizedBox();
                     })),
-            TextFieldUtils().dynamicText('Old Notifications',
-                context,
-                TextStyle(
-                  color: ThemeApp.blackColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: height * .028,
-                )),
+            Container(alignment: Alignment.centerLeft,
+              child: TextFieldUtils().dynamicText('Old Notifications',
+                  context,
+                  TextStyle(
+                    color: ThemeApp.blackColor,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
+                  )),
+            ),
             SizedBox(
               height: height * .02,
             ),

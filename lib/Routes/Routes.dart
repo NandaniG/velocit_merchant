@@ -25,9 +25,7 @@ class Routes {
     case RoutesName.myAccountRoute:
         return MaterialPageRoute(
             builder: (BuildContext context) => MyAccountActivity());
-   case RoutesName.myAccountRoute:
-        return MaterialPageRoute(
-            builder: (BuildContext context) => MyAccountActivity());
+
 
       // case RoutesName.otpRoute:
       //   return MaterialPageRoute(

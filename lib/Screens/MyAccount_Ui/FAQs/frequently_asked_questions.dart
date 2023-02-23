@@ -88,7 +88,7 @@ class _FAQsActivityState extends State<FAQsActivity> {
                 Expanded(child: Text('Expansion Widget Title ${index+1}')),
                 Transform.rotate(
                   angle: math.pi * animationValue / 2,
-                  child: Icon(Icons.arrow_right, size: 40),
+                  child: Icon(Icons.expand_more_sharp, size: 30,color: ThemeApp.lightFontColor),
                   alignment: Alignment.center,
                 ),
                 // Divider(thickness: 1,color: Colors.black,)

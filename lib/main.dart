@@ -70,12 +70,12 @@ class MyApp extends StatelessWidget {
             // initialRoute: '/',
             initialRoute: RoutesName.splashScreenRoute,
             onGenerateRoute: Routes.generateRoute,
-            routes: {
-              "/": (context) => SplashScreen(),
-              // "/":(context)=>OrderDashboard(),
-              // '/': (context) =>StringConstant.isLogIn==true?  const OrderDashboard():SignIn_Screen(),
-              '/forgotPasswordScreen': (context) => const ForgotPassword(),
-            },
+            // routes: {
+            //   "/": (context) => SplashScreen(),
+            //   // "/":(context)=>OrderDashboard(),
+            //   // '/': (context) =>StringConstant.isLogIn==true?  const OrderDashboard():SignIn_Screen(),
+            //   '/forgotPasswordScreen': (context) => const ForgotPassword(),
+            // },
           ),
         )
       // }),

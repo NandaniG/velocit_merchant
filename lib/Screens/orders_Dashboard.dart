@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -62,12 +63,14 @@ class _OrderDashboardState extends State<OrderDashboard> {
       key: scaffoldGlobalKey,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(height * .19),
-        child: Container(
-          height: height * .22,
-          child: Column(
+        child: Container(color:ThemeApp.appBackgroundColor,
+          height: height * .19,
+          child: Column(mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              appBarWidget(
-                  context, searchBar(context), SizedBox(), setState(() {})),
+              AppBarWidget(
+                  context: context,
+                  titleWidget: searchBar(context),
+                  location: SizedBox()),
               SizedBox(
                 height: 10,
               ),
@@ -203,7 +206,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                 isActiveOrders == true
                     ? Column(
                         children: [
-                          dropdownShow(),
+                          activeOrderDropdownShow(),
                           SizedBox(
                             height: height * .02,
                           ),
@@ -225,7 +228,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                       )
                     : Column(
                         children: [
-                          allOrderDropdownShow(),
+                          pastOrderDropdownShow(),
                           SizedBox(
                             height: height * .02,
                           ),
@@ -243,12 +246,12 @@ class _OrderDashboardState extends State<OrderDashboard> {
                             borderRadius: const BorderRadius.all(
                               Radius.circular(8),
                             ),
-                            color: ThemeApp.primaryNavyBlackColor,
+                            color: ThemeApp.appColor,
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
+                            padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
@@ -260,8 +263,8 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                         context,
                                         TextStyle(
                                             color: ThemeApp.whiteColor,
-                                            fontSize: height * .032,
-                                            fontWeight: FontWeight.bold)),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700)),
                                     InkWell(
                                       onTap: () {
                                         setState(() {
@@ -270,46 +273,46 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                       },
                                       child: Icon(
                                         Icons.clear,
-                                        size: height * .05,
+                                        size: 30,
                                         color: ThemeApp.whiteColor,
                                       ),
                                     ),
                                   ],
                                 ),
-                                Container(
-                                  height: height * .1,
-                                  child: ListView.builder(
-                                      itemCount: 3,
-                                      itemBuilder: (_, index) {
-                                        return Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Flexible(
-                                              child: Text(
-                                                  '', //"${value.myOrdersList[1]["myOrderDetailList"][0]["productDetails"]}",
-                                                  style: TextStyle(
-                                                      color:
-                                                          ThemeApp.whiteColor,
-                                                      fontSize: height * .022,
-                                                      fontWeight:
-                                                          FontWeight.w300,
-                                                      overflow: TextOverflow
-                                                          .ellipsis)),
-                                            ),
-                                            TextFieldUtils().dynamicText(
-                                                "* 3",
-                                                context,
-                                                TextStyle(
-                                                    color: ThemeApp.blackColor,
-                                                    fontSize: height * .022,
-                                                    fontWeight: FontWeight.w400,
-                                                    overflow:
-                                                        TextOverflow.ellipsis)),
-                                          ],
-                                        );
-                                      }),
-                                ),
+                                // Container(
+                                //   height: height * .1,
+                                //   child: ListView.builder(
+                                //       itemCount: 3,
+                                //       itemBuilder: (_, index) {
+                                //         return Row(
+                                //           mainAxisAlignment:
+                                //               MainAxisAlignment.spaceBetween,
+                                //           children: [
+                                //             Flexible(
+                                //               child: Text('',
+                                //                   //"${value.myOrdersList[1]["myOrderDetailList"][0]["productDetails"]}",
+                                //                   style: TextStyle(
+                                //                       color:
+                                //                           ThemeApp.whiteColor,
+                                //                       fontSize: height * .022,
+                                //                       fontWeight:
+                                //                           FontWeight.w300,
+                                //                       overflow: TextOverflow
+                                //                           .ellipsis)),
+                                //             ),
+                                //             TextFieldUtils().dynamicText(
+                                //                 "* 3",
+                                //                 context,
+                                //                 TextStyle(
+                                //                     color: ThemeApp.blackColor,
+                                //                     fontSize: height * .022,
+                                //                     fontWeight: FontWeight.w400,
+                                //                     overflow:
+                                //                         TextOverflow.ellipsis)),
+                                //           ],
+                                //         );
+                                //       }),
+                                // ),
                                 InkWell(
                                   onTap: () {
                                     setState(() {
@@ -317,25 +320,22 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                     });
                                   },
                                   child: Container(
-                                    width: width * .3,
-                                    padding: const EdgeInsets.fromLTRB(
-                                        20.0, 10, 20.0, 10),
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(20),
-                                      ),
-                                      color: ThemeApp.whiteColor,
-                                    ),
-                                    child: Center(
-                                      child: TextFieldUtils().dynamicText(
-                                          "View",
-                                          context,
-                                          TextStyle(
-                                              color: ThemeApp
-                                                  .primaryNavyBlackColor,
-                                              fontSize: height * .023,
-                                              fontWeight: FontWeight.w500)),
-                                    ),
+                                    // width: width * .3,
+                                    // padding: const EdgeInsets.fromLTRB(
+                                    //     20.0, 10, 20.0, 10),
+                                    // decoration: const BoxDecoration(
+                                    //   borderRadius: BorderRadius.all(
+                                    //     Radius.circular(20),
+                                    //   ),
+                                    //   color: ThemeApp.whiteColor,
+                                    // ),
+                                    child: TextFieldUtils().dynamicText(
+                                        "View",
+                                        context,
+                                        TextStyle(
+                                            color: ThemeApp.whiteColor,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400)),
                                   ),
                                 ),
                               ],
@@ -369,6 +369,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
     'Past 6 Months',
   ];
 
+/*
   Widget dropdownShow() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -446,76 +447,30 @@ class _OrderDashboardState extends State<OrderDashboard> {
       ],
     );
   }
-
-  Widget allOrderDropdownShow() {
+*/
+  Widget activeOrderDropdownShow() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        // TextFieldUtils().dynamicText(
-        //     "Show",
-        //     context,
-        //     TextStyle(
-        //         color: ThemeApp.blackColor,
-        //         fontSize: height * .022,
-        //         fontWeight: FontWeight.w500,
-        //         overflow: TextOverflow.ellipsis)),
-        // SizedBox(
-        //   width: width * .03,
-        // ),
         Container(
-          decoration: BoxDecoration(
-            color: ThemeApp.whiteColor, //<-- SEE HERE
-          ),
           width: MediaQuery.of(context).size.width * .5,
-          // height: 35,
-          child: DropdownButtonFormField(
-            decoration: InputDecoration(
-              fillColor: ThemeApp.whiteColor,
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(0),
-                  borderSide: BorderSide(color: ThemeApp.whiteColor)),
-              disabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(0),
-                  borderSide: BorderSide(color: ThemeApp.whiteColor)),
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(0),
-                  borderSide: BorderSide(color: ThemeApp.whiteColor)),
-              focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(0),
-                  borderSide: BorderSide(color: ThemeApp.whiteColor)),
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-           ),
-            style: TextStyle(
-                color: ThemeApp.blackColor,
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                overflow: TextOverflow.ellipsis),
-
-            value: allDropdownValue,
-
-            // Down Arrow Icon
-            // icon: const Icon(Icons.arrow_drop_down,size: 30),
-
-            // Array list of items
-            items: allItems.map((String items) {
-              return DropdownMenuItem(
-                value: items,
-                child: TextFieldUtils().dynamicText(
-                    items,
-                    context,
-                    TextStyle(
-                        color: ThemeApp.blackColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        overflow: TextOverflow.ellipsis)),
-              );
-            }).toList(),
-            // After selecting the desired option,it will
-            // change button value to selected value
-            onChanged: (String? newValue) {
+          child: CustomDropdownButton2(
+            // buttonWidth: MediaQuery.of(context).size.width,
+            // dropdownWidth: MediaQuery.of(context).size.width,
+            buttonDecoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: ThemeApp.whiteColor,
+            ),
+            icon: Icon(Icons.arrow_drop_down_outlined,
+                color: ThemeApp.subIconColor),
+            iconSize: 30,
+            hint: '',
+            dropdownWidth: MediaQuery.of(context).size.width * .5,
+            dropdownItems: activeItems,
+            value: activeDropdownValue,
+            onChanged: (value) {
               setState(() {
-                allDropdownValue = newValue!;
+                activeDropdownValue = value!;
               });
             },
           ),
@@ -523,6 +478,114 @@ class _OrderDashboardState extends State<OrderDashboard> {
       ],
     );
   }
+
+  Widget pastOrderDropdownShow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width * .5,
+          child: CustomDropdownButton2(
+            // buttonWidth: MediaQuery.of(context).size.width,
+            // dropdownWidth: MediaQuery.of(context).size.width,
+            buttonDecoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: ThemeApp.whiteColor,
+            ),
+            icon: Icon(Icons.arrow_drop_down_outlined,
+                color: ThemeApp.subIconColor),
+            iconSize: 30,
+            hint: '',
+            dropdownWidth: MediaQuery.of(context).size.width * .5,
+            dropdownItems: allItems,
+            value: allDropdownValue,
+            onChanged: (value) {
+              setState(() {
+                allDropdownValue = value!;
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Widget allOrderDropdownShow() {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.end,
+  //     children: [
+  //       // TextFieldUtils().dynamicText(
+  //       //     "Show",
+  //       //     context,
+  //       //     TextStyle(
+  //       //         color: ThemeApp.blackColor,
+  //       //         fontSize: height * .022,
+  //       //         fontWeight: FontWeight.w500,
+  //       //         overflow: TextOverflow.ellipsis)),
+  //       // SizedBox(
+  //       //   width: width * .03,
+  //       // ),
+  //       Container(
+  //         decoration: BoxDecoration(
+  //           color: ThemeApp.whiteColor, //<-- SEE HERE
+  //         ),
+  //         width: MediaQuery.of(context).size.width * .5,
+  //         // height: 35,
+  //         child: DropdownButtonFormField(
+  //           decoration: InputDecoration(
+  //             fillColor: ThemeApp.whiteColor,
+  //             enabledBorder: OutlineInputBorder(
+  //                 borderRadius: BorderRadius.circular(0),
+  //                 borderSide: BorderSide(color: ThemeApp.whiteColor)),
+  //             disabledBorder: OutlineInputBorder(
+  //                 borderRadius: BorderRadius.circular(0),
+  //                 borderSide: BorderSide(color: ThemeApp.whiteColor)),
+  //             border: OutlineInputBorder(
+  //                 borderRadius: BorderRadius.circular(0),
+  //                 borderSide: BorderSide(color: ThemeApp.whiteColor)),
+  //             focusedBorder: OutlineInputBorder(
+  //                 borderRadius: BorderRadius.circular(0),
+  //                 borderSide: BorderSide(color: ThemeApp.whiteColor)),
+  //             contentPadding:
+  //                 EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+  //           ),
+  //           style: TextStyle(
+  //               color: ThemeApp.blackColor,
+  //               fontSize: 12,
+  //               fontWeight: FontWeight.w400,
+  //               overflow: TextOverflow.ellipsis),
+  //
+  //           value: allDropdownValue,
+  //
+  //           // Down Arrow Icon
+  //           // icon: const Icon(Icons.arrow_drop_down,size: 30),
+  //
+  //           // Array list of items
+  //           items: allItems.map((String items) {
+  //             return DropdownMenuItem(
+  //               value: items,
+  //               child: TextFieldUtils().dynamicText(
+  //                   items,
+  //                   context,
+  //                   TextStyle(
+  //                       color: ThemeApp.blackColor,
+  //                       fontSize: 16,
+  //                       fontWeight: FontWeight.w400,
+  //                       overflow: TextOverflow.ellipsis)),
+  //             );
+  //           }).toList(),
+  //           // After selecting the desired option,it will
+  //           // change button value to selected value
+  //           onChanged: (String? newValue) {
+  //             setState(() {
+  //               allDropdownValue = newValue!;
+  //             });
+  //           },
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget activeOrderList(HomeProvider value) {
     return (value.jsonData.length > 0 && value.jsonData['status'] == 'OK')
@@ -626,7 +689,8 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                                   fontSize: 12,
                                                 )),
                                             TextFieldUtils().dynamicText(
-                                                '${order['overall_status']}', // earliest_delivery_date,
+                                                '${order['overall_status']}',
+                                                // earliest_delivery_date,
                                                 context,
                                                 TextStyle(
                                                   color:
@@ -792,11 +856,12 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                                   child: Text(
                                                     "View",
                                                     style: TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        color: ThemeApp
-                                                            .tealButtonColor),
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      color: ThemeApp
+                                                          .tealButtonColor,
+                                                    ),
                                                   ),
                                                 ),
                                               ),

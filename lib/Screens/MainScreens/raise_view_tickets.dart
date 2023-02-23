@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:velocit_merchant/Screens/MainScreens/raise_tickets.dart';
 import 'package:velocit_merchant/Screens/MainScreens/tickets_details.dart';
@@ -12,6 +13,7 @@ import '../../../utils/GlobalWidgets/appBar.dart';
 import 'package:expansion_widget/expansion_widget.dart';
 import 'dart:math' as math;
 
+import '../../Routes/Routes.dart';
 import '../../utils/GlobalWidgets/textFormFields.dart';
 // import '../../utils/GlobalWidgets/textFormFields.dart';
 
@@ -42,7 +44,7 @@ class _TicketsPageActivityState extends State<TicketsPageActivity> {
 
     return WillPopScope(
       onWillPop: () {
-        Navigator.pushReplacementNamed(context, '/dashBoardScreen');
+        Navigator.pushReplacementNamed(context, RoutesName.dashboardRoute);
 
         return Future.value(true);
       },
@@ -51,8 +53,10 @@ class _TicketsPageActivityState extends State<TicketsPageActivity> {
         key: scaffoldGlobalKey,
    appBar: PreferredSize(
         preferredSize: Size.fromHeight(height * .09),
-        child:   appBarWidget(
-            context, searchBar(context), SizedBox(), setState(() {})),
+        child:    AppBarWidget(
+            context: context,
+            titleWidget: searchBarWidget(),
+            location: SizedBox()),
       ),
     // bottomNavigationBar: SafeArea(child: Container(
     //   margin: EdgeInsets.all(10),
@@ -77,7 +81,22 @@ class _TicketsPageActivityState extends State<TicketsPageActivity> {
                                   );
             
           },
-          child: Icon(Icons.add_circle,size: 50,color: Color(0xff00A7BF),),
+          child:  Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: ThemeApp.appColor
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: SvgPicture.asset(
+              'assets/appImages/addIcon.svg',
+              color: ThemeApp.whiteColor,
+              semanticsLabel: 'Acme Logo',
+
+              // height: height * .03,
+        ),
+            ),
+          ),
         ),
         body: SafeArea(
           child:Column(
@@ -116,8 +135,8 @@ class _TicketsPageActivityState extends State<TicketsPageActivity> {
                           color: colorsStatus,
                         ),
                         child: Container(
-                          padding: EdgeInsets.only(left: 10,right: 10),
-                            height: MediaQuery.of(context).size.height * 0.2,
+                          padding: EdgeInsets.only(left: 10,right: 10,bottom: 15),
+                            // height: MediaQuery.of(context).size.height * 0.2,
                             width: MediaQuery.of(context).size.width * .9,
                             alignment: Alignment.center,
                             decoration: const BoxDecoration(
@@ -162,8 +181,8 @@ class _TicketsPageActivityState extends State<TicketsPageActivity> {
                                               TextStyle(
                                                 color: ThemeApp
                                                     .primaryNavyBlackColor,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 12,
                                               )),
                                           SizedBox(
                                             height: height * .01,
@@ -173,7 +192,7 @@ class _TicketsPageActivityState extends State<TicketsPageActivity> {
                                               context,
                                               TextStyle(
                                                 color: ThemeApp.lightFontColor,
-                                                fontSize: 12,
+                                                fontSize: 12,fontWeight: FontWeight.w400
                                               )),
                                         ],
                                       ),
@@ -187,7 +206,7 @@ class _TicketsPageActivityState extends State<TicketsPageActivity> {
                                               context,
                                               TextStyle(
                                                 color: Color(0xff0C1A30),
-                                                fontSize: 18,
+                                                fontSize: 14,
                                                 fontFamily: "Roboto",
                                                 fontWeight: FontWeight.w700
                                               )),

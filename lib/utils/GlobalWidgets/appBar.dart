@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocit_merchant/Screens/MainScreens/Notification_screen.dart';
 import 'package:velocit_merchant/Screens/MainScreens/raise_view_tickets.dart';
 import 'package:velocit_merchant/Screens/orders_Dashboard.dart';
@@ -14,6 +15,7 @@ import 'package:velocit_merchant/utils/GlobalWidgets/textFormFields.dart';
 
 import '../../Screens/MainScreens/Stock_screen.dart';
 import '../../Screens/MainScreens/report_screen.dart';
+import '../../Screens/MyAccount_Ui/AccountVerificationDialog.dart';
 import '../../Screens/MyAccount_Ui/my_account.dart';
 import '../../utils/constants.dart';
 import '../../utils/styles.dart';
@@ -26,78 +28,389 @@ import 'autoSearchLocation_popup.dart';
 
 speechToText.SpeechToText? speech;
 
-Widget appBarWidget(
-  BuildContext context,
-  Widget titleWidget,
-  Widget location,
-  void setState,
-) {
-  double height = 0.0;
-  double width = 0.0;
-  height = MediaQuery.of(context).size.height;
-  width = MediaQuery.of(context).size.width;
+class AppBarWidget extends StatefulWidget {
+  final BuildContext context;
+  final Widget titleWidget;
+  final Widget location;
 
-  return SafeArea(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width,
-          color: ThemeApp.appBackgroundColor,
-          child: AppBar(
-            centerTitle: true,
-            // elevation: 1,
-            shadowColor: ThemeApp.appBackgroundColor,
-            backgroundColor: ThemeApp.appBackgroundColor,
-            flexibleSpace: Container(
-              height: height * .08,
-              width: width,
-              decoration: const BoxDecoration(
-                color: ThemeApp.appBackgroundColor,
-              ),
-            ),
-            leading: InkWell(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => MyAccountActivity(),
-                  ),
-                );
-              },
-              child: Container(
-                  alignment: Alignment.center,
-                  child:
-                      Icon(Icons.menu, color: ThemeApp.blackColor, size: 30)),
-            ),
-            // leadingWidth: width * .07,
-            title: titleWidget,
-            actions: [
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => NotificationScreen(),
-                    ),
-                  );
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.only(right: 10),
-                  child: Image.asset('assets/appImages/notificationIcon.png',
-                      color: ThemeApp.primaryNavyBlackColor,
-                      height: 20,
-                      fit: BoxFit.fitWidth),
+  AppBarWidget(
+      {Key? key,
+        required this.context,
+        required this.titleWidget,
+        required this.location})
+      : super(key: key);
+
+  @override
+  State<AppBarWidget> createState() => _AppBarWidgetState();
+}
+
+class _AppBarWidgetState extends State<AppBarWidget> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPref();
+  }
+
+  getPref() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      StringConstant.ProfilePhoto =
+          (prefs.getString('profileImagePrefs')) ?? "";
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return appBarWidget(context, );
+  }
+
+  Widget appBarWidget(
+      BuildContext context,
+      ) {
+    double height = 0.0;
+    double width = 0.0;
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
+
+    return SafeArea(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            color: ThemeApp.appBackgroundColor,
+            child: AppBar(
+              centerTitle: true,
+              titleSpacing: 5,
+
+              // elevation: 1,
+              backgroundColor: ThemeApp.appBackgroundColor,
+              flexibleSpace: Container(
+                height: MediaQuery.of(context).size.height * .08,
+                width: width,
+                decoration: const BoxDecoration(
+                  color: ThemeApp.appBackgroundColor,
                 ),
               ),
-            ],
+              automaticallyImplyLeading: false,
+              leading: InkWell(
+                onTap: () async {
+                  final preferences = await SharedPreferences.getInstance();
+
+                  StringConstant.isUserLoggedIn =
+                      preferences.getInt('isUserLoggedIn') ?? 0;
+
+                  if (StringConstant.isUserLoggedIn != 0) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => MyAccountActivity(),
+                      ),
+                    );
+                  } else {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AccountVerificationDialog();
+                        });
+                  }
+                },
+                child: Container(
+                    alignment: Alignment.center,
+                    child:
+                    Icon(Icons.menu, color: ThemeApp.blackColor, size: 30)),
+              ),
+
+              title:widget.titleWidget,
+              // Row
+              actions: [
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const NotificationScreen(),
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 15, left: 15),
+                    child: Center(
+                      // height: 25,
+                      // width: 25,
+                      child: SvgPicture.asset(
+                        'assets/appImages/notificationIcon.svg',
+                        color: ThemeApp.primaryNavyBlackColor,
+                        semanticsLabel: 'Acme Logo',
+                        theme: SvgTheme(
+                          currentColor: ThemeApp.primaryNavyBlackColor,
+                        ),
+                        height: 28,
+                        width: 28,
+                      ), /*badges.Badge(
+                              badgeContent: Text(
+                                0.toString(),
+                                style: const TextStyle(
+                                  fontFamily: 'Roboto',
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                                // textAlign: TextAlign.center,
+                              ),
+                              badgeStyle: badges.BadgeStyle(
+                                badgeColor: ThemeApp.redColor,
+                                padding: EdgeInsets.all(7),
+                              ),
+                              child: SvgPicture.asset(
+                                'assets/appImages/notificationIcon.svg',
+                                color: ThemeApp.primaryNavyBlackColor,
+                                semanticsLabel: 'Acme Logo',
+                                theme: SvgTheme(
+                                  currentColor: ThemeApp.primaryNavyBlackColor,
+                                ),
+                                height: 28,
+                                width: 28,
+                              ),
+                            ),*/
+                    ),
+                  ),
+                ),
+
+                          // InkWell(
+                          //   onTap: () async {
+                          //
+                          //
+                          //     final prefs = await SharedPreferences.getInstance();
+                          //     StringConstant.loginUserName =
+                          //         (prefs.getString('usernameLogin')) ?? '';
+                          //     StringConstant.loginUserEmail =
+                          //         (prefs.getString('emailLogin')) ?? '';
+                          //
+                          //     StringConstant.isUserLoggedIn =
+                          //         (prefs.getInt('isUserLoggedIn')) ?? 0;
+                          //     // Navigator.pushAndRemoveUntil(
+                          //     //     context,
+                          //     //     MaterialPageRoute(
+                          //     //         builder: (context) => CartDetailsActivity(
+                          //     //             value: product, productList: provider.cartProductList)),
+                          //     //         (route) => false);
+                          //     if (StringConstant.isUserLoggedIn != 0) {
+                          //       Navigator.of(context)
+                          //           .push(
+                          //         MaterialPageRoute(
+                          //           builder: (context) =>
+                          //           const MyAccountActivity(),
+                          //         ),
+                          //       )
+                          //           .then((value) => setState(() {}));
+                          //     } else {
+                          //       showDialog(
+                          //           context: context,
+                          //           builder: (BuildContext context) {
+                          //             return AccountVerificationDialog();
+                          //           });
+                          //     }
+                          //   },
+                          //   child: StringConstant.ProfilePhoto == ''
+                          //       ? Padding(
+                          //     padding: const EdgeInsets.only(right: 10),
+                          //     child: SvgPicture.asset(
+                          //       'assets/appImages/profileIcon.svg',
+                          //       color: ThemeApp.primaryNavyBlackColor,
+                          //       semanticsLabel: 'Acme Logo',
+                          //       theme: SvgTheme(
+                          //         currentColor: ThemeApp.primaryNavyBlackColor,
+                          //       ),
+                          //       height: 28,
+                          //       width: 28,
+                          //     ),
+                          //   )
+                          //       : Padding(
+                          //     padding: const EdgeInsets.only(right: 10),
+                          //     child: Container(
+                          //       height: 28,
+                          //       width: 28,
+                          //       child: CircleAvatar(
+                          //         backgroundColor: ThemeApp.whiteColor,
+                          //         child: ClipRRect(
+                          //           borderRadius: const BorderRadius.all(
+                          //               Radius.circular(100)),
+                          //           child: Image.file(
+                          //             File(StringConstant.ProfilePhoto),
+                          //             fit: BoxFit.fill,
+                          //             height: 25,
+                          //             width: 25,
+                          //             errorBuilder:
+                          //                 (context, error, stackTrace) {
+                          //               return Icon(
+                          //                 Icons.image,
+                          //                 color: ThemeApp.whiteColor,
+                          //               );
+                          //             },
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ),
+                          //
+                          // )
+
+              ],
+            ),
           ),
-        ),
-        location
-      ],
-    ),
-  );
+          widget.location
+        ],
+      ),
+    );
+  }
 }
+
+/*
+class AppBarWidget extends StatefulWidget {
+  final BuildContext context;
+  final Widget titleWidget;
+  final Widget location;
+
+  AppBarWidget(
+      {Key? key,
+        required this.context,
+        required this.titleWidget,
+        required this.location})
+      : super(key: key);
+  @override
+  State<AppBarWidget> createState() => _AppBarWidgetState();
+}
+
+class _AppBarWidgetState extends State<AppBarWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return appBarWidget(context,);
+  }
+  Widget appBarWidget(
+      BuildContext context,
+      // Widget titleWidget,
+      // Widget location,
+
+      ) {
+    double height = 0.0;
+    double width = 0.0;
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
+
+    return SafeArea(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            color: ThemeApp.appBackgroundColor,
+            child: AppBar(
+              // centerTitle: true,
+              titleSpacing: 5,
+
+              shadowColor: ThemeApp.appBackgroundColor,
+              backgroundColor: ThemeApp.appBackgroundColor,
+              flexibleSpace: Container(
+                height: height * .08,
+                width: width,
+                decoration: const BoxDecoration(
+                  color: ThemeApp.appBackgroundColor,
+                ),
+              ),
+              leading: InkWell(
+                onTap: () async {
+                  final preferences = await SharedPreferences.getInstance();
+
+                  StringConstant.isUserLoggedIn =
+                      preferences.getInt('isUserLoggedIn') ?? 0;
+
+                  if (StringConstant.isUserLoggedIn != 0) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => MyAccountActivity(),
+                      ),
+                    );
+                  } else {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AccountVerificationDialog();
+                        });
+                  }
+                },
+                child: Container(
+                    alignment: Alignment.center,
+                    child:
+                    Icon(Icons.menu, color: ThemeApp.blackColor, size: 30)),
+              ),
+              // leadingWidth: width * .07,
+              title: Center(child: widget.titleWidget),
+              actions: [
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => NotificationScreen(),
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 15, left: 15),
+                    child: Center(
+                      // height: 25,
+                      // width: 25,
+                      child: SvgPicture.asset(
+                        'assets/appImages/notificationIcon.svg',
+                        color: ThemeApp.primaryNavyBlackColor,
+                        semanticsLabel: 'Acme Logo',
+                        theme: SvgTheme(
+                          currentColor: ThemeApp.primaryNavyBlackColor,
+                        ),
+                        height: 28,
+                        width: 28,
+                      ), */
+/*badges.Badge(
+                              badgeContent: Text(
+                                0.toString(),
+                                style: const TextStyle(
+                                  fontFamily: 'Roboto',
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                                // textAlign: TextAlign.center,
+                              ),
+                              badgeStyle: badges.BadgeStyle(
+                                badgeColor: ThemeApp.redColor,
+                                padding: EdgeInsets.all(7),
+                              ),
+                              child: SvgPicture.asset(
+                                'assets/appImages/notificationIcon.svg',
+                                color: ThemeApp.primaryNavyBlackColor,
+                                semanticsLabel: 'Acme Logo',
+                                theme: SvgTheme(
+                                  currentColor: ThemeApp.primaryNavyBlackColor,
+                                ),
+                                height: 28,
+                                width: 28,
+                              ),
+                            ),*//*
+
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          widget. location
+        ],
+      ),
+    );
+  }
+}
+*/
+
+
 
 Widget appBar_backWidget(
   BuildContext context,
@@ -139,13 +452,14 @@ Widget appBar_backWidget(
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: Transform.scale(
-                scale: 1.3,
-                child: IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Colors.black),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    })),
+            child:  Transform.scale(
+              scale: 0.7,
+              child: Image.asset(
+                'assets/appImages/backArrow.png',
+                color: ThemeApp.primaryNavyBlackColor,
+                // height: height*.001,
+              ),
+            ),
           ),
 
           // leadingWidth: width * .06,
@@ -250,7 +564,236 @@ Widget appTitle(BuildContext context, String text) {
             fontWeight: FontWeight.w400)),
   );
 }
+class searchBarWidget extends StatefulWidget {
+  const searchBarWidget({Key? key}) : super(key: key);
 
+  @override
+  State<searchBarWidget> createState() => _searchBarWidgetState();
+}
+
+class _searchBarWidgetState extends State<searchBarWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return searchBar(context);
+  }
+
+  Widget searchBar(BuildContext context) {
+    double height = 0.0;
+    double width = 0.0;
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
+
+    return Container(
+      // padding: const EdgeInsets.only(top: 20, bottom: 20),
+
+      child: TextFormField(
+                textInputAction: TextInputAction.search,
+
+                controller: StringConstant.controllerSpeechToText,
+                onFieldSubmitted: (value) {
+                  print("search");
+                  // showDialog(
+                  //     context: context,
+                  //     builder: (BuildContext context) {
+                  //       return OkDialog(text: StringConstant.controllerSpeechToText.text);
+                  //     });
+                },
+                onChanged: (val) {
+                  // print("StringConstant.speechToText..." +
+                  //     StringConstant.speechToText);
+                  // (() {
+                  //   if (val.isEmpty) {
+                  //     val = StringConstant.speechToText;
+                  //   } else {
+                  //     StringConstant.speechToText = StringConstant.controllerSpeechToText.text;
+                  //   }
+                  // });
+                },
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: ThemeApp.whiteColor,
+                  isDense: true,
+                  // contentPadding:
+                  //     const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+                  /* -- Text and Icon -- */
+                  hintText: "Search",
+                  hintStyle: const TextStyle(
+                    fontFamily: 'Roboto',
+                    fontSize: 14,
+                    color: ThemeApp.darkGreyTab,
+                  ),
+                  prefixIconColor: ThemeApp.primaryNavyBlackColor,
+                  prefixIcon: /*const Icon(
+                Icons.search,
+                size: 26,
+                color: Colors.black54,
+              ),*/
+                  Container(
+                    margin: const EdgeInsets.all(10),
+                    child: SvgPicture.asset(
+                      'assets/appImages/searchIcon.svg',
+                      color: ThemeApp.primaryNavyBlackColor,
+                      semanticsLabel: 'Acme Logo',
+                      theme: SvgTheme(fontSize: 5,
+                        currentColor: ThemeApp.primaryNavyBlackColor,
+                      ),
+                      // height: 18,
+                    ),
+                  ),
+                  suffixIcon: InkWell(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return SpeechToTextDialog();
+                          });
+                    },
+                    child:   Container(
+                      margin:const EdgeInsets.all(10),
+                      child: SvgPicture.asset(
+                        'assets/appImages/miceIcon.svg',
+                        color: ThemeApp.primaryNavyBlackColor,
+                        semanticsLabel: 'Acme Logo',
+                        theme: SvgTheme(fontSize: 5,
+                          currentColor: ThemeApp.primaryNavyBlackColor,
+                        ),
+                      ),
+                    ), /*const Icon(
+                  Icons.mic,
+                  size: 26,
+                  color: Colors.black54,
+                ),*/
+                  ),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide:
+                      const BorderSide(color: ThemeApp.redColor, width: 1)),
+                  // OutlineInputBorder
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(
+                          color: ThemeApp.appBackgroundColor, width: 1)),
+                  // OutlineInputBorder
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(
+                          color: ThemeApp.appBackgroundColor, width: 1)),
+                ), // InputDecoration
+              ),
+            );
+
+
+  }
+}
+Widget searchBar(BuildContext context) {
+  double height = 0.0;
+  double width = 0.0;
+  height = MediaQuery.of(context).size.height;
+  width = MediaQuery.of(context).size.width;
+
+  return Container(
+
+    // padding: const EdgeInsets.only(top: 20, bottom: 20),
+
+    child: TextFormField(
+      textInputAction: TextInputAction.search,
+
+      controller: StringConstant.controllerSpeechToText,
+      onFieldSubmitted: (value) {
+        print("search");
+        // showDialog(
+        //     context: context,
+        //     builder: (BuildContext context) {
+        //       return OkDialog(text: StringConstant.controllerSpeechToText.text);
+        //     });
+      },
+      onChanged: (val) {
+        // print("StringConstant.speechToText..." +
+        //     StringConstant.speechToText);
+        // (() {
+        //   if (val.isEmpty) {
+        //     val = StringConstant.speechToText;
+        //   } else {
+        //     StringConstant.speechToText = StringConstant.controllerSpeechToText.text;
+        //   }
+        // });
+      },
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: ThemeApp.whiteColor,
+        isDense: true,
+        // contentPadding:
+        //     const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+        /* -- Text and Icon -- */
+        hintText: "Search",
+        hintStyle: const TextStyle(
+          fontFamily: 'Roboto',
+          fontSize: 14,
+          color: ThemeApp.darkGreyTab,
+        ),
+        prefixIconColor: ThemeApp.primaryNavyBlackColor,
+        prefixIcon: /*const Icon(
+                Icons.search,
+                size: 26,
+                color: Colors.black54,
+              ),*/
+        Container(
+          margin: const EdgeInsets.all(10),
+          child: SvgPicture.asset(
+            'assets/appImages/searchIcon.svg',
+            color: ThemeApp.primaryNavyBlackColor,
+            semanticsLabel: 'Acme Logo',
+            theme: SvgTheme(fontSize: 5,
+              currentColor: ThemeApp.primaryNavyBlackColor,
+            ),
+            // height: 18,
+          ),
+        ),
+        suffixIcon: InkWell(
+          onTap: () {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return SpeechToTextDialog();
+                });
+          },
+          child:   Container(
+            margin:const EdgeInsets.all(10),
+            child: SvgPicture.asset(
+              'assets/appImages/miceIcon.svg',
+              color: ThemeApp.primaryNavyBlackColor,
+              semanticsLabel: 'Acme Logo',
+              theme: SvgTheme(fontSize: 5,
+                currentColor: ThemeApp.primaryNavyBlackColor,
+              ),
+            ),
+          ), /*const Icon(
+                  Icons.mic,
+                  size: 26,
+                  color: Colors.black54,
+                ),*/
+        ),
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide:
+            const BorderSide(color: ThemeApp.redColor, width: 1)),
+        // OutlineInputBorder
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(
+                color: ThemeApp.appBackgroundColor, width: 1)),
+        // OutlineInputBorder
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(
+                color: ThemeApp.appBackgroundColor, width: 1)),
+      ), // InputDecoration
+    ),
+  );
+
+
+}
+/*
 //codeElan.velocIT
 Widget searchBar(BuildContext context) {
   double height = 0.0;
@@ -292,7 +835,9 @@ Widget searchBar(BuildContext context) {
         isDense: true,
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
-        /* -- Text and Icon -- */
+        */
+/* -- Text and Icon -- *//*
+
         hintText: "Search for Products...",
         hintStyle: const TextStyle(
           fontSize: 18,
@@ -338,6 +883,7 @@ Widget searchBar(BuildContext context) {
     ),
   );
 }
+*/
 
 Widget addressWidget(BuildContext context, String addressString) {
   double height = 0.0;
@@ -650,8 +1196,15 @@ Widget bottomNavigationBarWidget(BuildContext context, int indexSelected) {
                     return ScannerWidget(state: controller.state);
                   });
             },
-            child: const Icon(Icons.document_scanner_outlined,
-                color: ThemeApp.whiteColor),
+              child: SvgPicture.asset(
+                'assets/appImages/scanIcon.svg',
+                color: ThemeApp.whiteColor,
+                semanticsLabel: 'Acme Logo',
+                width: 29,
+                height: 29,
+
+                // height: height * .03,
+              ),
           ),
         ),
       ),
@@ -762,7 +1315,23 @@ class _ScannerWidgetState extends State<ScannerWidget> {
   }
 
   Widget _startScanFileButton(BarcodeFinderState state) {
-    return Container(
+    return
+      proceedButton( "Open Gallery", ThemeApp.tealButtonColor, context,false, () async {
+        FilePickerResult? pickedFile =
+        await FilePicker.platform.pickFiles();
+        if (pickedFile != null) {
+          String? filePath = pickedFile.files.single.path;
+          if (filePath != null) {
+            final file = File(filePath);
+            controller.scanFile(file);
+          }
+        } else {
+          Utils.errorToast('Please select content');
+        }
+      });
+
+/*
+      Container(
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
       decoration: const BoxDecoration(
@@ -789,6 +1358,6 @@ class _ScannerWidgetState extends State<ScannerWidget> {
               : null,
           child: TextFieldUtils().usingPassTextFields(
               "Open Gallery", ThemeApp.whiteColor, context)),
-    );
+    );*/
   }
 }

@@ -63,7 +63,7 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(height * .09),
           child: appBar_backWidget(context,
-              appTitle(context, "Order ID - 1234567"), const SizedBox()),
+              appTitle(context, "Raise Ticket"), const SizedBox()),
         ),
         bottomNavigationBar: Container(
           height: 160,
@@ -104,7 +104,7 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
         // ),
         body: SafeArea(
             child: Container(
-          padding: EdgeInsets.only(left: 10, right: 10),
+          padding: EdgeInsets.only(left: 18, right: 18),
           child: ListView(
             // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -121,14 +121,17 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
               Container(
                 child: CustomDropdownButton2(
                   buttonWidth: MediaQuery.of(context).size.width,
-                  dropdownWidth: MediaQuery.of(context).size.width,
+                  dropdownWidth: MediaQuery.of(context).size.width-36,
+                  icon: Icon(Icons.arrow_drop_down_sharp,color: ThemeApp.subIconColor),iconSize: 30,
                   buttonDecoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       color: Colors.white,
-                      border: Border.all(
-                        width: 1,
-                      )),
+                      // border: Border.all(
+                      //   width: 1,
+                      // )
+                  ),
                   hint: 'Choose Subject',
+                  itemPadding: EdgeInsets.all(10),
                   dropdownItems: items,
                   value: selectedValue,
                   onChanged: (value) {
@@ -149,7 +152,7 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
                       fontWeight: FontWeight.w400)),
               SizedBox(height: 20),
               SizedBox(
-                height: 200,
+                height: 100,
                 child: TextField(
                   expands: true,
                   maxLines: null,
@@ -162,26 +165,30 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
                       filled: true,
                       focusedBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.black, width: 1)),
+                              BorderSide(color: Colors.white, width: 1)),
                       border:
-                          OutlineInputBorder(borderSide: BorderSide(width: 1))),
+                          OutlineInputBorder(borderSide: BorderSide(width: 1,color: Colors.white,)
+                          ),
+                    disabledBorder: OutlineInputBorder(borderSide: BorderSide(width: 1,color: Colors.white,)
+                    ),
+                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(width: 1,color: Colors.white,)
+                    )
+                  ),
                 ),
               ),
               SizedBox(
-                height: 30,
+                height: 10,
               ),
               Container(
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10)),
-                padding: EdgeInsets.only(left: 5, right: 5),
-                height: MediaQuery.of(context).size.height * 0.2,
+                padding: EdgeInsets.all(10),
+                // height: MediaQuery.of(context).size.height * 0.2,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: 20,
-                    ),
+
                     Text(
                       "Attachment",
                       style:
@@ -189,7 +196,7 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 10),
-                      height: (MediaQuery.of(context).size.height * 0.2) * 0.6,
+                      // height: (MediaQuery.of(context).size.height * 0.2) * 0.6,
                       // color: Colors.yellow,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,

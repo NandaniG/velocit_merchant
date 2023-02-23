@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/otp_field_style.dart';
@@ -231,11 +232,16 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                           ),
                           Row(
                             children: [
-                              Icon(Icons.phone_in_talk_sharp,
-                                  color: ThemeApp.tealButtonColor),
-                              SizedBox(
-                                width: width * .02,
+                              SvgPicture.asset(
+                                'assets/appImages/callIcon.svg',
+                                color: ThemeApp.appColor,
+                                semanticsLabel: 'Acme Logo',
+                                theme: SvgTheme(
+                                  currentColor: ThemeApp.appColor,
+                                ),
+                                height: height * .025,
                               ),
+
                               TextFieldUtils().dynamicText(
                                   " +91 ${widget.order['customer_contact']}",
                                   context,

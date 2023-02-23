@@ -47,9 +47,13 @@ class _StockScreenState extends State<StockScreen> {
       backgroundColor: ThemeApp.appBackgroundColor,
       key: scaffoldGlobalKey,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(height * .09),
-        child: appBarWidget(
-            context, searchBar(context), SizedBox(), setState(() {})),
+        preferredSize: Size.fromHeight(height * .10),
+        child:Center(
+          child: AppBarWidget(
+              context: context,
+              titleWidget: searchBarWidget(),
+              location: SizedBox()),
+        ),
       ),
       bottomNavigationBar: bottomNavigationBarWidget(context, 1),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -110,14 +114,14 @@ class _StockScreenState extends State<StockScreen> {
                                               color: ThemeApp.blackColor,
                                               fontWeight: FontWeight.w400,
                                               fontSize: 12,
-                                              fontFamily: "Roboto",
+                                fontFamily: "Roboto",
                                               overflow: TextOverflow.ellipsis)),
                                     ),
                                     SizedBox(
                                       width: 5,
                                     ),
                                     Expanded(
-                                      flex: 1,
+                                      flex: 2,
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.end,
@@ -199,7 +203,7 @@ class _StockScreenState extends State<StockScreen> {
                 icon: Icon(Icons.arrow_drop_down_outlined,
                     color: ThemeApp.blackColor),
                 iconSize: 30,
-                hint: 'Choose Subject',
+                hint: 'Select',
                 dropdownItems: items,
                 value: selectedValue,
                 onChanged: (value) {
@@ -226,7 +230,7 @@ class _StockScreenState extends State<StockScreen> {
                 icon: Icon(Icons.arrow_drop_down_outlined,
                     color: ThemeApp.blackColor),
                 iconSize: 30,
-                hint: 'Choose Subject',
+                hint: 'Select',
                 dropdownItems: items,
                 value: selectedValue,
                 onChanged: (value) {
@@ -253,7 +257,7 @@ class _StockScreenState extends State<StockScreen> {
                 icon: Icon(Icons.arrow_drop_down_outlined,
                     color: ThemeApp.blackColor),
                 iconSize: 30,
-                hint: 'Choose Subject',
+                hint: 'Select',
                 dropdownItems: items,
                 value: selectedValue,
                 onChanged: (value) {

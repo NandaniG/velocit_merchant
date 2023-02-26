@@ -14,6 +14,8 @@ import '../../../utils/styles.dart';
 import '../../../utils/utils.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../Routes/Routes.dart';
+import '../../Services/Provider/Home_Provider.dart';
 import '../../utils/GlobalWidgets/appBar.dart';
 import '../../utils/GlobalWidgets/textFormFields.dart';
 import '../../utils/StringUtils.dart';
@@ -24,6 +26,7 @@ class OrderReviewSubActivity extends StatefulWidget {
   OrderReviewSubActivity({Key? key, required this.order}) : super(key: key);
 
   final Map order;
+
   @override
   State<OrderReviewSubActivity> createState() => _OrderReviewSubActivityState();
 }
@@ -47,221 +50,179 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
     'Delivered',
     'Reject'
   ];
+  var data;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    // data = Provider.of<HomeProvider>(context, listen: false)
+    //     .loadJsonForChangeStatus();
   }
 
   var address =
       'Maninagar BRTS stand, Punit Maharaj Road, Maninagar, Ahmedabad, Gujarat, India - 380021';
+  var statusData = '';
 
   @override
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
+    if (widget.order['overall_status'] == 'CONTAINS_CANCELLED') {
+      statusData = 'Order Canceled';
+    } else if (widget.order['overall_status'] == 'ACCEPTANCE_PENDING') {
+      statusData = 'Acceptance Pending';
+    } else if (widget.order['overall_status'] == 'PACKING_PENDING') {
+      statusData = 'To be Packed';
+    } else if (widget.order['overall_status'] == 'SHIPPING_PENDING') {
+      statusData = 'To be Shipped';
+    } else if (widget.order['overall_status'] == 'DELIVERY_PENDING') {
+      statusData = 'To be Delivered';
+    }
 
-    return Scaffold(
-      backgroundColor: ThemeApp.appBackgroundColor,
-      key: scaffoldGlobalKey,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(height * .09),
-        child: appBar_backWidget(
-            context,
-            appTitle(context, "Order ID - ${widget.order["id"]}"),
-            const SizedBox()),
-      ),
-      // bottomNavigationBar: singleSelectOptions
-      //     ? Container(
-      //         height: 0,
-      //       )
-      //     : SafeArea(
-      //         child: Container(
-      //         height: 45,
-      //         child: Row(
-      //           children: [
-      //             Expanded(
-      //               child: InkWell(
-      //                 onTap: () {
-      //                   setState(() {});
-      //                 },
-      //                 child: Container(
-      //                     padding: const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
-      //                     decoration: BoxDecoration(
-      //                       borderRadius: const BorderRadius.all(
-      //                         Radius.circular(100),
-      //                       ),
-      //                       border: Border.all(color: ThemeApp.tealButtonColor),
-      //                       color: ThemeApp.tealButtonColor,
-      //                     ),
-      //                     child: Center(
-      //                       child: TextFieldUtils().usingPassTextFields(
-      //                           'Accept', ThemeApp.whiteColor, context),
-      //                     )),
-      //               ),
-      //             ),
-      //             Expanded(
-      //               child: Container(
-      //                   padding: const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
-      //                   decoration: BoxDecoration(
-      //                     borderRadius: const BorderRadius.all(
-      //                       Radius.circular(100),
-      //                     ),
-      //                     border: Border.all(color: ThemeApp.tealButtonColor),
-      //                     color: ThemeApp.buttonShade2,
-      //                   ),
-      //                   child: Center(
-      //                     child: TextFieldUtils().usingPassTextFields(
-      //                         'Reject', ThemeApp.tealButtonColor, context),
-      //                   )),
-      //             )
-      //           ],
-      //         ),
-      //       )),
-      body: SafeArea(
-          child: Container(
-        color: ThemeApp.appBackgroundColor,
-        width: width,
-        child: ListView(
-            // mainAxisAlignment: MainAxisAlignment.start,
-            // crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Column(
-                  children: [
-                    /* stepperWidget(),  SizedBox(
-                    height: height * .02,
-                  ),*/
-                    Row(
-                      children: [
-                        Text(
-                          'Current Status:',
-                          style: TextStyle(
-                              color: ThemeApp.primaryNavyBlackColor,
-                              fontSize: 15,
-                              fontFamily: 'Roboto',
-                              fontWeight: FontWeight.w400),
-                        ),
-                        Text(widget.order['overall_status'] ?? "",
+    return WillPopScope(
+      onWillPop: () { setState(() {});
+      Navigator.pushReplacementNamed(context, RoutesName.dashboardRoute).then((value) => setState((){}));
+
+      return Future.value(true);
+      },
+      child: Scaffold(
+        backgroundColor: ThemeApp.appBackgroundColor,
+        key: scaffoldGlobalKey,
+        appBar:/* PreferredSize(
+          preferredSize: Size.fromHeight(height * .09),
+          child: appBar_backWidget(
+              context,
+              appTitle(context, "Order ID - ${widget.order["id"]}"),
+              const SizedBox()),
+        ),*/
+
+        AppBar(
+          shadowColor: ThemeApp.appBackgroundColor,
+
+          centerTitle: false,
+          // elevation: 0,
+          backgroundColor: ThemeApp.appBackgroundColor,
+          flexibleSpace: Container(
+            height: height * .08,
+            width: width,
+            decoration: const BoxDecoration(
+              color: ThemeApp.appBackgroundColor,
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(15),
+                  bottomRight: Radius.circular(15)),
+            ),
+          ),
+          titleSpacing: 0,
+          leading: InkWell(
+            onTap: () {
+              Navigator.pushReplacementNamed(context, RoutesName.dashboardRoute).then((value) => setState((){}));
+            },
+            child:  Transform.scale(
+              scale: 0.7,
+              child: Image.asset(
+                'assets/appImages/backArrow.png',
+                color: ThemeApp.primaryNavyBlackColor,
+                // height: height*.001,
+              ),
+            ),
+          ),
+
+          // leadingWidth: width * .06,
+          title:  Text("Order ID - ${widget.order["id"]}",style: const TextStyle(
+              color: ThemeApp.blackColor,
+              fontSize: 16,
+              fontFamily: "Roboto",
+              fontWeight: FontWeight.w400),),
+          // Row
+        ),
+        // bottomNavigationBar: singleSelectOptions
+        //     ? Container(
+        //         height: 0,
+        //       )
+        //     : SafeArea(
+        //         child: Container(
+        //         height: 45,
+        //         child: Row(
+        //           children: [
+        //             Expanded(
+        //               child: InkWell(
+        //                 onTap: () {
+        //                   setState(() {});
+        //                 },
+        //                 child: Container(
+        //                     padding: const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
+        //                     decoration: BoxDecoration(
+        //                       borderRadius: const BorderRadius.all(
+        //                         Radius.circular(100),
+        //                       ),
+        //                       border: Border.all(color: ThemeApp.tealButtonColor),
+        //                       color: ThemeApp.tealButtonColor,
+        //                     ),
+        //                     child: Center(
+        //                       child: TextFieldUtils().usingPassTextFields(
+        //                           'Accept', ThemeApp.whiteColor, context),
+        //                     )),
+        //               ),
+        //             ),
+        //             Expanded(
+        //               child: Container(
+        //                   padding: const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
+        //                   decoration: BoxDecoration(
+        //                     borderRadius: const BorderRadius.all(
+        //                       Radius.circular(100),
+        //                     ),
+        //                     border: Border.all(color: ThemeApp.tealButtonColor),
+        //                     color: ThemeApp.buttonShade2,
+        //                   ),
+        //                   child: Center(
+        //                     child: TextFieldUtils().usingPassTextFields(
+        //                         'Reject', ThemeApp.tealButtonColor, context),
+        //                   )),
+        //             )
+        //           ],
+        //         ),
+        //       )),
+        body: SafeArea(
+            child: Container(
+          color: ThemeApp.appBackgroundColor,
+          width: width,
+          child: ListView(
+              // mainAxisAlignment: MainAxisAlignment.start,
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: Column(
+                    children: [
+                      /* stepperWidget(),  SizedBox(
+                      height: height * .02,
+                    ),*/
+                      Row(
+                        children: [
+                          Text(
+                            'Current Status : ',
                             style: TextStyle(
                                 color: ThemeApp.primaryNavyBlackColor,
                                 fontSize: 15,
                                 fontFamily: 'Roboto',
-                                fontWeight: FontWeight.w700))
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      // height: height * 0.5,
-                      width: width,
-                      padding: const EdgeInsets.all(20),
-                      decoration: const BoxDecoration(
-                        color: ThemeApp.whiteColor,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              TextFieldUtils().dynamicText(
-                                  StringUtils.deliveryDetails,
-                                  context,
-                                  TextStyle(
-                                      color: ThemeApp.primaryNavyBlackColor,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold)),
-                              SizedBox(
-                                width: width * .02,
-                              ),
-                              Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(18, 8, 18, 8),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(30),
-                                  ),
-                                  // border: Border.all(
-                                  //     color: ThemeApp.packedButtonColor),
-                                  color: ThemeApp.whiteColor,
-                                ),
-                                child: TextFieldUtils().dynamicText(
-                                    StringConstant.selectedTypeOfAddress,
-                                    context,
-                                    TextStyle(
-                                        color: ThemeApp.lightFontColor,
-                                        fontSize: height * .018,
-                                        fontWeight: FontWeight.bold)),
-                              ),
-                            ],
+                                fontWeight: FontWeight.w400),
                           ),
-                          SizedBox(
-                            height: height * .02,
-                          ),
-                          TextFieldUtils().dynamicText(
-                              widget.order["customer_name"] ?? "",
-                              context,
-                              TextStyle(
-                                  color: ThemeApp.primaryNavyBlackColor,
-                                  fontSize: 14,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w400)),
-                          SizedBox(
-                            height: height * .01,
-                          ),
-                          Text(
-                              // provider.orderCheckOutDetails[0]
-                              //     ["orderCheckOutDeliveryAddress"],
-                              '${widget.order["delivery_address_line1"]},${widget.order["delivery_address_line2"]},${widget.order["delivery_address_city"]},${widget.order["delivery_address_pincode"]},${widget.order["delivery_address_state"]}',
-                              softWrap: true,
+                          Text(statusData,
                               style: TextStyle(
                                   color: ThemeApp.primaryNavyBlackColor,
-                                  fontSize: 12,
+                                  fontSize: 15,
                                   fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w400)),
-                          SizedBox(
-                            height: height * .02,
-                          ),
-                          Divider(
-                            thickness: 1,
-                          ),
-                          Row(
-                            children: [
-                              SvgPicture.asset(
-                                'assets/appImages/callIcon.svg',
-                                color: ThemeApp.appColor,
-                                semanticsLabel: 'Acme Logo',
-                                theme: SvgTheme(
-                                  currentColor: ThemeApp.appColor,
-                                ),
-                                height: height * .025,
-                              ),
-
-                              TextFieldUtils().dynamicText(
-                                  " +91 ${widget.order['customer_contact']}",
-                                  context,
-                                  TextStyle(
-                                      color: ThemeApp.primaryNavyBlackColor,
-                                      fontSize: height * .022,
-                                      fontWeight: FontWeight.w500)),
-                            ],
-                          ),
+                                  fontWeight: FontWeight.w700))
                         ],
                       ),
-                    ),
-                    SizedBox(
-                      height: height * .02,
-                    ),
-                    Container(
-                        // height: height * 0.6,
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        // height: height * 0.5,
                         width: width,
-                        padding:
-                            const EdgeInsets.only(left: 20, right: 20, top: 20),
+                        padding: const EdgeInsets.all(20),
                         decoration: const BoxDecoration(
                           color: ThemeApp.whiteColor,
                           borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -269,122 +230,225 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TextFieldUtils().dynamicText(
-                                StringUtils.orderSummary,
-                                context,
-                                TextStyle(
-                                  fontFamily: 'Roboto',
-                                  color: ThemeApp.primaryNavyBlackColor,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700,
-                                )),
-                            SizedBox(
-                              height: height * .02,
-                            ),
-                            cartProductList(),
-                          ],
-                        )),
-                    SizedBox(
-                      height: height * .02,
-                    ),
-                    priceDetails(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    // ,
-                    // proceedButton(
-                    //     "Complete Order", ThemeApp.tealButtonColor, context,
-                    //     () {
-                    //   Navigator.of(context).push(
-                    //     MaterialPageRoute(
-                    //       builder: (context) => OrderDeliveryScreen(),
-                    //     ),
-                    //   );
-                    // }),
-                    singleSelectOptions
-                        ? Container(
-                            height: 0,
-                          )
-                        : SafeArea(
-                            child: Container(
-                            height: 45,
-                            child: Row(
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Expanded(
-                                  child: InkWell(
-                                    onTap: () {
-                                      setState(() {});
-                                    },
-                                    child: Container(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 9.0, 0, 9.0),
-                                        decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(100),
-                                          ),
-                                          border: Border.all(
-                                              color: ThemeApp.tealButtonColor),
-                                          color: ThemeApp.tealButtonColor,
-                                        ),
-                                        child: Center(
-                                          child: TextFieldUtils()
-                                              .usingPassTextFields(
-                                                  'Accept Orders',
-                                                  ThemeApp.whiteColor,
-                                                  context),
-                                        )),
-                                  ),
-                                ),
+                                TextFieldUtils().dynamicText(
+                                    StringUtils.deliveryDetails,
+                                    context,
+                                    TextStyle(
+                                        color: ThemeApp.primaryNavyBlackColor,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold)),
                                 SizedBox(
-                                  width: 10,
+                                  width: width * .02,
                                 ),
-                                Expanded(
-                                  child: InkWell(
-                                    onTap: () {
-                                      Navigator.of(context).pushReplacement(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ReturnOrderActivity(
-                                                    values: widget.order,
-                                                    isSingleOrderReject: false,
-                                                  )));
-                                    },
-                                    child: Container(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 9.0, 0, 9.0),
-                                        decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(100),
-                                          ),
-                                          border: Border.all(
-                                              color: ThemeApp.tealButtonColor),
-                                          color: ThemeApp.buttonShade2,
-                                        ),
-                                        child: Center(
-                                          child: TextFieldUtils()
-                                              .usingPassTextFields(
-                                                  'Reject Orders',
-                                                  ThemeApp.tealButtonColor,
-                                                  context),
-                                        )),
+                                Container(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(18, 8, 18, 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(30),
+                                    ),
+                                    // border: Border.all(
+                                    //     color: ThemeApp.packedButtonColor),
+                                    color: ThemeApp.whiteColor,
                                   ),
-                                )
+                                  child: TextFieldUtils().dynamicText(
+                                      StringConstant.selectedTypeOfAddress,
+                                      context,
+                                      TextStyle(
+                                          color: ThemeApp.lightFontColor,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold)),
+                                ),
                               ],
                             ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            TextFieldUtils().dynamicText(
+                                widget.order["customer_name"] ?? "",
+                                context,
+                                TextStyle(
+                                    color: ThemeApp.primaryNavyBlackColor,
+                                    fontSize: 14,
+                                    fontFamily: 'Roboto',
+                                    fontWeight: FontWeight.w400)),
+                            SizedBox(
+                              height:10,
+                            ),
+                            Text(
+                                // provider.orderCheckOutDetails[0]
+                                //     ["orderCheckOutDeliveryAddress"],
+                                '${widget.order["delivery_address_line1"]},${widget.order["delivery_address_line2"]},${widget.order["delivery_address_city"]},${widget.order["delivery_address_pincode"]},${widget.order["delivery_address_state"]}',
+                                softWrap: true,
+                                style: TextStyle(
+                                    color: ThemeApp.primaryNavyBlackColor,
+                                    fontSize: 12,
+                                    fontFamily: 'Roboto',
+                                    fontWeight: FontWeight.w400)),
+                            SizedBox(
+                              height:10,
+                            ),
+                            Divider(
+                              thickness: 1,
+                            ),
+                            Row(
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/appImages/callIcon.svg',
+                                  color: ThemeApp.appColor,
+                                  semanticsLabel: 'Acme Logo',
+                                  theme: SvgTheme(
+                                    currentColor: ThemeApp.appColor,
+                                  ),
+                                  // height: height * .025,
+                                ),
+                                TextFieldUtils().dynamicText(
+                                    " +91 ${widget.order['customer_contact']}",
+                                    context,
+                                    TextStyle(
+                                        color: ThemeApp.primaryNavyBlackColor,
+                                        fontSize:16,
+                                        fontWeight: FontWeight.w500)),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: height * .02,
+                      ),
+                      Container(
+                          // height: height * 0.6,
+                          width: width,
+                          padding:
+                              const EdgeInsets.only(left: 20, right: 20, top: 20),
+                          decoration: const BoxDecoration(
+                            color: ThemeApp.whiteColor,
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextFieldUtils().dynamicText(
+                                  StringUtils.orderSummary,
+                                  context,
+                                  TextStyle(
+                                    fontFamily: 'Roboto',
+                                    color: ThemeApp.primaryNavyBlackColor,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w700,
+                                  )),
+                              SizedBox(
+                                height: height * .02,
+                              ),
+                              orderSummary(),
+                            ],
                           )),
+                      SizedBox(
+                        height: height * .02,
+                      ),
+                      priceDetails(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      // ,
+                      // proceedButton(
+                      //     "Complete Order", ThemeApp.tealButtonColor, context,
+                      //     () {
+                      //   Navigator.of(context).push(
+                      //     MaterialPageRoute(
+                      //       builder: (context) => OrderDeliveryScreen(),
+                      //     ),
+                      //   );
+                      // }),
+                      singleSelectOptions
+                          ? Container(
+                              height: 0,
+                            )
+                          : SafeArea(
+                              child: Container(
+                              height: 45,
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {});
+                                      },
+                                      child: Container(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 9.0, 0, 9.0),
+                                          decoration: BoxDecoration(
+                                            borderRadius: const BorderRadius.all(
+                                              Radius.circular(100),
+                                            ),
+                                            border: Border.all(
+                                                color: ThemeApp.tealButtonColor),
+                                            color: ThemeApp.tealButtonColor,
+                                          ),
+                                          child: Center(
+                                            child: TextFieldUtils()
+                                                .usingPassTextFields(
+                                                    'Accept Orders',
+                                                    ThemeApp.whiteColor,
+                                                    context),
+                                          )),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Expanded(
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ReturnOrderActivity(
+                                                      values: widget.order,
+                                                      isSingleOrderReject: false,
+                                                    )));
+                                      },
+                                      child: Container(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 9.0, 0, 9.0),
+                                          decoration: BoxDecoration(
+                                            borderRadius: const BorderRadius.all(
+                                              Radius.circular(100),
+                                            ),
+                                            border: Border.all(
+                                                color: ThemeApp.tealButtonColor),
+                                            color: ThemeApp.buttonShade2,
+                                          ),
+                                          child: Center(
+                                            child: TextFieldUtils()
+                                                .usingPassTextFields(
+                                                    'Reject Orders',
+                                                    ThemeApp.tealButtonColor,
+                                                    context),
+                                          )),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )),
 
-                    SizedBox(
-                      height: height * .01,
-                    ),
-                  ],
+                      SizedBox(
+                        height: height * .01,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ]),
-      )),
+              ]),
+        )),
+      ),
     );
   }
 
-  Widget cartProductList() {
+  Widget orderSummary() {
     return ListView.builder(
         shrinkWrap: true,
         // separatorBuilder: (BuildContext context, int index) =>
@@ -394,9 +458,14 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
         itemCount: widget.order['orders'].length,
         itemBuilder: (BuildContext context, int index) {
           Map orderDetails = widget.order['orders'][index];
+
+          DateFormat format = DateFormat('dd MMM yyyy hh:mm aaa');
+          DateTime date = DateTime.parse(
+              (orderDetails['delivery_date'] ?? DateTime.now().toString()));
+          var delivery_date = format.format(date);
           bool orderStatus = true;
 
-          if (orderDetails['is_Placed']) {
+          if (orderDetails['is_accepted']) {
             orderStatus = true;
           } else if (orderDetails['is_packed']) {
             orderStatus = true;
@@ -470,7 +539,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                                         TextStyle(
                                             color:
                                                 ThemeApp.primaryNavyBlackColor,
-                                            fontSize: height * .02,
+                                            fontSize:13,
                                             overflow: TextOverflow.ellipsis,
                                             fontWeight: FontWeight.w400)),
                                     SizedBox(
@@ -481,12 +550,12 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         TextFieldUtils().dynamicText(
-                                            'Quantity:${orderDetails['item_quantity']}',
+                                            'Quantity : ${orderDetails['item_qty']}',
                                             context,
                                             TextStyle(
                                                 color: ThemeApp
                                                     .primaryNavyBlackColor,
-                                                fontSize: height * .022,
+                                                fontSize:14,
                                                 overflow: TextOverflow.ellipsis,
                                                 fontWeight: FontWeight.w700)),
                                         orderStatus
@@ -517,7 +586,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                                                                       top:
                                                                           30.0),
                                                               child:
-                                                                  bottomSheetForOtp(),
+                                                                  bottomSheetForOtp(orderDetails),
                                                             ),
                                                             Positioned(
                                                               top: 0,
@@ -548,7 +617,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                                                 }),
                                                 child: Container(
                                                     // height: 45,
-                                                    padding: EdgeInsets.all(10),
+                                                    padding: EdgeInsets.all(5),
                                                     decoration: BoxDecoration(
                                                         border: Border.all(
                                                             color: ThemeApp
@@ -586,6 +655,21 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                             ),
                           ),
                         ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: TextFieldUtils().dynamicText(
+                            "Delivery date : " + delivery_date,
+                            context,
+                            TextStyle(
+                              fontFamily: 'Roboto',
+                              color: ThemeApp.subIconColor,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                            )),
                       ),
                       SizedBox(
                         height: 15,
@@ -1025,282 +1109,203 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
   //   );
   // }
 
-  Widget DropDownForStatusChange() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // TextFieldUtils().dynamicText(
-        //     "Show",
-        //     context,
-        //     TextStyle(
-        //         color: ThemeApp.blackColor,
-        //         fontSize: height * .022,
-        //         fontWeight: FontWeight.w500,
-        //         overflow: TextOverflow.ellipsis)),
-        // SizedBox(
-        //   width: width * .03,
-        // ),/
-
-        ///// DropDown
-        // Container(
-        //   decoration: BoxDecoration(
-        //     color: ThemeApp.whiteColor, //<-- SEE HERE
-        //   ),
-        //   width: 110,
-        //   height: 50,
-        //   child: SizedBox(
-        //     width: 110,
-        //     child: DropdownButtonFormField(
-        //       decoration: InputDecoration(
-        //         fillColor: ThemeApp.whiteColor,
-        //         enabledBorder: OutlineInputBorder(
-        //             borderRadius: BorderRadius.circular(0),
-        //             borderSide: BorderSide(color: ThemeApp.whiteColor)),
-        //         disabledBorder: OutlineInputBorder(
-        //             borderRadius: BorderRadius.circular(0),
-        //             borderSide: BorderSide(color: ThemeApp.whiteColor)),
-        //         border: OutlineInputBorder(
-        //             borderRadius: BorderRadius.circular(0),
-        //             borderSide: BorderSide(color: ThemeApp.whiteColor)),
-        //         focusedBorder: OutlineInputBorder(
-        //             borderRadius: BorderRadius.circular(0),
-        //             borderSide: BorderSide(color: ThemeApp.whiteColor)),
-        //         contentPadding:
-        //             EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        //       ),
-        //       style: TextStyle(
-        //           color: ThemeApp.lightFontColor,
-        //           fontSize: 12,
-        //           fontWeight: FontWeight.w400,
-        //           overflow: TextOverflow.ellipsis),
-
-        //       value: 'Accepted',
-
-        //       // Down Arrow Icon
-        //       // icon: const Icon(Icons.arrow_drop_down,size: 30),
-
-        //       // Array list of items
-        //       items: dropDownForAcceptedProducts.map((String items) {
-        //         return DropdownMenuItem(
-        //           value: items,
-        //           child: TextFieldUtils().dynamicText(
-        //               items,
-        //               context,
-        //               TextStyle(
-        //                   color: ThemeApp.lightFontColor,
-        //                   fontSize: 10,
-        //                   fontWeight: FontWeight.w400,
-        //                   overflow: TextOverflow.ellipsis)),
-        //         );
-        //       }).toList(),
-        //       // After selecting the desired option,it will
-        //       // change button value to selected value
-        //       onChanged: (String? newValue) {
-        //         if (newValue == 'Delivered') {
-        //           showDialog(
-        //               context: context,
-        //               builder: ((context) {
-        //                 return CupertinoAlertDialog(
-        //                   title:
-        //                       Text("Enter Delivery PIN Shared With Customer"),
-        //                   content: Container(
-        //                     height: 40,
-        //                     // color: Colors.blue,
-        //                     margin: EdgeInsets.only(top: 10),
-        //                     child: Material(
-        //                       color: Colors.transparent,
-        //                       child: OTPTextField(
-        //                         length: 5,
-        //                         width: 50,
-        //                         fieldWidth: 40,
-        //                         style: TextStyle(fontSize: 17),
-        //                         textFieldAlignment:
-        //                             MainAxisAlignment.spaceAround,
-        //                         otpFieldStyle: OtpFieldStyle(
-        //                             backgroundColor: Colors.white),
-        //                         fieldStyle: FieldStyle.box,
-        //                         onCompleted: (pin) {
-        //                           print("Completed: " + pin);
-        //                         },
-        //                       ),
-        //                     ),
-        //                   ),
-        //                   actions: [
-        //                     Container(
-        //                       // margin: EdgeInsets.all(5),
-        //                       decoration: BoxDecoration(
-        //                           color: ThemeApp.appColor,
-        //                           borderRadius: BorderRadius.circular(0)),
-        //                       child: MaterialButton(
-        //                         onPressed: () {
-        //                           Navigator.pop(context);
-        //                         },
-        //                         child: Text(
-        //                           "Varify OTP",
-        //                           style: TextStyle(
-        //                               fontSize: 16, color: Colors.white),
-        //                         ),
-        //                       ),
-        //                     )
-        //                   ],
-        //                 );
-        //               }));
-        //         }
-        //         // setState(() {
-        //         //   // allDropdownValue = newValue!;
-        //         // });
-        //       },
-        //     ),
-        //   ),
-        // ),
-      ],
-    );
-  }
-
-  Widget bottomSheetForOtp() {
-    return SingleChildScrollView(
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(16, 20, 24, 20),
-        decoration: const BoxDecoration(
-            color: ThemeApp.whiteColor,
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20.0),
-                topRight: Radius.circular(20.0))),
-        // padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+  Widget bottomSheetForOtp(Map orderDetails) {
+    return Consumer<HomeProvider>(builder: (context, value, child) {
+      return SingleChildScrollView(
         child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-              border: Border.all(color: ThemeApp.lightBorderColor)),
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      selectedTypeOfOrders = "Accepted";
-                      Navigator.pop(context);
-                    });
-                  },
-                  child: TextFieldUtils().dynamicText(
-                      'Accepted',
-                      context,
-                      const TextStyle(
-                          color: ThemeApp.activeOrderColor,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700)),
-                ),
-                SizedBox(
-                  height: height * .04,
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      selectedTypeOfOrders = "Packed";
-                      Navigator.pop(context);
-                    });
-                  },
-                  child: TextFieldUtils().dynamicText(
-                      'Packed',
-                      context,
-                      const TextStyle(
-                          color: ThemeApp.packedButtonColor,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700)),
-                ),
-                SizedBox(
-                  height: height * .04,
-                ),
-                InkWell(
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: ((context) {
-                          return CupertinoAlertDialog(
-                            title:
-                                Text("Enter Delivery OTP Shared With Customer"),
-                            content: Container(
-                              height: 40,
-                              // color: Colors.blue,
-                              margin: EdgeInsets.only(top: 10),
-                              child: Material(
-                                color: Colors.transparent,
-                                child: OTPTextField(
-                                  controller: OtpFieldController(),
-                                  length: 5,
-                                  width: 50,
-                                  fieldWidth: 40,
-                                  style: TextStyle(fontSize: 17),
-                                  textFieldAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  otpFieldStyle: OtpFieldStyle(
-                                      backgroundColor: Colors.white),
-                                  fieldStyle: FieldStyle.box,
-                                  onCompleted: (pin) {
-                                    print("Completed: " + pin);
-                                  },
-                                ),
-                              ),
-                            ),
-                            actions: [
-                              Container(
-                                // margin: EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                    color: ThemeApp.appColor,
-                                    borderRadius: BorderRadius.circular(0)),
-                                child: MaterialButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text(
-                                    "Verify OTP",
-                                    style: TextStyle(
-                                        fontSize: 16, color: Colors.white),
+          padding: const EdgeInsets.fromLTRB(16, 20, 24, 20),
+          decoration: const BoxDecoration(
+              color: ThemeApp.whiteColor,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20.0),
+                  topRight: Radius.circular(20.0))),
+          // padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                border: Border.all(color: ThemeApp.lightBorderColor)),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        selectedTypeOfOrders = "Accepted";
+                        // value.statusCode = 510;
+                        data = Provider.of<HomeProvider>(context, listen: false)
+                            .loadJsonForChangeStatus(510,widget.order['id'] ,orderDetails['order_id']);
+                        Navigator.pop(context);
+                      });
+                    },
+                    child: TextFieldUtils().dynamicText(
+                        'Accepted',
+                        context,
+                        const TextStyle(
+                            color: ThemeApp.activeOrderColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700)),
+                  ),
+                  SizedBox(
+                    height: height * .04,
+                  ),   InkWell(
+                    onTap: () {
+                      setState(() {
+                        selectedTypeOfOrders = "Acceptance Rejected";
+                        // value.statusCode = 510;
+                        data = Provider.of<HomeProvider>(context, listen: false)
+                            .loadJsonForChangeStatus(550 ,widget.order['id'] ,orderDetails['order_id']);
+                        Navigator.pop(context);
+                      });
+                    },
+                    child: TextFieldUtils().dynamicText(
+                        'Acceptance Rejected',
+                        context,
+                        const TextStyle(
+                            color: ThemeApp.activeOrderColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700)),
+                  ),
+                  SizedBox(
+                    height: height * .04,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        selectedTypeOfOrders = "Packed";
+
+                        data = Provider.of<HomeProvider>(context, listen: false)
+                            .loadJsonForChangeStatus(610,widget.order['id'] ,orderDetails['order_id']);
+                        Navigator.pop(context);
+                      });
+                    },
+                    child: TextFieldUtils().dynamicText(
+                      
+                        'Packed',
+                        context,
+                        const TextStyle(
+                            color: ThemeApp.packedButtonColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700)),
+                  ),
+                  SizedBox(
+                    height: height * .04,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: ((context) {
+                            return CupertinoAlertDialog(
+                              title: Text(
+                                  "Enter Delivery OTP Shared With Customer"),
+                              content: Container(
+                                height: 40,
+                                // color: Colors.blue,
+                                margin: EdgeInsets.only(top: 10),
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: OTPTextField(
+                                    controller: OtpFieldController(),
+                                    length: 5,
+                                    width: 50,
+                                    fieldWidth: 40,
+                                    style: TextStyle(fontSize: 17),
+                                    textFieldAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    otpFieldStyle: OtpFieldStyle(
+                                        backgroundColor: Colors.white),
+                                    fieldStyle: FieldStyle.box,
+                                    onCompleted: (pin) {
+                                      print("Completed: " + pin);
+                                    },
                                   ),
                                 ),
-                              )
-                            ],
-                          );
-                        }));
+                              ),
+                              actions: [
+                                Container(
+                                  // margin: EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                      color: ThemeApp.appColor,
+                                      borderRadius: BorderRadius.circular(0)),
+                                  child: MaterialButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      "Verify OTP",
+                                      style: TextStyle(
+                                          fontSize: 16, color: Colors.white),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            );
+                          }));
 
-                    setState(() {
-                      selectedTypeOfOrders = "Shipped";
-                    });
-                  },
-                  child: TextFieldUtils().dynamicText(
-                      'Shipped',
-                      context,
-                      const TextStyle(
-                          color: ThemeApp.shippedOrderColor,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700)),
-                ),
-                SizedBox(
-                  height: height * .04,
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      selectedTypeOfOrders = "Delivered";
-                      Navigator.pop(context);
-                    });
-                  },
-                  child: TextFieldUtils().dynamicText(
-                      'Delivered',
-                      context,
-                      const TextStyle(
-                          color: ThemeApp.deliveredOrderColor,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700)),
-                ),
-              ],
+                      setState(() {
+                        data = Provider.of<HomeProvider>(context, listen: false)
+                            .loadJsonForChangeStatus(710,widget.order['id'] ,orderDetails['order_id']);
+                        selectedTypeOfOrders = "Shipped";
+                      });
+                    },
+                    child: TextFieldUtils().dynamicText(
+                        'Shipped',
+                        context,
+                        const TextStyle(
+                            color: ThemeApp.shippedOrderColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700)),
+                  ),
+                  SizedBox(
+                    height: height * .04,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        data = Provider.of<HomeProvider>(context, listen: false)
+                            .loadJsonForChangeStatus(810,widget.order['id'] ,orderDetails['order_id']);
+                        selectedTypeOfOrders = "Delivered";
+                        Navigator.pop(context);
+                      });
+                    },
+                    child: TextFieldUtils().dynamicText(
+                        'Delivered',
+                        context,
+                        const TextStyle(
+                            color: ThemeApp.deliveredOrderColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700)),
+                  ),
+                  SizedBox(
+                    height: height * .04,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        data = Provider.of<HomeProvider>(context, listen: false)
+                            .loadJsonForChangeStatus(850,widget.order['id'] ,orderDetails['order_id']);
+                        selectedTypeOfOrders = "Delivery Failure";
+                        Navigator.pop(context);
+                      });
+                    },
+                    child: TextFieldUtils().dynamicText(
+                        'Delivery Failure',
+                        context,
+                        const TextStyle(
+                            color: ThemeApp.deliveredOrderColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700)),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

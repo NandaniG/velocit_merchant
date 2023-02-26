@@ -9,7 +9,7 @@ import '../../utils/constants.dart';
 import '../../utils/utils.dart';
 import '../data/network/baseApiServices.dart';
 import '../data/network/networkApiServices.dart';
-
+import 'package:http/http.dart'as http;
 import '../AppConstant/apiMapping.dart';
 
 class Repository {
@@ -64,6 +64,8 @@ class Repository {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('jwt_token') ?? '';
     // dynamic responseJson;
+    print("Active order Map:" + jsonMap.toString());
+
     var url = ApiMapping.ConstructURI(StringConstant.apiMerchantBasket_findby_merchant);
 print(url);
     dynamic responseJson = await _apiServices.getGetApiResponseWithBody(url, jsonMap);
@@ -126,4 +128,42 @@ print(url);
     httpClient.close();
     return responseJson;
   }
+
+  Future putApiForChangeStatus(int statusCode,var merchantId, var orderId) async {
+
+    print("orderId ID" + orderId.toString());
+    print("merchantId ID" + merchantId.toString());
+
+    var url = '/order/$orderId/changeStatus';
+
+    Map<String, String> statusData = {
+      'newStatusCode': statusCode.toString(),
+      'merchantBasketId': merchantId.toString(),
+
+    };
+    print("statusData Query$statusData");
+    String queryString = Uri(queryParameters: statusData).query;
+
+    var requestUrl = '${ApiMapping.BaseAPI}$url?$queryString';
+    print("statusData URL $requestUrl");
+
+    try {
+      dynamic reply;
+      http.Response response = await http.put(Uri.parse(requestUrl),
+         headers: {'content-type': 'application/json'});
+      print("response statusData" + response.body.toString());
+      var jsonData = json.decode(response.body);
+      print("response  statusData" + jsonData['status'].toString());
+
+      // Utils.successToast(response.body.toString());
+      return reply;
+
+      return response;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+
+
 }

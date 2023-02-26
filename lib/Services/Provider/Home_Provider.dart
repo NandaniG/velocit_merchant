@@ -9,27 +9,37 @@ import '../../utils/constants.dart';
 import '../HomeModel.dart';
 
 class HomeProvider with ChangeNotifier {
-  Map<dynamic, dynamic> jsonData = {};
+  Map<dynamic, dynamic> jsonDataBasket = {};
+  Map<dynamic, dynamic> jsonDataStatus = {};
 
   //---------------------------------------------------------
   //--------------------load json file------------------------
   //----------------------------------------------------------
-  loadJson() async {
+
+  bool IsActiveOrderList = true;
+  int PastDays =7;
+//get merchant Basket Data
+  loadJsonForGetMerchantBasket() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
+    var merchanId = (pref.getInt('merchant_id')) ?? 0;
     try {
-      String jsonContent = await Repository().postApiRequest({
-    "merchant_id":pref.getInt('merchant_id') ?? 4,
-    "IsActiveOrderList":StringConstant.IsActiveOrderList,
-    "from_days_in_past":7
-});
-      Map data={
-        "merchant_id":pref.getInt('merchant_id') ?? 4,
-        "IsActiveOrderList":StringConstant.IsActiveOrderList,
-        "from_days_in_past":0
-      };
-      print("Active order Map:" +data.toString());
+      String jsonContent = await Repository().postApiRequest(IsActiveOrderList==true?{
+        "merchant_id": merchanId,
+        "IsActiveOrderList": IsActiveOrderList,
+        "from_days_in_past": 0
+      }:{
+        "merchant_id": merchanId,
+        "IsActiveOrderList": IsActiveOrderList,
+        "from_days_in_past": PastDays
+      });
+
+      // Map data = {
+      //   "merchant_id": merchanId,
+      //   "IsActiveOrderList": StringConstant.IsActiveOrderList,
+      //   "from_days_in_past": PastDays
+      // };
       // rootBundle.loadString("assets/jsonData.json");
-      jsonData = json.decode(jsonContent);
+      jsonDataBasket = json.decode(jsonContent);
       notifyListeners();
       // return jsonData;
       print("____________loadJson______________________");
@@ -53,7 +63,47 @@ class HomeProvider with ChangeNotifier {
     } catch (e) {
       print("Error in loadJson: $e");
       return {};
+    }
+  }
 
+//change status in detail screen
+
+  // var statusCode,orderId;
+  loadJsonForChangeStatus(var statusCode,merchantId,orderId) async {
+
+    try {
+      var jsonContent = await Repository().putApiForChangeStatus(statusCode,merchantId, orderId);
+
+      // Map data = {
+      //   "merchant_id": merchanId,
+      //   "IsActiveOrderList": StringConstant.IsActiveOrderList,
+      //   "from_days_in_past": PastDays
+      // };
+      // rootBundle.loadString("assets/jsonData.json");
+      jsonDataStatus = json.decode(jsonContent);
+      notifyListeners();
+      // return jsonData;
+      print("____________loadJson______________________");
+      // print(jsonData["stepperOfDeliveryList"]);
+      // StringConstant.printObject(jsonData);
+
+      // homeImageSliderService();
+      // shopByCategoryService();
+      // bookOurServicesService();
+      // recommendedListService();
+      // merchantNearYouListService();
+      // bestDealListService();
+      // cartProductListService();
+      // orderCheckOutListService();
+      // myOrdersListService();budgetBuyListService();
+      // myAddressListService();
+      // customerSupportService();
+      // accountSettingService();
+      // notificationsListService();
+      // offersListService();
+    } catch (e) {
+      print("Error in loadJson: $e");
+      return {};
     }
   }
 
@@ -226,6 +276,7 @@ class HomeProvider with ChangeNotifier {
     // print(budgetBuyList.toString());
     return budgetBuyList.map((e) => BudgetBuyList.fromJson(e)).toList();
   }
+
   //---------------------------------------------------------
   //----------------- My Orders--------------------
   var myOrdersList;
@@ -269,7 +320,8 @@ class HomeProvider with ChangeNotifier {
 
   //---------------------------------------------------------
   //----------------- customer support--------------------
-var customerSupportList;
+  var customerSupportList;
+
   Future customerSupportService() async {
     final jsondata = await rootBundle.loadString('assets/jsonData.json');
     customerSupportList = json.decode(jsondata);
@@ -280,9 +332,11 @@ var customerSupportList;
 
     return customerSupportList;
   }
+
   //---------------------------------------------------------
   //----------------- account setting--------------------
   var accountSettings;
+
   Future accountSettingService() async {
     final jsondata = await rootBundle.loadString('assets/jsonData.json');
     accountSettings = json.decode(jsondata);
@@ -293,6 +347,7 @@ var customerSupportList;
 
     return accountSettings;
   }
+
   //---------------------------------------------------------
   //----------------- My Orders--------------------
   var notificationDataList;
@@ -309,6 +364,7 @@ var customerSupportList;
         .map((e) => NotificationsList.fromJson(e))
         .toList();
   }
+
   //---------------------------------------------------------
   //----------------- My address--------------------
   var mycardsList;
@@ -329,7 +385,6 @@ var customerSupportList;
     return mycardsList.map((e) => MyAddressList.fromJson(e)).toList();
   }
 
-
   //---------------------------------------------------------
   //----------------- My offers--------------------
   var offerList;
@@ -343,17 +398,14 @@ var customerSupportList;
     offerList = offerList["offersData"];
     // print(offerList.toString());
 
-      offerListDetails = offerList["offerList"];
+    offerListDetails = offerList["offerList"];
     offerByType = offerList["offerByType"];
     print("-------------offerList Data-------------");
-
 
     for (int i = 0; i <= offerByType.length; i++) {
       offerByTypeImagesList = offerByType[i]["offerImages"];
       // print("-------------offerImages Dataaaaaaaa$offerByTypeImagesList");
     }
-
-
 
     // print(offerByType.toString());
     return offerList.map((e) => OffersData.fromJson(e)).toList();

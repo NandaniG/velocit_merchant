@@ -19,58 +19,62 @@ import 'package:http/http.dart' as http;
 
 class AuthRepository {
   BaseApiServices _apiServices = NetworkApiServices();
-  Future postApiUsingEmailRequest(Map jsonMap, BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    dynamic responseJson;
-    var url = ApiMapping.getURI(apiEndPoint.auth_signIn_using_post);
-
-    HttpClient httpClient = new HttpClient();
-    HttpClientRequest request =
-    await httpClient.postUrl(Uri.parse(url)).timeout(Duration(seconds: 10));
-    request.headers.set('content-type', 'application/json');
-    request.add(utf8.encode(json.encode(jsonMap)));
-
-    HttpClientResponse response = await request.close();
-    // todo - you should check the response.statusCode
-    responseJson = await response.transform(utf8.decoder).join();
-    String rawJson = responseJson.toString();
-    print(responseJson.toString());
-
-    Map<String, dynamic> map = jsonDecode(rawJson);
-    String id = map['id'].toString();
-    int merchantId = map['principal_id'] ?? -1;
-    try {
-      if (response.statusCode == 200) {
-        print(responseJson.toString());
-        String userId = id.toString();
-        print("UserId from Api" + userId);
-        // prefs.setString(StringConstant.userId, userId);
-        prefs.setString(StringConstant.testId, userId);
-        if (merchantId != -1) {
-          prefs.setInt('merchant_id', merchantId);
-          prefs.setBool('isLogin', true);
-          StringConstant.isLogIn = true;
-          prefs.setString('jwt_token', map['jwt_token'].toString());
-        }
-        // Prefs.instance.setToken(StringConstant.userId, id.toString());
-
-        var loginId = await prefs.getString(StringConstant.testId);
-
-        print("LoginId : .. " + loginId.toString());
-        // StringConstant.isLogIn = true;
-        Utils.successToast(id.toString());
-
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => OrderDashboard()));
-      } else {      Utils.errorToast("System is busy, Please try after sometime.");
-      }
-    } catch (e) {
-      Utils.errorToast("System is busy, Please try after sometime.");
-    }
-    httpClient.close();
-    return responseJson;
-  }
+  // Future postApiUsingEmailRequest(Map jsonMap, BuildContext context) async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //
+  //   dynamic responseJson;
+  //   var url = ApiMapping.getURI(apiEndPoint.auth_signIn_using_post);
+  //
+  //   HttpClient httpClient = new HttpClient();
+  //   HttpClientRequest request =
+  //   await httpClient.postUrl(Uri.parse(url)).timeout(Duration(seconds: 10));
+  //   request.headers.set('content-type', 'application/json');
+  //   request.add(utf8.encode(json.encode(jsonMap)));
+  //
+  //   HttpClientResponse response = await request.close();
+  //   // todo - you should check the response.statusCode
+  //   responseJson = await response.transform(utf8.decoder).join();
+  //   String rawJson = responseJson.toString();
+  //   print(responseJson.toString());
+  //
+  //   Map<String, dynamic> map = jsonDecode(rawJson);
+  //   String id = map['id'].toString();
+  //   int merchantId = map['principal_id'] ?? -1;
+  //
+  //   print("UserId from Api" + map['id'].toString());
+  //   try {
+  //     if (response.statusCode == 200) {
+  //       print(responseJson.toString());
+  //       String userId = id.toString();
+  //       print("UserId ..." + userId);
+  //       // prefs.setString(StringConstant.userId, userId);
+  //       prefs.setString(StringConstant.testId, userId);
+  //       if (merchantId != -1) {
+  //         prefs.setInt('merchant_id', merchantId);
+  //         prefs.setBool('isLogin', true);
+  //         StringConstant.isLogIn = true;
+  //         prefs.setString('jwt_token', map['jwt_token'].toString());
+  //       }
+  //       // Prefs.instance.setToken(StringConstant.userId, id.toString());
+  //
+  //       var loginId = await prefs.getString(StringConstant.testId);
+  //
+  //       print("LoginId : .. " + loginId.toString());
+  //       // StringConstant.isLogIn = true;
+  //       Utils.successToast(id.toString());
+  //
+  //       // Navigator.of(context).pushReplacement(
+  //       //     MaterialPageRoute(builder: (context) => OrderDashboard()));
+  //
+  //     } else {      Utils.errorToast("System is busy, Please try after sometime.");
+  //     }
+  //   } catch (e) {
+  //     Utils.errorToast("System is busy, Please try after sometime.");
+  //   }
+  //   httpClient.close();
+  //   return responseJson;
+  // }
 
   /// FINAL API FOR LOGIN USING EMAIL AND PASSWORD
 
@@ -111,6 +115,14 @@ class AuthRepository {
       preferences.setString(
           'emailLogin', jsonData['payload']['body']['email'].toString());
 
+      int merchantId = jsonData['payload']['body']['principal_id'] ?? -1;
+print("merchantId ${merchantId}");
+      if (merchantId != -1) {
+        prefs.setInt('merchant_id', merchantId);
+        prefs.setBool('isLogin', true);
+        StringConstant.isLogIn = true;
+        prefs.setString('jwt_token', jsonData['payload']['body']['jwt_token'].toString());
+      }
       print("LoginId : .. " + loginId.toString());
 
       StringConstant.isLogIn = true;

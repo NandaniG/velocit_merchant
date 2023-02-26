@@ -25,6 +25,7 @@ class ThemeApp {
   static const shippedOrderColor = Color(0xffF59B40);
   static const deliveredOrderColor = Color(0xff2400FF);
   static const boxLightColor = Color(0xfff8f8f8);
+  static const megentaColor = Color(0xffff33cc);
 
   static const separatedLineColor = Color(0xffD9D9D9);
     static const emptyImageColor = Color(0xffEDEDED);

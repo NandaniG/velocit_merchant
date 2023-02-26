@@ -44,6 +44,8 @@ class _OrderDashboardState extends State<OrderDashboard> {
 
   setPram() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
+    StringConstant.isLogIn =   (pref.getBool('isLogin'))??false;
+
   }
 
   final indianRupeesFormat = NumberFormat.currency(
@@ -229,7 +231,17 @@ class _OrderDashboardState extends State<OrderDashboard> {
 
   Widget mainUI() {
     return Consumer<HomeProvider>(builder: (context, value, child) {
-      return (value.jsonDataBasket.isNotEmpty && value.jsonDataBasket['error'] == null)
+      return
+        !StringConstant.isLogIn
+            ?    Center(
+          child: Text(
+            "For OnBoarding\nPlease connect to Sales Team",
+            style: TextStyle(
+                fontSize: 16, color: ThemeApp.appColor),
+            textAlign: TextAlign.center,
+          ),
+        ):
+        (value.jsonDataBasket.isNotEmpty && value.jsonDataBasket['error'] == null)
           ? Stack(
               children: [
                 /*  isActiveOrders == true
@@ -271,16 +283,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                     !isActiveOrders
                         ? activeOrderDropdownShow()
                         : pastOrderDropdownShow(value),
-                    StringConstant.isLogIn
-                        ? Container()
-                        : Center(
-                            child: Text(
-                              "For OnBoarding\nPlease connect to Sales Team",
-                              style: TextStyle(
-                                  fontSize: 16, color: ThemeApp.appColor),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
+
                     SizedBox(
                       height: 10,
                     ),
@@ -408,7 +411,18 @@ class _OrderDashboardState extends State<OrderDashboard> {
               : Center(child: CircularProgressIndicator());
     });
   }
-
+Widget unAuthorizedUser(){
+    return Column(children: const [
+      Center(
+        child: Text(
+          "For OnBoarding\nPlease connect to Sales Team",
+          style: TextStyle(
+              fontSize: 16, color: ThemeApp.appColor),
+          textAlign: TextAlign.center,
+        ),
+      )
+    ],);
+}
   String activeDropdownValue = 'All Orders';
 
   var activeItems = [

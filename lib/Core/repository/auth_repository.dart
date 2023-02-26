@@ -99,8 +99,8 @@ class AuthRepository {
     StringConstant.prettyPrintJson(responseJson.toString(), 'Login Response:');
 
     if (jsonData['status'].toString() == 'OK') {
-      AuthRepository()
-          .getUserDetailsById(jsonData['payload']['body']['id'].toString());
+      // AuthRepository()
+      //     .getUserDetailsById(jsonData['payload']['body']['id'].toString());
       prefs.setString(
           StringConstant.testId, jsonData['payload']['body']['id'].toString());
       // Prefs.instance.setToken(StringConstant.userId, id.toString());
@@ -267,8 +267,8 @@ print("merchantId ${merchantId}");
         responseJson.toString(), 'Validate OTP Response:');
     if (response.statusCode == 200) {
       if (jsonData['status'].toString() == 'OK') {
-        AuthRepository()
-            .getUserDetailsById(jsonData['payload']['id'].toString());
+        // AuthRepository()
+        //     .getUserDetailsById(jsonData['payload']['id'].toString());
 
         prefs.setString(
             StringConstant.testId, jsonData['payload']['id'].toString());
@@ -313,7 +313,7 @@ print("merchantId ${merchantId}");
   }
 
 //get user details
-  Future<UserModel> getUserDetailsById(String id) async {
+  Future getUserDetailsById(String id) async {
     var url = ApiMapping.getURI(apiEndPoint.user_get);
     print("user specific ID : " + url + id.toString());
     final prefs = await SharedPreferences.getInstance();
@@ -321,18 +321,18 @@ print("merchantId ${merchantId}");
     try {
       dynamic response = await _apiServices.getGetApiResponse(url + id);
       print("user Specific Id : " + response.toString());
-      print("user Specific email : " + response['payload']['email']);
+      // print("user Specific email : " + response['payload']['email']);
+      //
+      // final prefs = await SharedPreferences.getInstance();
+      //
+      // await prefs.setString(
+      //     'userProfileNamePrefs', response['payload']['username'].toString());
+      // await prefs.setString(
+      //     'userProfileEmailPrefs', response['payload']['email'].toString());
+      // await prefs.setString(
+      //     'userProfileMobilePrefs', response['payload']['mobile'].toString());
 
-      final prefs = await SharedPreferences.getInstance();
-
-      await prefs.setString(
-          'userProfileNamePrefs', response['payload']['username'].toString());
-      await prefs.setString(
-          'userProfileEmailPrefs', response['payload']['email'].toString());
-      await prefs.setString(
-          'userProfileMobilePrefs', response['payload']['mobile'].toString());
-
-      return response = UserModel.fromJson(response);
+      return response ;
     } catch (e) {
       throw e;
     }

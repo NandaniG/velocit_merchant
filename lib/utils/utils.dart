@@ -34,7 +34,7 @@ class Utils {
     Fluttertoast.showToast(
         msg: msg,
         toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
+        gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1000,
         backgroundColor: Colors.red,
         fontSize: 20,
@@ -47,7 +47,7 @@ class Utils {
     Fluttertoast.showToast(
         msg: msg,
         toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
+        gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 10000 * 5,
         fontSize: 20,
         backgroundColor: Colors.green,

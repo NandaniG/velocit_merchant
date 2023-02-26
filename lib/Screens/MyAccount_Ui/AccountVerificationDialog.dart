@@ -144,7 +144,6 @@ class _AccountVerificationDialogState extends State<AccountVerificationDialog> {
                                   .pushNamedAndRemoveUntil(
                                   RoutesName.signInRoute, (route) => false)
                                   .then((value) {
-                                setState(() {});
                               });
                             },
                             child: Text(

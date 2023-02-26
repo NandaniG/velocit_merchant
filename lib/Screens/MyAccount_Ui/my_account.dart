@@ -512,7 +512,10 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
                             await pref.clear();
 
                             Navigator.pushReplacementNamed(
-                                context, RoutesName.dashboardRoute);
+                                context, RoutesName.dashboardRoute).then((value){
+                              prefs.setBool('isLogin', false);
+                              StringConstant.isLogIn = false;
+                            });
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(10),

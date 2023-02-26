@@ -157,7 +157,7 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
                                     children: [
                                       Text(
                                           "Order ID : " +
-                                              orders["id"].toString(),
+                                              orders["order_id"].toString(),
                                           maxLines: 2,
                                           style: TextStyle(
                                               fontFamily: 'Roboto',
@@ -530,12 +530,29 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
                                         FocusManager.instance.primaryFocus
                                             ?.unfocus();
 
-                                        Navigator.of(context).pushReplacement(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    OrderReviewSubActivity(
-                                                      order: widget.values,
-                                                    )));
+                                          setState(() {
+
+                                              data = Provider.of<HomeProvider>(
+                                                  context,
+                                                  listen: false)
+                                                  .loadJsonForChangeStatus(
+                                                  2000,
+                                                  widget.values['id'],
+                                                  widget.values['orders'][index]
+                                                  ['order_id'],
+                                                  context);
+
+                                          });
+
+
+
+                                        //
+                                        // Navigator.of(context).pushReplacement(
+                                        //     MaterialPageRoute(
+                                        //         builder: (context) =>
+                                        //             OrderReviewSubActivity(
+                                        //               order: widget.values,
+                                        //             )));
                                       })
                                     ]),
                               ),
@@ -832,11 +849,25 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
               "Reject Order", ThemeApp.tealButtonColor, context, false,
               () async {
             FocusManager.instance.primaryFocus?.unfocus();
-
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => OrderReviewSubActivity(
-                      order: widget.values,
-                    )));
+            setState(() {
+              for (int i = 0;
+              i < widget.values['orders'].length;
+              i++) {
+                data = Provider.of<HomeProvider>(
+                    context,
+                    listen: false)
+                    .loadJsonForChangeStatus(
+                    2000,
+                    widget.values['id'],
+                    widget.values['orders'][i]
+                    ['order_id'],
+                    context);
+              }
+            });
+            // Navigator.of(context).pushReplacement(MaterialPageRoute(
+            //     builder: (context) => OrderReviewSubActivity(
+            //           order: widget.values,
+            //         )));
           }),
         ],
       ),

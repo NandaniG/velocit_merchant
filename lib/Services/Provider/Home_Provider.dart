@@ -25,11 +25,11 @@ class HomeProvider with ChangeNotifier {
     try {
       String jsonContent = await Repository().postApiRequest(IsActiveOrderList==true?{
         "merchant_id": merchanId,
-        "IsActiveOrderList": IsActiveOrderList,
+        "is_active_order_list": IsActiveOrderList,
         "from_days_in_past": 0
       }:{
         "merchant_id": merchanId,
-        "IsActiveOrderList": IsActiveOrderList,
+        "is_active_order_list": IsActiveOrderList,
         "from_days_in_past": PastDays
       });
 
@@ -69,10 +69,10 @@ class HomeProvider with ChangeNotifier {
 //change status in detail screen
 
   // var statusCode,orderId;
-  loadJsonForChangeStatus(var statusCode,merchantId,orderId) async {
+  loadJsonForChangeStatus(var statusCode,merchantId,orderId, context) async {
 
     try {
-      var jsonContent = await Repository().putApiForChangeStatus(statusCode,merchantId, orderId);
+      var jsonContent = await Repository().putApiForChangeStatus(statusCode,merchantId, orderId,context);
 
       // Map data = {
       //   "merchant_id": merchanId,

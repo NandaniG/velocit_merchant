@@ -95,32 +95,32 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                 ),
               ),
               automaticallyImplyLeading: false,
-              leading: InkWell(
-                onTap: () async {
-                  final preferences = await SharedPreferences.getInstance();
-
-                  StringConstant.isUserLoggedIn =
-                      preferences.getInt('isUserLoggedIn') ?? 0;
-
-                  if (StringConstant.isUserLoggedIn != 0) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => MyAccountActivity(),
-                      ),
-                    );
-                  } else {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AccountVerificationDialog();
-                        });
-                  }
-                },
-                child: Container(
-                    alignment: Alignment.center,
-                    child:
-                    Icon(Icons.menu, color: ThemeApp.blackColor, size: 30)),
-              ),
+              // leading: InkWell(
+              //   onTap: () async {
+              //     final preferences = await SharedPreferences.getInstance();
+              //
+              //     StringConstant.isUserLoggedIn =
+              //         preferences.getInt('isUserLoggedIn') ?? 0;
+              //
+              //     if (StringConstant.isUserLoggedIn != 0) {
+              //       Navigator.of(context).push(
+              //         MaterialPageRoute(
+              //           builder: (context) => MyAccountActivity(),
+              //         ),
+              //       );
+              //     } else {
+              //       showDialog(
+              //           context: context,
+              //           builder: (BuildContext context) {
+              //             return AccountVerificationDialog();
+              //           });
+              //     }
+              //   },
+              //   child: Container(
+              //       alignment: Alignment.center,
+              //       child:
+              //       Icon(Icons.menu, color: ThemeApp.blackColor, size: 30)),
+              // ),
 
               title:widget.titleWidget,
               // Row
@@ -176,84 +176,72 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                   ),
                 ),
 
-                          // InkWell(
-                          //   onTap: () async {
-                          //
-                          //
-                          //     final prefs = await SharedPreferences.getInstance();
-                          //     StringConstant.loginUserName =
-                          //         (prefs.getString('usernameLogin')) ?? '';
-                          //     StringConstant.loginUserEmail =
-                          //         (prefs.getString('emailLogin')) ?? '';
-                          //
-                          //     StringConstant.isUserLoggedIn =
-                          //         (prefs.getInt('isUserLoggedIn')) ?? 0;
-                          //     // Navigator.pushAndRemoveUntil(
-                          //     //     context,
-                          //     //     MaterialPageRoute(
-                          //     //         builder: (context) => CartDetailsActivity(
-                          //     //             value: product, productList: provider.cartProductList)),
-                          //     //         (route) => false);
-                          //     if (StringConstant.isUserLoggedIn != 0) {
-                          //       Navigator.of(context)
-                          //           .push(
-                          //         MaterialPageRoute(
-                          //           builder: (context) =>
-                          //           const MyAccountActivity(),
-                          //         ),
-                          //       )
-                          //           .then((value) => setState(() {}));
-                          //     } else {
-                          //       showDialog(
-                          //           context: context,
-                          //           builder: (BuildContext context) {
-                          //             return AccountVerificationDialog();
-                          //           });
-                          //     }
-                          //   },
-                          //   child: StringConstant.ProfilePhoto == ''
-                          //       ? Padding(
-                          //     padding: const EdgeInsets.only(right: 10),
-                          //     child: SvgPicture.asset(
-                          //       'assets/appImages/profileIcon.svg',
-                          //       color: ThemeApp.primaryNavyBlackColor,
-                          //       semanticsLabel: 'Acme Logo',
-                          //       theme: SvgTheme(
-                          //         currentColor: ThemeApp.primaryNavyBlackColor,
-                          //       ),
-                          //       height: 28,
-                          //       width: 28,
-                          //     ),
-                          //   )
-                          //       : Padding(
-                          //     padding: const EdgeInsets.only(right: 10),
-                          //     child: Container(
-                          //       height: 28,
-                          //       width: 28,
-                          //       child: CircleAvatar(
-                          //         backgroundColor: ThemeApp.whiteColor,
-                          //         child: ClipRRect(
-                          //           borderRadius: const BorderRadius.all(
-                          //               Radius.circular(100)),
-                          //           child: Image.file(
-                          //             File(StringConstant.ProfilePhoto),
-                          //             fit: BoxFit.fill,
-                          //             height: 25,
-                          //             width: 25,
-                          //             errorBuilder:
-                          //                 (context, error, stackTrace) {
-                          //               return Icon(
-                          //                 Icons.image,
-                          //                 color: ThemeApp.whiteColor,
-                          //               );
-                          //             },
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ),
-                          //
-                          // )
+                          InkWell(
+
+                              onTap: () async {
+                                final preferences = await SharedPreferences.getInstance();
+
+                                StringConstant.isUserLoggedIn =
+                                    preferences.getInt('isUserLoggedIn') ?? 0;
+
+                                if (StringConstant.isUserLoggedIn != 0) {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => MyAccountActivity(),
+                                    ),
+                                  );
+                                } else {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AccountVerificationDialog();
+                                      });
+                                }
+                              },
+
+                            child: StringConstant.ProfilePhoto == ''
+                                ? Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: SvgPicture.asset(
+                                'assets/appImages/Username.svg',
+                                color: ThemeApp.primaryNavyBlackColor,
+                                semanticsLabel: 'Acme Logo',
+                                theme: SvgTheme(
+                                  currentColor: ThemeApp.primaryNavyBlackColor,
+                                ),
+                                height: 28,
+                                width: 28,
+                              ),
+                            )
+                                : Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Container(
+                                height: 28,
+                                width: 28,
+                                child: CircleAvatar(
+                                  backgroundColor: ThemeApp.whiteColor,
+                                  child: ClipRRect(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(100)),
+                                    child: Image.file(
+                                      File(StringConstant.ProfilePhoto),
+                                      fit: BoxFit.fill,
+                                      height: 25,
+                                      width: 25,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                        return Icon(
+                                          Icons.image,
+                                          color: ThemeApp.whiteColor,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                          )
 
               ],
             ),

@@ -129,7 +129,7 @@ print(url);
     return responseJson;
   }
 
-  Future putApiForChangeStatus(int statusCode,var merchantId, var orderId) async {
+  Future putApiForChangeStatus(int statusCode,var merchantId, var orderId,BuildContext context) async {
 
     print("orderId ID" + orderId.toString());
     print("merchantId ID" + merchantId.toString());
@@ -153,9 +153,14 @@ print(url);
          headers: {'content-type': 'application/json'});
       print("response statusData" + response.body.toString());
       var jsonData = json.decode(response.body);
-      print("response  statusData" + jsonData['status'].toString());
+      if(response.statusCode == 200) {
 
-      // Utils.successToast(response.body.toString());
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => OrderDashboard()));
+      }
+        print("response  statusData" + jsonData['status'].toString());
+
+        // Utils.successToast(response.body.toString());}
       return reply;
 
       return response;

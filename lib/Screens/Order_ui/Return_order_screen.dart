@@ -256,7 +256,7 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
                                                     activeColor:
                                                         ThemeApp.appColor,
                                                     onChanged: (value) {
-                                                      setState(() {
+                                                      widget.values['orders'][index]['current_status_code'] ==2000?null:   setState(() {
                                                         _radioIndex =
                                                             value as int;
                                                         _radioVal =
@@ -297,7 +297,7 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
                                                     activeColor:
                                                         ThemeApp.appColor,
                                                     onChanged: (value) {
-                                                      setState(() {
+                                                      widget.values['orders'][index]['current_status_code'] ==2000?null:  setState(() {
                                                         _radioIndex =
                                                             value as int;
                                                         _radioVal =
@@ -338,7 +338,7 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
                                                     activeColor:
                                                         ThemeApp.appColor,
                                                     onChanged: (value) {
-                                                      setState(() {
+                                                      widget.values['orders'][index]['current_status_code'] ==2000?null:    setState(() {
                                                         _radioIndex =
                                                             value as int;
                                                         _radioVal =
@@ -379,7 +379,7 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
                                                     activeColor:
                                                         ThemeApp.appColor,
                                                     onChanged: (value) {
-                                                      setState(() {
+                                                      widget.values['orders'][index]['current_status_code'] ==2000?null:     setState(() {
                                                         _radioIndex =
                                                             value as int;
                                                         _radioVal =
@@ -420,7 +420,7 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
                                                     activeColor:
                                                         ThemeApp.appColor,
                                                     onChanged: (value) {
-                                                      setState(() {
+                                                      widget.values['orders'][index]['current_status_code'] ==2000?null:    setState(() {
                                                         _radioIndex =
                                                             value as int;
                                                         _radioVal = 'Other';
@@ -454,7 +454,7 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
                                       SizedBox(
                                         height: 15,
                                       ),
-                                      Column(
+                              Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         crossAxisAlignment:
@@ -474,7 +474,7 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
                                       SizedBox(
                                         height: 16,
                                       ),
-                                      TextFormField(
+                                 TextFormField(
                                         controller: vendorReviewController,
                                         style: TextStyle(
                                           fontFamily: 'Roboto',
@@ -522,7 +522,16 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
                                       SizedBox(
                                         height: 20,
                                       ),
-                                      proceedButton(
+                                      widget.values['orders'][index]['current_status_code'] ==2000?Center(
+                                        child: Text(
+                                          "Your order is already Rejected",
+                                          style: TextStyle(
+                                              color: ThemeApp.redColor,
+                                              fontSize: 15,
+                                              fontWeight:
+                                              FontWeight.w700),
+                                        ),
+                                      ):    proceedButton(
                                           "Reject Order",
                                           ThemeApp.tealButtonColor,
                                           context,

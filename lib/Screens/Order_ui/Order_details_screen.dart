@@ -59,7 +59,6 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
     // TODO: implement initState
     super.initState();
     getColorCodeStatus(widget.order);
-
   }
 
   DateFormat formate = DateFormat('dd MMM yyyy hh:mm aaa');
@@ -472,7 +471,8 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                                 width: width * .02,
                               ),
                               Container(
-                                padding: const EdgeInsets.fromLTRB(18, 8, 18, 8),
+                                padding:
+                                    const EdgeInsets.fromLTRB(18, 8, 18, 8),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.all(
                                     Radius.circular(30),
@@ -544,18 +544,18 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                         ],
                       ),
                     ),
-                    Container(
-                        alignment: Alignment.centerRight,
-
-                        child:  SvgPicture.asset(
-                          'assets/appImages/delivered_Stamp.svg',
-                          // color: ThemeApp.appColor,
-                          semanticsLabel: 'Acme Logo',
-                          theme: SvgTheme(
-                            // currentColor: ThemeApp.appColor,
-                          ),
-                          // height: height * .025,
-                        ),),
+                    // Container(
+                    //     alignment: Alignment.centerRight,
+                    //
+                    //     child:  SvgPicture.asset(
+                    //       'assets/appImages/delivered_Stamp.svg',
+                    //       // color: ThemeApp.appColor,
+                    //       semanticsLabel: 'Acme Logo',
+                    //       theme: SvgTheme(
+                    //         // currentColor: ThemeApp.appColor,
+                    //       ),
+                    //       // height: height * .025,
+                    //     ),),
                   ],
                 ),
                 SizedBox(
@@ -606,7 +606,9 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                 //   );
                 // }),
 
-                singleSelectOptions ==false?Container():      SafeArea(
+                singleSelectOptions == false
+                    ? Container()
+                    : isOrderCanceled==false? SafeArea(
                         child: Container(
                         height: 45,
                         child: Row(
@@ -748,7 +750,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                             )
                           ],
                         ),
-                      )),
+                      )):SizedBox(),
                 SizedBox(
                   height: height * .01,
                 ),
@@ -757,7 +759,9 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
           ),
         ]);
   }
-  // var orderStatus = false;
+
+  bool isOrderCanceled = false;
+
   Widget orderSummary() {
     return StringConstant.isLogIn
         ? ListView.builder(
@@ -774,33 +778,36 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
               DateTime date = DateTime.parse(
                   (orderDetails['delivery_date'] ?? DateTime.now().toString()));
               var delivery_date = format.format(date);
+              for (int i = 0; i < widget.order['orders'].length; i++) {
+                print(
+                    "widget.order['orders']['current_status_code']${widget.order['orders'][i]['current_status_code']}");
+                if (widget.order['orders'][i]['current_status_code'] == 2000) {
+                  orderStatus = true;
 
-              if (orderDetails["is_accepted"] == false) {
+                  isOrderCanceled = true;
+                }
+              }
+
+              if (orderDetails["is_accepted"] == false &&
+                  orderDetails['current_status_code'] != 2000) {
                 orderStatus = true;
                 orderStatusName = 'Accept all Orders';
-              }
-           else   if (orderDetails["is_accepted"] == true &&
-              orderDetails["is_packed"] == false){
+              } else if (orderDetails["is_accepted"] == true &&
+                  orderDetails["is_packed"] == false) {
                 orderStatus = true;
                 orderStatusName = 'All Orders Packed';
-
-              }
-
-              else if (orderDetails["is_accepted"] == true &&
-              orderDetails["is_packed"] == true &&
-              orderDetails["is_shipped"] == false){
+              } else if (orderDetails["is_accepted"] == true &&
+                  orderDetails["is_packed"] == true &&
+                  orderDetails["is_shipped"] == false) {
                 orderStatus = true;
                 orderStatusName = 'All Orders Shipped';
-              }
-
-              else  if (orderDetails["is_accepted"] == true &&
-              orderDetails["is_packed"] == true &&
-              orderDetails["is_shipped"] == true &&
-              orderDetails["is_delivered"] == false){
+              } else if (orderDetails["is_accepted"] == true &&
+                  orderDetails["is_packed"] == true &&
+                  orderDetails["is_shipped"] == true &&
+                  orderDetails["is_delivered"] == false) {
                 orderStatus = true;
                 orderStatusName = 'All Orders Delivered';
               }
-
 
               if (orderStatus) {
                 WidgetsBinding.instance
@@ -866,7 +873,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                                       children: [
                                         TextFieldUtils().dynamicText(
                                             // 'POCO M3 Pro 5G(Yellow, 32GB)',
-                                            '${orderDetails['oneliner']}',
+                                            '${orderDetails['short_name']}',
                                             context,
                                             TextStyle(
                                                 color: ThemeApp
@@ -1001,7 +1008,8 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                           SizedBox(
                             height: 15,
                           ),
-                          if (orderDetails["is_accepted"] == false)
+                          if (orderDetails['current_status_code'] != 2000 &&
+                              orderDetails["is_accepted"] == false)
                             Container(
                               height: 45,
                               child: Row(
@@ -1022,7 +1030,6 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                                                   widget.order['id'],
                                                   orderDetails['order_id'],
                                                   context);
-
                                         });
                                       },
                                       child: Container(

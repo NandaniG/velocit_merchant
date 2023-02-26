@@ -64,6 +64,10 @@ dependencies:
   expansion_widget: ^0.0.3
   dropdown_button2: ^1.9.2
   flutter_rating_bar: ^4.0.1
+  #firebase
+  firebase_core: ^2.4.1
+  firebase_messaging: ^14.2.1
+  flutter_local_notifications: ^13.0.0
 
 dev_dependencies:
   flutter_test:

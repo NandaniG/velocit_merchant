@@ -727,7 +727,8 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                                           Icons.image_outlined);
                                                     })) ??
                                                     SizedBox(),
-                                              ), /* GridView.builder(
+                                              ),
+                                              /* GridView.builder(
                                                 gridDelegate:
                                                     const SliverGridDelegateWithFixedCrossAxisCount(
                                                   crossAxisSpacing: 0,
@@ -967,7 +968,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                                                             color: ThemeApp
                                                                                 .blackColor,
                                                                             fontSize:
-                                                                                15,
+                                                                            12,
                                                                             fontWeight: FontWeight
                                                                                 .bold,
                                                                             letterSpacing:
@@ -1526,7 +1527,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                                           color: ThemeApp
                                                               .blackColor,
                                                           fontSize:
-                                                          15,
+                                                          12,
                                                           fontWeight: FontWeight
                                                               .bold,
                                                           letterSpacing:

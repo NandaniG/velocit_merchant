@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,11 +19,18 @@ import 'Screens/Auth_Screens/forgot_password.dart';
 import 'Services/Provider/Home_Provider.dart';
 import 'l10n/l10n.dart';
 import 'l10n/localeProvider.dart';
+import 'notificationservices/local_notification_service.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+Future<void> backgroundHandler(RemoteMessage message) async {
+  print('FirebaseMessaging : ' + message.data.toString());
+  print('FirebaseMessaging : ' + message.notification!.title.toString());
+}
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  // await Firebase.initializeApp();
+  // FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+  // LocalNotificationService.initialize();
   runApp(const MyApp());
 }
 

@@ -79,7 +79,7 @@ class AuthRepository {
   /// FINAL API FOR LOGIN USING EMAIL AND PASSWORD
 
   Future postApiUsingEmailPasswordRequest(
-      Map jsonMap, BuildContext context) async {
+      Map jsonMap,String fcmToken, BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     dynamic responseJson;
@@ -99,6 +99,8 @@ class AuthRepository {
     StringConstant.prettyPrintJson(responseJson.toString(), 'Login Response:');
 
     if (jsonData['status'].toString() == 'OK') {
+      //api for passing fcm token
+      // passFCMToken(jsonData['payload']['body']['id'].toString(), fcmToken);
       // AuthRepository()
       //     .getUserDetailsById(jsonData['payload']['body']['id'].toString());
       prefs.setString(
@@ -198,7 +200,7 @@ print("merchantId ${merchantId}");
   /// FINAL API FOR LOGIN USING EMAIL AND OTP
 
   Future postApiForEmailOTPRequest(
-      Map jsonMap, bool isForgotPass, BuildContext context) async {
+      Map jsonMap, bool isForgotPass,String fcmToken, BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     dynamic responseJson;
@@ -220,6 +222,9 @@ print("merchantId ${merchantId}");
         responseJson.toString(), 'Login Using Email OTP Response:');
 
     if (jsonData['status'].toString() == 'OK') {
+      //api for passing fcm token
+      // passFCMToken(jsonData['payload']['id'].toString(), fcmToken);
+
       prefs.setString(
           StringConstant.setOtp, jsonData['payload']['otp'].toString());
       prefs.setString('userIdFromOtp',jsonData['payload']['user_id'].toString());
@@ -454,5 +459,34 @@ print("merchantId ${merchantId}");
     } catch (e) {
       throw e;
     }
-  }
+
+
 }
+  ///firebase fcm token
+  Future passFCMToken(String userId, String fcmToken) async {
+    Map<String, String> queryParams = {
+      'fcm_token': fcmToken,
+    };
+    var url = ApiMapping.BaseAPI + '/user/$userId/setfcmtoken';
+    String queryString = Uri(queryParameters: queryParams).query;
+
+    var requestUrl = '$url?$queryString';
+    print(requestUrl.toString());
+    print("response url : " + requestUrl.toString());
+
+    try {
+      dynamic reply;
+      http.Response response = await http.put(Uri.parse(requestUrl),
+          headers: {'content-type': 'application/json'});
+      print("response passFCMToken : " + response.body.toString());
+      var jsonData = json.decode(response.body);
+      print("response  passFCMToken status : " + jsonData['status'].toString());
+
+      // Utils.successToast(response.body.toString());
+      return reply;
+
+      return response;
+    } catch (e) {
+      throw e;
+    }
+  }}

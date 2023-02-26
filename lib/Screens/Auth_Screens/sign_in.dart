@@ -837,6 +837,7 @@
 // }
 import 'dart:async';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
@@ -930,6 +931,7 @@ class _SignIn_ScreenState extends State<SignIn_Screen> {
     // _radioIndex = 1;
     isOtp = false;
     _usingPassVisible = false;
+    // getDeviceTokenToSendNotification();
   }
 
   @override
@@ -941,7 +943,17 @@ class _SignIn_ScreenState extends State<SignIn_Screen> {
     // emailUsingOtpController.dispose();
     password.dispose();
   }
+  String deviceTokenToSendPushNotification = '';
 
+  Future<void> getDeviceTokenToSendNotification() async {
+    final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+    final token = await _fcm.getToken();
+    deviceTokenToSendPushNotification = token.toString();
+
+    print("Token Value $deviceTokenToSendPushNotification");
+
+
+  }
   var isOtpValues;
   var userId, userName;
 
@@ -1526,7 +1538,7 @@ class _SignIn_ScreenState extends State<SignIn_Screen> {
 
                                 AuthRepository()
                                     .postApiForEmailOTPRequest(
-                                    emaildata, false, context)
+                                    emaildata, false,deviceTokenToSendPushNotification, context)
                                     .then((value) {
                                   _start = 90;
                                   isLoading = true;
@@ -1777,13 +1789,13 @@ class _SignIn_ScreenState extends State<SignIn_Screen> {
                             if (StringConstant().isNumeric(email.text)) {
                               AuthRepository()
                                   .postApiUsingEmailPasswordRequest(
-                                  mobileData, context)
+                                  mobileData,deviceTokenToSendPushNotification, context)
                                   .then((value) => setState(() {}));
                               print("Digit found");
                             } else {
                               AuthRepository()
                                   .postApiUsingEmailPasswordRequest(
-                                  emaildata, context)
+                                  emaildata,deviceTokenToSendPushNotification, context)
                                   .then((value) => setState(() {}));
 
                               print("Digit not found");
@@ -2061,7 +2073,7 @@ class _SignIn_ScreenState extends State<SignIn_Screen> {
       print(emaildata);
 
       AuthRepository()
-          .postApiForEmailOTPRequest(emaildata, false, context)
+          .postApiForEmailOTPRequest(emaildata, false, deviceTokenToSendPushNotification,context)
           .then((value) => setState(() {
         getPref();
       }));

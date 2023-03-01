@@ -1,12 +1,19 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/otp_field_style.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:velocit_merchant/Core/repository/qrcode_repository.dart';
 import 'package:velocit_merchant/Screens/Order_ui/Return_order_screen.dart';
 import 'package:velocit_merchant/utils/GlobalWidgets/proceedButtons.dart';
 import '../../../utils/constants.dart';
@@ -14,11 +21,13 @@ import '../../../utils/styles.dart';
 import '../../../utils/utils.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../Core/ViewModel/qrCode_view_model.dart';
 import '../../Routes/Routes.dart';
 import '../../Services/Provider/Home_Provider.dart';
 import '../../utils/GlobalWidgets/appBar.dart';
 import '../../utils/GlobalWidgets/textFormFields.dart';
 import '../../utils/StringUtils.dart';
+import '../../utils/features/scannerWithGallery.dart';
 import 'Cancel_order_screen.dart';
 import 'Order_delivery_screen.dart';
 
@@ -41,7 +50,8 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
     locale: 'en_IN',
     decimalDigits: 0, // change it to get decimal places
     symbol: '₹',
-  );
+  );  final controller = BarcodeFinderController();
+
   String selectedTypeOfOrders = 'Change Status';
   var dropDownForAcceptedProducts = [
     'Packed',
@@ -544,18 +554,19 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                         ],
                       ),
                     ),
-                    // Container(
-                    //     alignment: Alignment.centerRight,
-                    //
-                    //     child:  SvgPicture.asset(
-                    //       'assets/appImages/delivered_Stamp.svg',
-                    //       // color: ThemeApp.appColor,
-                    //       semanticsLabel: 'Acme Logo',
-                    //       theme: SvgTheme(
-                    //         // currentColor: ThemeApp.appColor,
-                    //       ),
-                    //       // height: height * .025,
-                    //     ),),
+                    Container(
+                        alignment: Alignment.centerRight,
+
+                        child:
+                        SvgPicture.asset(
+                          'assets/appImages/canceledIcon.svg',
+                          // color: ThemeApp.appColor,
+                          theme: SvgTheme(
+                            // currentColor: ThemeApp.appColor,
+                          ),
+                          // height: height * .025,
+                        ),
+                     ),
                   ],
                 ),
                 SizedBox(
@@ -1285,19 +1296,27 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                                   Expanded(
                                     child: InkWell(
                                       onTap: () {
-                                        setState(() {
-                                          singleSelectOptions = true;
-                                          orderDetails['is_order_placed'] =
-                                              true;
-                                          data = Provider.of<HomeProvider>(
-                                                  context,
-                                                  listen: false)
-                                              .loadJsonForChangeStatus(
-                                                  810,
-                                                  widget.order['id'],
-                                                  orderDetails['order_id'],
-                                                  context);
-                                        });
+                                        // setState(() {
+                                        //   singleSelectOptions = true;
+                                        //   orderDetails['is_order_placed'] =
+                                        //       true;
+                                        //   data = Provider.of<HomeProvider>(
+                                        //           context,
+                                        //           listen: false)
+                                        //       .loadJsonForChangeStatus(
+                                        //           810,
+                                        //           widget.order['id'],
+                                        //           orderDetails['order_id'],
+                                        //           context);
+                                        // });
+                                        //QR code
+
+                                        showModalBottomSheet(
+                                            isDismissible: true,
+                                            context: context,
+                                            builder: (context) {
+                                              return ScannerWidget(state: controller.state,orderId:  widget.order['id']);
+                                            });
                                       },
                                       child: Container(
                                           padding: const EdgeInsets.fromLTRB(
@@ -1315,7 +1334,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                                           child: Center(
                                             child: TextFieldUtils()
                                                 .usingPassTextFields(
-                                                    'Delivered',
+                                                    'Order Code',
                                                     ThemeApp.whiteColor,
                                                     context),
                                           )),
@@ -2178,5 +2197,184 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
         ),
       );
     });
+  }
+}
+class ScannerWidget extends StatefulWidget {
+  BarcodeFinderState state;
+var orderId;
+
+  ScannerWidget({Key? key, required this.state,required this.orderId}) : super(key: key);
+
+  @override
+  State<ScannerWidget> createState() => _ScannerWidgetState();
+}
+
+class _ScannerWidgetState extends State<ScannerWidget> {
+  var getResult = 'QR Code Result';
+  final controller = BarcodeFinderController();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  String _scanBarcode = 'Please scan proper content';
+  // QRCodeViewModel qrViewMode =QRCodeViewModel();
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height * .25,
+      color: Colors.cyan,
+      margin: const EdgeInsets.all(10.0),
+      child: Scaffold(
+          key: _scaffoldKey,
+          body: Center(
+            child: Wrap(
+              children: [
+                AnimatedBuilder(
+                  animation: controller,
+                  builder: (_, __) {
+                    final state = controller.state;
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        proceedButton("Scan with Camera",
+                            ThemeApp.darkGreyColor, context, false, () {
+                              // Navigator.of(context).pop();
+
+                              scanQR(context);
+                            }),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * .01,
+                        ),
+                        _startScanFileButton(state),
+                        // const Text(
+                        //   'Code:',
+                        //   textAlign: TextAlign.center,
+                        // ),
+                        /*    if (state is BarcodeFinderLoading)
+                          _loading()
+                        else if (state is BarcodeFinderError)
+
+
+                          _text(
+                            '${state.message}',
+                          )
+                        else if (state is BarcodeFinderSuccess)
+                          _text(
+                            '${state.code}',
+                          ),*/
+                      ],
+                    );
+                  },
+                ),
+              ],
+            ),
+          )),
+    );
+  }
+
+  Widget _loading() => const Padding(
+    padding: EdgeInsets.all(8.0),
+    child: Center(
+        child: CircularProgressIndicator(
+          color: ThemeApp.darkGreyColor,
+        )),
+  );
+
+  Future<void> scanQR(BuildContext context) async {
+  String  barcodeScanRes = '';
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.QR);
+      print(barcodeScanRes);
+      _scanBarcode = barcodeScanRes;
+      print('_scanBarcode : ' + barcodeScanRes);
+      print('_scanBarcode : ' + _scanBarcode);
+      // getSingleProduct.getSingleProductScannerWithGet(_scanBarcode.toString());
+      final prefs = await SharedPreferences.getInstance();
+
+      if (_scanBarcode == '-1') {
+        // Utils.flushBarErrorMessage("Please scan proper content", context);
+      } else {
+        // Utils.successToast(_scanBarcode);
+      }
+      print('_scanBarcode timer... : ' + _scanBarcode);
+      print('_scanBarcode pref befor... : ' + StringConstant.ScannedProductId);
+
+      // qrViewMode.getDeliveryByScannerWithGet(widget.orderId.toString(),
+      //     barcodeScanRes.toString(), context);
+
+      // QRRepository().getProductDeliveryScannerList(widget.orderId.toString(),
+      //     barcodeScanRes.toString(), context);
+      QRRepository().getProductDeliveryScannerList('2062',
+          '6yD7JnrmnbWSAfAw5O8c7lKOiQ', context);
+      // QRRepository().getProductDeliveryScannerList(widget.orderId.toString(),
+      //     '6yD7JnrmnbWSAfAw5O8c7lKOiQ', context);
+
+
+      StringConstant.ScannedProductId =
+          (prefs.getString('ScannedProductIDPref')) ?? '';
+
+      print('_scanBarcode pref after... : ' +
+          StringConstant.ScannedProductId.toString());
+
+      // Navigator.of(context).pushReplacement(
+      //   MaterialPageRoute(
+      //     builder: (context) => ProductDetailsActivity(
+      //       id:int.parse(StringConstant.ScannedProductId,
+      //     ),
+      //   ),
+      //   ));
+      // if (!mounted) return;
+
+      print('_scanBarcode : ' + _scanBarcode);
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
+    }
+//barcode scanner flutter ant
+  }
+
+  Widget _startScanFileButton(BarcodeFinderState state) {
+    return
+      proceedButton( "Open Gallery", ThemeApp.tealButtonColor, context,false, () async {
+        FilePickerResult? pickedFile =
+        await FilePicker.platform.pickFiles();
+        if (pickedFile != null) {
+          String? filePath = pickedFile.files.single.path;
+          if (filePath != null) {
+            final file = File(filePath);
+            controller.scanFile(file);
+
+          }
+        } else {
+          Utils.errorToast('Please select content');
+        }
+      });
+
+/*
+      Container(
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
+        ),
+        color: ThemeApp.darkGreyColor,
+      ),
+      child: InkWell(
+          onTap: state is! BarcodeFinderLoading
+              ? () async {
+                  FilePickerResult? pickedFile =
+                      await FilePicker.platform.pickFiles();
+                  if (pickedFile != null) {
+                    String? filePath = pickedFile.files.single.path;
+                    if (filePath != null) {
+                      final file = File(filePath);
+                      controller.scanFile(file);
+                    }
+                  } else {
+                    Utils.errorToast('Please select content');
+                  }
+                }
+              : null,
+          child: TextFieldUtils().usingPassTextFields(
+              "Open Gallery", ThemeApp.whiteColor, context)),
+    );*/
   }
 }

@@ -45,8 +45,8 @@ class LocalNotificationService{
       print(id.toString());
       const NotificationDetails notificationDetails = NotificationDetails(
         android: AndroidNotificationDetails(
-          "velocit",
-          "velocitchannel",
+          "velocitMerchant",
+          "velocitMerchantchannel",
           importance: Importance.max,
           priority: Priority.high,
         ),

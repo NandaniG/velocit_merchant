@@ -73,7 +73,7 @@ class _ProfileImageDialogBoxState extends State<ProfileImageDialogBox> {
                   final prefs = await SharedPreferences.getInstance();
                   // StringConstant.CurrentPinCode = (prefs.getString('CurrentPinCodePref') ?? '');
                   String imagePath = image!.path;
-
+print("imagePath"+imagePath);
                   await prefs.setString('profileImagePrefs', imagePath);
                   Map data = {
                     "imgUrl": image.path,

@@ -100,9 +100,9 @@ class AuthRepository {
 
     if (jsonData['status'].toString() == 'OK') {
       //api for passing fcm token
-      // passFCMToken(jsonData['payload']['body']['id'].toString(), fcmToken);
-      // AuthRepository()
-      //     .getUserDetailsById(jsonData['payload']['body']['id'].toString());
+      passFCMToken(jsonData['payload']['body']['id'].toString(), fcmToken);
+      AuthRepository()
+          .getUserDetailsById(jsonData['payload']['body']['id'].toString());
       prefs.setString(
           StringConstant.testId, jsonData['payload']['body']['id'].toString());
       // Prefs.instance.setToken(StringConstant.userId, id.toString());
@@ -223,7 +223,7 @@ print("merchantId ${merchantId}");
 
     if (jsonData['status'].toString() == 'OK') {
       //api for passing fcm token
-      // passFCMToken(jsonData['payload']['id'].toString(), fcmToken);
+      passFCMToken(jsonData['payload']['id'].toString(), fcmToken);
 
       prefs.setString(
           StringConstant.setOtp, jsonData['payload']['otp'].toString());
@@ -272,8 +272,8 @@ print("merchantId ${merchantId}");
         responseJson.toString(), 'Validate OTP Response:');
     if (response.statusCode == 200) {
       if (jsonData['status'].toString() == 'OK') {
-        // AuthRepository()
-        //     .getUserDetailsById(jsonData['payload']['id'].toString());
+        AuthRepository()
+            .getUserDetailsById(jsonData['payload']['id'].toString());
 
         prefs.setString(
             StringConstant.testId, jsonData['payload']['id'].toString());
@@ -318,7 +318,7 @@ print("merchantId ${merchantId}");
   }
 
 //get user details
-  Future getUserDetailsById(String id) async {
+  Future<UserModel> getUserDetailsById(String id) async {
     var url = ApiMapping.getURI(apiEndPoint.user_get);
     print("user specific ID : " + url + id.toString());
     final prefs = await SharedPreferences.getInstance();
@@ -326,22 +326,47 @@ print("merchantId ${merchantId}");
     try {
       dynamic response = await _apiServices.getGetApiResponse(url + id);
       print("user Specific Id : " + response.toString());
-      // print("user Specific email : " + response['payload']['email']);
-      //
-      // final prefs = await SharedPreferences.getInstance();
-      //
-      // await prefs.setString(
-      //     'userProfileNamePrefs', response['payload']['username'].toString());
-      // await prefs.setString(
-      //     'userProfileEmailPrefs', response['payload']['email'].toString());
-      // await prefs.setString(
-      //     'userProfileMobilePrefs', response['payload']['mobile'].toString());
+      print("user Specific email : " + response['payload']['email']);
 
-      return response ;
+      final prefs = await SharedPreferences.getInstance();
+
+      await prefs.setString(
+          'userProfileNamePrefs', response['payload']['username'].toString());
+      await prefs.setString(
+          'userProfileEmailPrefs', response['payload']['email'].toString());
+      await prefs.setString(
+          'userProfileMobilePrefs', response['payload']['mobile'].toString());
+
+      return response = UserModel.fromJson(response);
     } catch (e) {
       throw e;
     }
   }
+
+//   Future getUserDetailsById(String id) async {
+//     var url = ApiMapping.getURI(apiEndPoint.user_get);
+//     print("user specific ID : " + url + id.toString());
+//     final prefs = await SharedPreferences.getInstance();
+//
+//     try {
+//       dynamic response = await _apiServices.getGetApiResponse(url + id);
+//       print("user Specific Id : " + response.toString());
+//       // print("user Specific email : " + response['payload']['email']);
+//       //
+//       // final prefs = await SharedPreferences.getInstance();
+//       //
+//       // await prefs.setString(
+//       //     'userProfileNamePrefs', response['payload']['username'].toString());
+//       // await prefs.setString(
+//       //     'userProfileEmailPrefs', response['payload']['email'].toString());
+//       // await prefs.setString(
+//       //     'userProfileMobilePrefs', response['payload']['mobile'].toString());
+//
+//       return response ;
+//     } catch (e) {
+//       throw e;
+//     }
+//   }
 
   //Forgot password
   Future forgotPassRequest(Map jsonMap, BuildContext context) async {

@@ -49,7 +49,7 @@ class ApiMapping {
         break;
 
       case apiEndPoint.user_get:
-        retVal = ConstructURI("/users/");
+        retVal = ConstructURI("/user/");
         break;
       case apiEndPoint.user_post:
         retVal = ConstructURI("/users");

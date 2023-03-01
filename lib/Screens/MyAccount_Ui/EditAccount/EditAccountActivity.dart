@@ -70,10 +70,12 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
     }
   }
 
-  getUserData() async {
+  getUserData()async{
     final prefs = await SharedPreferences.getInstance();
 
     setState(() {
+      StringConstant.UserLoginId =
+          (prefs.getString('isUserId')) ?? '';
       StringConstant.userProfileName =
           prefs.getString('userProfileNamePrefs') ?? "";
       StringConstant.userProfileEmail =

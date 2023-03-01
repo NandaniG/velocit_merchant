@@ -931,7 +931,7 @@ class _SignIn_ScreenState extends State<SignIn_Screen> {
     // _radioIndex = 1;
     isOtp = false;
     _usingPassVisible = false;
-    // getDeviceTokenToSendNotification();
+    getDeviceTokenToSendNotification();
   }
 
   @override

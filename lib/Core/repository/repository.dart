@@ -169,6 +169,43 @@ print(url);
     }
   }
 
+  Future putApiForRejectOrder(String cancellationReason,var orderId,BuildContext context) async {
+
+    print("orderId ID" + orderId.toString());
+
+    var url = '/order/$orderId/cancel';
+
+    Map<String, String> statusData = {
+      'cancellationReason': cancellationReason.toString(),
+
+    };
+    print("statusData Query$statusData");
+    String queryString = Uri(queryParameters: statusData).query;
+
+    var requestUrl = '${ApiMapping.BaseAPI}$url?$queryString';
+    print("statusData URL $requestUrl");
+
+    try {
+      dynamic reply;
+      http.Response response = await http.put(Uri.parse(requestUrl),
+          headers: {'content-type': 'application/json'});
+      print("response cancel order" + response.body.toString());
+      var jsonData = json.decode(response.body);
+      if(response.statusCode == 200) {
+
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => OrderDashboard()));
+      }
+      print("response cancel Data" + jsonData['status'].toString());
+
+      // Utils.successToast(response.body.toString());}
+      return reply;
+
+      return response;
+    } catch (e) {
+      throw e;
+    }
+  }
 
 
 }

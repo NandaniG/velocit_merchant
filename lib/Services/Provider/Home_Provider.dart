@@ -11,6 +11,7 @@ import '../HomeModel.dart';
 class HomeProvider with ChangeNotifier {
   Map<dynamic, dynamic> jsonDataBasket = {};
   Map<dynamic, dynamic> jsonDataStatus = {};
+  Map<dynamic, dynamic> jsonDataCancelOrder = {};
 
   //---------------------------------------------------------
   //--------------------load json file------------------------
@@ -74,33 +75,26 @@ class HomeProvider with ChangeNotifier {
     try {
       var jsonContent = await Repository().putApiForChangeStatus(statusCode,merchantId, orderId,context);
 
-      // Map data = {
-      //   "merchant_id": merchanId,
-      //   "IsActiveOrderList": StringConstant.IsActiveOrderList,
-      //   "from_days_in_past": PastDays
-      // };
-      // rootBundle.loadString("assets/jsonData.json");
+
       jsonDataStatus = json.decode(jsonContent);
       notifyListeners();
-      // return jsonData;
       print("____________loadJson______________________");
-      // print(jsonData["stepperOfDeliveryList"]);
-      // StringConstant.printObject(jsonData);
 
-      // homeImageSliderService();
-      // shopByCategoryService();
-      // bookOurServicesService();
-      // recommendedListService();
-      // merchantNearYouListService();
-      // bestDealListService();
-      // cartProductListService();
-      // orderCheckOutListService();
-      // myOrdersListService();budgetBuyListService();
-      // myAddressListService();
-      // customerSupportService();
-      // accountSettingService();
-      // notificationsListService();
-      // offersListService();
+    } catch (e) {
+      print("Error in loadJson: $e");
+      return {};
+    }
+  }
+  loadJsonForCancelOrder(String cancellationReason,orderId, context) async {
+
+    try {
+      var jsonContent = await Repository().putApiForRejectOrder(cancellationReason, orderId,context);
+
+
+      jsonDataCancelOrder = json.decode(jsonContent);
+      notifyListeners();
+      print("____________loadJson______________________");
+
     } catch (e) {
       print("Error in loadJson: $e");
       return {};

@@ -15,7 +15,7 @@ class QRRepository{
     String orderId,  String QrCode, BuildContext context) async {
 
     Map<String, String> fmcgData = {
-      'qr_code': QrCode.toString(),
+      'qr_code': QrCode.toString().trim(),
     };
 
     print("getProductBy Query" + fmcgData.toString());

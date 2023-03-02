@@ -541,12 +541,11 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
 
                                           setState(() {
 
-                                              data = Provider.of<HomeProvider>(
+                                          Provider.of<HomeProvider>(
                                                   context,
                                                   listen: false)
-                                                  .loadJsonForChangeStatus(
-                                                  2000,
-                                                  widget.values['id'],
+                                                  .loadJsonForCancelOrder(
+                                                  _radioVal+ ' '+ vendorReviewController.text,
                                                   widget.values['orders'][index]
                                                   ['order_id'],
                                                   context);

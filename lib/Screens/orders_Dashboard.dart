@@ -792,7 +792,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 TextFieldUtils().dynamicText(
-                                                    "Order ID : " +
+                                                    "Basket ID : " +
                                                         order['id'].toString(),
                                                     context,
                                                     TextStyle(
@@ -1351,7 +1351,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                       CrossAxisAlignment.start,
                                       children: [
                                         TextFieldUtils().dynamicText(
-                                            "Order ID : " +
+                                            "Basket ID : " +
                                                 order['id'].toString(),
                                             context,
                                             TextStyle(

@@ -143,7 +143,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
           preferredSize: Size.fromHeight(height * .09),
           child: appBar_backWidget(
               context,
-              appTitle(context, "Order ID - ${widget.order["id"]}"),
+              appTitle(context, "Basket ID - ${widget.order["id"]}"),
               const SizedBox()),
         ),*/
 
@@ -181,7 +181,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
 
           // leadingWidth: width * .06,
           title: Text(
-            "Order ID - ${!StringConstant.isLogIn ? '1212' : widget.order["id"]}",
+            "Basket ID - ${!StringConstant.isLogIn ? '1212' : widget.order["id"]}",
             style: const TextStyle(
                 color: ThemeApp.blackColor,
                 fontSize: 16,
@@ -790,8 +790,8 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                   (orderDetails['delivery_date'] ?? DateTime.now().toString()));
               var delivery_date = format.format(date);
               for (int i = 0; i < widget.order['orders'].length; i++) {
-                print(
-                    "widget.order['orders']['current_status_code']${widget.order['orders'][i]['current_status_code']}");
+                // print(
+                //     "widget.order['orders']['current_status_code']${widget.order['orders'][i]['current_status_code']}");
                 if (widget.order['orders'][i]['current_status_code'] == 2000) {
                   orderStatus = true;
 
@@ -883,6 +883,19 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         TextFieldUtils().dynamicText(
+                                            'Order ID : ${orderDetails['order_id']}',
+                                            context,
+                                            TextStyle(
+                                                color: ThemeApp
+                                                    .primaryNavyBlackColor,
+                                                fontSize: 14,
+                                                overflow:
+                                                TextOverflow.ellipsis,
+                                                fontWeight:
+                                                FontWeight.w600)),SizedBox(
+                                          height: 10,
+                                        ),
+                                        TextFieldUtils().dynamicText(
                                             // 'POCO M3 Pro 5G(Yellow, 32GB)',
                                             '${orderDetails['short_name']}',
                                             context,
@@ -893,7 +906,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                                                 overflow: TextOverflow.ellipsis,
                                                 fontWeight: FontWeight.w400)),
                                         SizedBox(
-                                          height: 20,
+                                          height: 5,
                                         ),
                                         Row(
                                           mainAxisAlignment:
@@ -1312,10 +1325,43 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                                         //QR code
 
                                         showModalBottomSheet(
-                                            isDismissible: true,
                                             context: context,
+                                            isScrollControlled: true,
+                                            backgroundColor:
+                                            Colors.transparent,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(60.0),
+                                            ),
                                             builder: (context) {
-                                              return ScannerWidget(state: controller.state,orderId:  widget.order['id']);
+                                              return Stack(   alignment: Alignment
+                                                  .center, // <---------
+
+                                                children: [
+                                                  Container(
+                                                      width: width,
+                                                      padding:
+                                                      const EdgeInsets.only(
+                                                          top: 30.0),child: ScannerWidget(state: controller.state,orderId:  widget.order['id'])),
+                                                  Positioned(
+                                                    top: 0,
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        Navigator.pop(
+                                                            context);
+                                                      },
+                                                      child: Container(
+                                                          alignment: Alignment
+                                                              .center,
+                                                          child: const Icon(
+                                                            Icons.close,
+                                                            size: 30,
+                                                            color: ThemeApp
+                                                                .whiteColor,
+                                                          )),
+                                                    ),
+                                                  ), ],
+                                              );
                                             });
                                       },
                                       child: Container(
@@ -2219,11 +2265,13 @@ class _ScannerWidgetState extends State<ScannerWidget> {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * .25,
-      color: Colors.cyan,
-      margin: const EdgeInsets.all(10.0),
-      child: Scaffold(
-          key: _scaffoldKey,
-          body: Center(
+      padding: const EdgeInsets.fromLTRB(16, 20, 24, 20),
+      decoration: const BoxDecoration(
+          color: ThemeApp.whiteColor,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20.0),
+              topRight: Radius.circular(20.0))),
+      child: Center(
             child: Wrap(
               children: [
                 AnimatedBuilder(
@@ -2265,7 +2313,7 @@ class _ScannerWidgetState extends State<ScannerWidget> {
                 ),
               ],
             ),
-          )),
+          ),
     );
   }
 
@@ -2302,10 +2350,10 @@ class _ScannerWidgetState extends State<ScannerWidget> {
 
       // QRRepository().getProductDeliveryScannerList(widget.orderId.toString(),
       //     barcodeScanRes.toString(), context);
-      QRRepository().getProductDeliveryScannerList('2062',
-          '6yD7JnrmnbWSAfAw5O8c7lKOiQ', context);
-      // QRRepository().getProductDeliveryScannerList(widget.orderId.toString(),
-      //     '6yD7JnrmnbWSAfAw5O8c7lKOiQ', context);
+      // QRRepository().getProductDeliveryScannerList('2062',
+      //     barcodeScanRes.toString(), context);
+      QRRepository().getProductDeliveryScannerList(widget.orderId.toString(),
+          barcodeScanRes.toString(), context);
 
 
       StringConstant.ScannedProductId =

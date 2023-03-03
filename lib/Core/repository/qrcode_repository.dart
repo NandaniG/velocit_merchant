@@ -1,8 +1,10 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../Screens/orders_Dashboard.dart';
+import '../../Services/Provider/Home_Provider.dart';
 import '../../utils/utils.dart';
 import '../AppConstant/apiMapping.dart';
 import '../data/network/baseApiServices.dart';
@@ -12,7 +14,7 @@ class QRRepository{
   BaseApiServices _apiServices = NetworkApiServices();
 
  getProductDeliveryScannerList(
-    String orderId,  String QrCode, BuildContext context) async {
+    String merchant_id, String orderId,  String QrCode, BuildContext context) async {
 
     Map<String, String> fmcgData = {
       'qr_code': QrCode.toString().trim(),
@@ -35,6 +37,19 @@ class QRRepository{
       //     'ScannedProductIDPref', response['payload']['id'].toString());
       if(response['status']== 'OK'){
         Utils.successToast("Scan successfully", );
+        // setState(() {
+        //   singleSelectOptions = true;
+        //   orderDetails['is_order_placed'] =
+        //       true;
+         Provider.of<HomeProvider>(
+                  context,
+                  listen: false)
+              .loadJsonForChangeStatus(
+                  810,
+             merchant_id,
+                  orderId,
+                  context);
+        // });
         Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => OrderDashboard()));
        }else{

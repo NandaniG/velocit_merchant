@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -25,11 +26,14 @@ class _ReportScreenState extends State<ReportScreen> {
   double width = 0.0;
   bool isAnySelected = false;
   int _counter = 0;
+  var data;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    data = Provider.of<HomeProvider>(context, listen: false)
+        .loadJsonForGetMerchantBasket();
     getPermission();
   }
 
@@ -41,13 +45,10 @@ class _ReportScreenState extends State<ReportScreen> {
     await Permission.storage.request().isGranted;
   }
 
-  void _generateCsvFile(HomeProvider value) async {
-    List<dynamic> associateList = [
-      {"number": 1, "lat": "14.97534313396318", "lon": "101.22998536005622"},
-      {"number": 2, "lat": "14.97534313396318", "lon": "101.22998536005622"},
-      {"number": 3, "lat": "14.97534313396318", "lon": "101.22998536005622"},
-      {"number": 4, "lat": "14.97534313396318", "lon": "101.22998536005622"}
-    ];
+  void _generateActiveOrderCsvFile(HomeProvider value) async {
+    DateFormat format = DateFormat('dd_MM_yyyy_hh_mm_aaa');
+    DateTime date = DateTime.now();
+    var currentDate = format.format(date);
 
     List<List<dynamic>> rows = [];
 
@@ -61,13 +62,7 @@ class _ReportScreenState extends State<ReportScreen> {
     row.add("Amount");
     row.add("Current Status");
     rows.add(row);
-    // for (int i = 0; i < associateList.length; i++) {
-    //   List<dynamic> row = [];
-    //   row.add(associateList[i]["number"] - 1);
-    //   row.add(associateList[i]["lat"]);
-    //   row.add(associateList[i]["lon"]);
-    //   rows.add(row);
-    // }
+
     for (int i = 0;
         i < value.jsonDataBasket['payload']['merchant_baskets'].length;
         i++) {
@@ -87,8 +82,8 @@ class _ReportScreenState extends State<ReportScreen> {
             [j]['oneliner']);
         row.add(value.jsonDataBasket['payload']['merchant_baskets'][i]['orders']
             [j]['item_qty']);
-        row.add('Rs. ${value.jsonDataBasket['payload']['merchant_baskets'][i]['orders'][j]
-                    ['mrp']}');
+        row.add(
+            'Rs. ${value.jsonDataBasket['payload']['merchant_baskets'][i]['orders'][j]['mrp']}');
 
         row.add(value.jsonDataBasket['payload']['merchant_baskets'][i]
             ['overall_status']);
@@ -99,21 +94,152 @@ class _ReportScreenState extends State<ReportScreen> {
     String csv = const ListToCsvConverter().convert(rows);
     //create file path
     var directory =
-        await Directory('/storage/emulated/0/VelocITt Merchant Reports')
-            .create();
-    print('Directory path :${directory.path}');
+        await Directory('/storage/emulated/0/VelocITt Merchant Reports');
+    if (await directory.exists() == false) {
+      directory.create();
+      print('Directory path active:${directory.path}');
+    } else {
+      directory;
+    }
+    //save pdf file
+    final file = File('${directory.path}/ActiveOrders_$currentDate.csv');
+    Utils.successToast('Report Successfully Downloaded');
+
+    file.writeAsString(csv);
+
+    setState(() {
+      _counter++;
+    });
+  }
+
+  void _generatePastOrderCsvFile(HomeProvider value) async {
+    DateFormat format = DateFormat('dd_MM_yyyy_hh_mm_aaa');
+    DateTime date = DateTime.now();
+    var currentDate = format.format(date);
+
+    print('date ;' + currentDate);
+
+    List<List<dynamic>> rows = [];
+
+    List<dynamic> row = [];
+    row.add("Sr. no.");
+    row.add("Order Date");
+    row.add("Basket ID");
+    row.add("Order ID");
+    row.add("Order Description");
+    row.add("Order Quantity");
+    row.add("Amount");
+    row.add("Current Status");
+    rows.add(row);
+
+    for (int i = 0;
+        i < value.jsonDataBasket['payload']['merchant_baskets'].length;
+        i++) {
+      for (int j = 0;
+          j <
+              value.jsonDataBasket['payload']['merchant_baskets'][i]['orders']
+                  .length;
+          j++) {
+        // print(\u{20B9 +value.jsonDataBasket['payload']['merchant_baskets'][i]['orders'][j]['mrp']}');
+        List<dynamic> row = [];
+        row.add((i + 1));
+        row.add('NA');
+        row.add(value.jsonDataBasket['payload']['merchant_baskets'][i]['id']);
+        row.add(value.jsonDataBasket['payload']['merchant_baskets'][i]['orders']
+            [j]['order_id']);
+        row.add(value.jsonDataBasket['payload']['merchant_baskets'][i]['orders']
+            [j]['oneliner']);
+        row.add(value.jsonDataBasket['payload']['merchant_baskets'][i]['orders']
+            [j]['item_qty']);
+        row.add(
+            'Rs. ${value.jsonDataBasket['payload']['merchant_baskets'][i]['orders'][j]['mrp']}');
+
+        row.add(value.jsonDataBasket['payload']['merchant_baskets'][i]
+            ['overall_status']);
+        rows.add(row);
+      }
+    }
+
+    String csv = const ListToCsvConverter().convert(rows);
+    //create file path
+    var directory =
+        await Directory('/storage/emulated/0/VelocITt Merchant Reports');
+    if (await directory.exists() == false) {
+      directory.create();
+      print('Directory path past:${directory.path}');
+    } else {
+      directory;
+    }
 
     //save pdf file
-    final file = File('${directory.path}/ActiveOrders.csv');
+    final file = File('${directory.path}/PastOrders_$currentDate.csv');
     Utils.successToast('Report Successfully Downloaded');
-    // String dir = await ExternalPath.getExternalStoragePublicDirectory(
-    //     ExternalPath.DIRECTORY_DOWNLOADS);
-    //
-    //
-    // print("dir $dir");
-    // String file = "$dir";
-    //
-    // File f = File(file + "/filename.csv");
+
+    file.writeAsString(csv);
+
+    setState(() {
+      _counter++;
+    });
+  }
+
+  void _generateCancelledOrderCsvFile(HomeProvider value) async {
+    List<List<dynamic>> rows = [];
+
+    List<dynamic> row = [];
+    row.add("Sr. no.");
+    row.add("Order Date");
+    row.add("Basket ID");
+    row.add("Order ID");
+    row.add("Order Description");
+    row.add("Order Quantity");
+    row.add("Amount");
+    row.add("Current Status");
+    rows.add(row);
+
+    for (int i = 0;
+    i < value.jsonDataBasket['payload']['merchant_baskets'].length;
+    i++) {
+      for (int j = 0;
+      j <
+          value.jsonDataBasket['payload']['merchant_baskets'][i]['orders']
+              .length;
+      j++) {
+        // print(\u{20B9 +value.jsonDataBasket['payload']['merchant_baskets'][i]['orders'][j]['mrp']}');
+        List<dynamic> row = [];
+        row.add(i + 1);
+        row.add('NA');
+        row.add(value.jsonDataBasket['payload']['merchant_baskets'][i]['id']);
+        row.add(value.jsonDataBasket['payload']['merchant_baskets'][i]['orders']
+        [j]['order_id']);
+        row.add(value.jsonDataBasket['payload']['merchant_baskets'][i]['orders']
+        [j]['oneliner']);
+        row.add(value.jsonDataBasket['payload']['merchant_baskets'][i]['orders']
+        [j]['item_qty']);
+        row.add(
+            'Rs. ${value.jsonDataBasket['payload']['merchant_baskets'][i]['orders'][j]['mrp']}');
+
+        row.add(value.jsonDataBasket['payload']['merchant_baskets'][i]
+        ['overall_status']);
+        rows.add(row);
+      }
+    }
+
+    String csv = const ListToCsvConverter().convert(rows);
+    //create file path
+    var directory =
+    await Directory('/storage/emulated/0/VelocITt Merchant Reports');
+    if(await directory.exists()==false){
+      directory.create();
+      print('Directory path past:${directory.path}');
+
+    }else{
+      directory;
+    }
+    // print('Directory path :${directory.path}');
+
+    //save pdf file
+    final file = File('${directory.path}/CancelledOrders.csv');
+    Utils.successToast('Report Successfully Downloaded');
 
     file.writeAsString(csv);
 
@@ -148,9 +274,55 @@ class _ReportScreenState extends State<ReportScreen> {
                     Padding(
                       padding: const EdgeInsets.only(left: 20, right: 20),
                       child: isAnySelected == true
-                          ? proceedButton("Share Reports",
-                              ThemeApp.tealButtonColor, context, false, () {
-                              _generateCsvFile(value);
+                          ? proceedButton(
+                              "Share Reports",
+                              ThemeApp.tealButtonColor,
+                              context,
+                              false, () async {
+                              for (int i = 0; i < _items.length; i++) {
+                                if (_items[i].index == 1 &&
+                                    _items[i].isChecked == true) {
+                                  print("index 1 Active Orders");
+                                  value.IsActiveOrderList = true;
+
+                                  print("Is Past Orders  " +
+                                      value.IsActiveOrderList.toString());
+
+                                  data = await Provider.of<HomeProvider>(
+                                          context,
+                                          listen: false)
+                                      .loadJsonForGetMerchantBasket();
+                                  _generateActiveOrderCsvFile(value);
+                                } else if (_items[i].index == 2 &&
+                                    _items[i].isChecked == true) {
+                                  print("index 1 Past Orders");
+                                  value.IsActiveOrderList = false;
+
+                                  print("Is Past Orders  " +
+                                      value.IsActiveOrderList.toString());
+
+                                  data = await Provider.of<HomeProvider>(
+                                          context,
+                                          listen: false)
+                                      .loadJsonForGetMerchantBasket();
+
+                                  _generatePastOrderCsvFile(value);
+                                } else if (_items[i].index == 3 &&
+                                    _items[i].isChecked == true) {
+                                  print("index 1 Past Orders");
+                                  value.IsActiveOrderList = false;
+
+                                  print("Is Past Orders  " +
+                                      value.IsActiveOrderList.toString());
+
+                                  data = await Provider.of<HomeProvider>(
+                                          context,
+                                          listen: false)
+                                      .loadJsonForGetMerchantBasket();
+
+                                  _generateCancelledOrderCsvFile(value);
+                                }
+                              }
                             })
                           : inActiveButton("Share Reports", context, () {}),
                     ),
@@ -198,11 +370,10 @@ class _ReportScreenState extends State<ReportScreen> {
                         onChanged: (val) {
                           setState(() {
                             t.isChecked = val!;
-                            isAnySelected = val;
-                            if (val == true) {
-                              _currText = t.title;
-                            }
+                            isAnySelected = true;
+                            print(t.index);
                           });
+
                         },
                       ),
                     ),
@@ -214,17 +385,18 @@ class _ReportScreenState extends State<ReportScreen> {
   }
 
   final List<SimpleModel> _items = <SimpleModel>[
-    SimpleModel("Order Report", false),
-    SimpleModel("Inventory Report", false),
-    SimpleModel("Revenue Report", false),
+    SimpleModel(1, "Active Order Report", false),
+    SimpleModel(2, "Past 7 Days Report", false),
+    SimpleModel(3, "Cancelled Order Report", false),
   ];
 
   String _currText = '';
 }
 
 class SimpleModel {
+  int index;
   String title;
   bool isChecked;
 
-  SimpleModel(this.title, this.isChecked);
+  SimpleModel(this.index, this.title, this.isChecked);
 }

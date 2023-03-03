@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:barcode_finder/barcode_finder.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -50,7 +51,8 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
     locale: 'en_IN',
     decimalDigits: 0, // change it to get decimal places
     symbol: '₹',
-  );  final controller = BarcodeFinderController();
+  );
+  final controller = BarcodeFinderController();
 
   String selectedTypeOfOrders = 'Change Status';
   var dropDownForAcceptedProducts = [
@@ -68,6 +70,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    bottomButtonVisibility();
     getColorCodeStatus(widget.order);
   }
 
@@ -555,18 +558,17 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                       ),
                     ),
                     Container(
-                        alignment: Alignment.centerRight,
-
-                        child:
-                        SvgPicture.asset(
-                          'assets/appImages/canceledIcon.svg',
-                          // color: ThemeApp.appColor,
-                          theme: SvgTheme(
+                      alignment: Alignment.centerRight,
+                      child: SvgPicture.asset(
+                        // 'assets/appImages/canceledIcon.svg',
+                        'assets/appImages/Cancelled.svg',
+                        color: ThemeApp.redColor,
+                        theme: SvgTheme(
                             // currentColor: ThemeApp.appColor,
-                          ),
-                          // height: height * .025,
-                        ),
-                     ),
+                            ),
+                        // height: height * .025,
+                      ),
+                    ),
                   ],
                 ),
                 SizedBox(
@@ -616,152 +618,162 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                 //     ),
                 //   );
                 // }),
-
-                singleSelectOptions == false
+                // allOrderCheckButtons(),
+                allBottomButtons(),
+                // allOrderStatusButton(),
+                /*   singleSelectOptions == false
                     ? Container()
-                    : isOrderCanceled==false? SafeArea(
-                        child: Container(
-                        height: 45,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    for (int i = 0;
-                                        i < widget.order['orders'].length;
-                                        i++) {
-                                      if (widget.order['orders'][i]
-                                              ["is_accepted"] ==
-                                          false) {
-                                        data = Provider.of<HomeProvider>(
-                                                context,
-                                                listen: false)
-                                            .loadJsonForChangeStatus(
-                                                510,
-                                                widget.order['id'],
-                                                widget.order['orders'][i]
-                                                    ['order_id'],
-                                                context);
-                                      }
-
-                                      if (widget.order['orders'][i]
+                    : isOrderCanceled == false
+                        ? SafeArea(
+                            child: Container(
+                            height: 45,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        for (int i = 0;
+                                            i < widget.order['orders'].length;
+                                            i++) {
+                                          if (widget.order['orders'][i]
                                                   ["is_accepted"] ==
-                                              true &&
-                                          widget.order['orders'][i]
-                                                  ["is_packed"] ==
                                               false) {
-                                        data = Provider.of<HomeProvider>(
-                                                context,
-                                                listen: false)
-                                            .loadJsonForChangeStatus(
-                                                610,
-                                                widget.order['id'],
-                                                widget.order['orders'][i]
-                                                    ['order_id'],
-                                                context);
-                                      }
+                                            data = Provider.of<HomeProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .loadJsonForChangeStatus(
+                                                    510,
+                                                    widget.order['orders'][i]
+                                                        ['merchant_id'],
+                                                    widget.order['orders'][i]
+                                                        ['order_id'],
+                                                    context);
+                                          }
 
-                                      if (widget.order['orders'][i]
-                                                  ["is_accepted"] ==
-                                              true &&
-                                          widget.order['orders'][i]
-                                                  ["is_packed"] ==
-                                              true &&
-                                          widget.order['orders'][i]
-                                                  ["is_shipped"] ==
-                                              false) {
-                                        data = Provider.of<HomeProvider>(
-                                                context,
-                                                listen: false)
-                                            .loadJsonForChangeStatus(
-                                                710,
-                                                widget.order['id'],
-                                                widget.order['orders'][i]
-                                                    ['order_id'],
-                                                context);
-                                      }
+                                          if (widget.order['orders'][i]
+                                                      ["is_accepted"] ==
+                                                  true &&
+                                              widget.order['orders'][i]
+                                                      ["is_packed"] ==
+                                                  false) {
+                                            data = Provider.of<HomeProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .loadJsonForChangeStatus(
+                                                    610,
+                                                    widget.order['orders'][i]
+                                                        ['merchant_id'],
+                                                    widget.order['orders'][i]
+                                                        ['order_id'],
+                                                    context);
+                                          }
 
-                                      if (widget.order['orders'][i]
-                                                  ["is_accepted"] ==
-                                              true &&
-                                          widget.order['orders'][i]
-                                                  ["is_packed"] ==
-                                              true &&
-                                          widget.order['orders'][i]
-                                                  ["is_shipped"] ==
-                                              true &&
-                                          widget.order['orders'][i]
-                                                  ["is_delivered"] ==
-                                              false) {
-                                        data = Provider.of<HomeProvider>(
-                                                context,
-                                                listen: false)
-                                            .loadJsonForChangeStatus(
-                                                810,
-                                                widget.order['id'],
-                                                widget.order['orders'][i]
-                                                    ['order_id'],
-                                                context);
-                                      }
-                                    }
-                                  });
-                                },
-                                child: Container(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        0, 9.0, 0, 9.0),
-                                    decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(100),
-                                      ),
-                                      border: Border.all(
-                                          color: ThemeApp.tealButtonColor),
-                                      color: ThemeApp.tealButtonColor,
-                                    ),
-                                    child: Center(
-                                      child: TextFieldUtils()
-                                          .usingPassTextFields(orderStatusName,
-                                              ThemeApp.whiteColor, context),
-                                    )),
-                              ),
+                                          if (widget.order['orders'][i]
+                                                      ["is_accepted"] ==
+                                                  true &&
+                                              widget.order['orders'][i]
+                                                      ["is_packed"] ==
+                                                  true &&
+                                              widget.order['orders'][i]
+                                                      ["is_shipped"] ==
+                                                  false) {
+                                            data = Provider.of<HomeProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .loadJsonForChangeStatus(
+                                                    710,
+                                                    widget.order['orders'][i]
+                                                        ['merchant_id'],
+                                                    widget.order['orders'][i]
+                                                        ['order_id'],
+                                                    context);
+                                          }
+
+                                          if (widget.order['orders'][i]
+                                                      ["is_accepted"] ==
+                                                  true &&
+                                              widget.order['orders'][i]
+                                                      ["is_packed"] ==
+                                                  true &&
+                                              widget.order['orders'][i]
+                                                      ["is_shipped"] ==
+                                                  true &&
+                                              widget.order['orders'][i]
+                                                      ["is_delivered"] ==
+                                                  false) {
+                                            data = Provider.of<HomeProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .loadJsonForChangeStatus(
+                                                    810,
+                                                    widget.order['orders'][i]
+                                                        ['merchant_id'],
+                                                    widget.order['orders'][i]
+                                                        ['order_id'],
+                                                    context);
+                                          }
+                                        }
+                                      });
+                                    },
+                                    child: Container(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 9.0, 0, 9.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(100),
+                                          ),
+                                          border: Border.all(
+                                              color: ThemeApp.tealButtonColor),
+                                          color: ThemeApp.tealButtonColor,
+                                        ),
+                                        child: Center(
+                                          child: TextFieldUtils()
+                                              .usingPassTextFields(
+                                                  orderStatusName,
+                                                  ThemeApp.whiteColor,
+                                                  context),
+                                        )),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ReturnOrderActivity(
+                                                    values: widget.order,
+                                                    isSingleOrderReject: false,
+                                                  )));
+                                    },
+                                    child: Container(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 9.0, 0, 9.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(100),
+                                          ),
+                                          border: Border.all(
+                                              color: ThemeApp.tealButtonColor),
+                                          color: ThemeApp.buttonShade2,
+                                        ),
+                                        child: Center(
+                                          child: TextFieldUtils()
+                                              .usingPassTextFields(
+                                                  'Reject Orders',
+                                                  ThemeApp.tealButtonColor,
+                                                  context),
+                                        )),
+                                  ),
+                                )
+                              ],
                             ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              ReturnOrderActivity(
-                                                values: widget.order,
-                                                isSingleOrderReject: false,
-                                              )));
-                                },
-                                child: Container(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        0, 9.0, 0, 9.0),
-                                    decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(100),
-                                      ),
-                                      border: Border.all(
-                                          color: ThemeApp.tealButtonColor),
-                                      color: ThemeApp.buttonShade2,
-                                    ),
-                                    child: Center(
-                                      child: TextFieldUtils()
-                                          .usingPassTextFields(
-                                              'Reject Orders',
-                                              ThemeApp.tealButtonColor,
-                                              context),
-                                    )),
-                              ),
-                            )
-                          ],
-                        ),
-                      )):SizedBox(),
+                          ))
+                        : SizedBox(),*/
                 SizedBox(
                   height: height * .01,
                 ),
@@ -789,15 +801,24 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
               DateTime date = DateTime.parse(
                   (orderDetails['delivery_date'] ?? DateTime.now().toString()));
               var delivery_date = format.format(date);
-              for (int i = 0; i < widget.order['orders'].length; i++) {
-                // print(
-                //     "widget.order['orders']['current_status_code']${widget.order['orders'][i]['current_status_code']}");
-                if (widget.order['orders'][i]['current_status_code'] == 2000) {
-                  orderStatus = true;
-
-                  isOrderCanceled = true;
-                }
-              }
+              // for (int i = 0; i < widget.order['orders'].length; i++) {
+              //   print(
+              //       "widget.order['orders']['current_status_code']${widget.order['orders'][i]['current_status_code']}");
+              //     if (widget.order['orders'][i]['current_status_code'] == 2000) {
+              //       orderStatus = true;
+              //       subOrderStatus = 'Refund Proceed ';
+              //       colorsSubOrderStatus = ThemeApp.tealButtonColor;
+              //       isOrderCanceled = true;
+              //     } else if (widget.order['orders'][i]['current_status_code'] ==
+              //         810) {
+              //       subOrderStatus = 'Delivered';
+              //       colorsSubOrderStatus = ThemeApp.deliveredOrderColor;
+              //     } else if (widget.order['orders'][i]['current_status_code'] ==
+              //         850) {
+              //       subOrderStatus = 'Refund Proceed ';
+              //       colorsSubOrderStatus = ThemeApp.tealButtonColor;
+              //     }
+              //   }
 
               if (orderDetails["is_accepted"] == false &&
                   orderDetails['current_status_code'] != 2000) {
@@ -882,17 +903,25 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        TextFieldUtils().dynamicText(
-                                            'Order ID : ${orderDetails['order_id']}',
-                                            context,
-                                            TextStyle(
-                                                color: ThemeApp
-                                                    .primaryNavyBlackColor,
-                                                fontSize: 14,
-                                                overflow:
-                                                TextOverflow.ellipsis,
-                                                fontWeight:
-                                                FontWeight.w600)),SizedBox(
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            TextFieldUtils().dynamicText(
+                                                'Order ID : ${orderDetails['order_id']}',
+                                                context,
+                                                TextStyle(
+                                                    color: ThemeApp
+                                                        .primaryNavyBlackColor,
+                                                    fontSize: 14,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    fontWeight:
+                                                        FontWeight.w600)),
+                                            cancelDeliveredStatus(orderDetails),
+                                          ],
+                                        ),
+                                        SizedBox(
                                           height: 10,
                                         ),
                                         TextFieldUtils().dynamicText(
@@ -908,105 +937,15 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                                         SizedBox(
                                           height: 5,
                                         ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            TextFieldUtils().dynamicText(
-                                                'Quantity : ${orderDetails['item_qty']}',
-                                                context,
-                                                TextStyle(
-                                                    color: ThemeApp
-                                                        .primaryNavyBlackColor,
-                                                    fontSize: 14,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    fontWeight:
-                                                        FontWeight.w700)),
-                                            /*  orderStatus
-                                                ? InkWell(
-                                                    onTap: (() {
-                                                      showModalBottomSheet(
-                                                          context: context,
-                                                          isScrollControlled:
-                                                              true,
-                                                          backgroundColor:
-                                                              Colors
-                                                                  .transparent,
-                                                          shape:
-                                                              RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        60.0),
-                                                          ),
-                                                          builder: (context) {
-                                                            return Stack(
-                                                              alignment: Alignment
-                                                                  .center, // <---------
-
-                                                              children: [
-                                                                Container(
-                                                                  width: width,
-                                                                  padding: const EdgeInsets
-                                                                          .only(
-                                                                      top:
-                                                                          30.0),
-                                                                  child: bottomSheetForOtp(
-                                                                      orderDetails),
-                                                                ),
-                                                                Positioned(
-                                                                  top: 0,
-                                                                  child:
-                                                                      InkWell(
-                                                                    onTap: () {
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                    },
-                                                                    child: Container(
-                                                                        alignment: Alignment.center,
-                                                                        child: const Icon(
-                                                                          Icons
-                                                                              .close,
-                                                                          size:
-                                                                              30,
-                                                                          color:
-                                                                              ThemeApp.whiteColor,
-                                                                        )),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            );
-                                                          });
-                                                    }),
-                                                    child: Container(
-                                                        // height: 45,
-                                                        padding:
-                                                            EdgeInsets.all(5),
-                                                        decoration: BoxDecoration(
-                                                            border: Border.all(
-                                                                color: ThemeApp
-                                                                    .dropDownBorderColor)),
-                                                        child: Row(
-                                                          children: [
-                                                            Text(
-                                                                selectedTypeOfOrders,
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600)),
-                                                            Icon(
-                                                              Icons
-                                                                  .arrow_drop_down,
-                                                              color: ThemeApp
-                                                                  .subIconColor,
-                                                            )
-                                                          ],
-                                                        )))
-
-                                                : Container(),*/
-                                          ],
-                                        ),
+                                        TextFieldUtils().dynamicText(
+                                            'Quantity : ${orderDetails['item_qty']}',
+                                            context,
+                                            TextStyle(
+                                                color: ThemeApp
+                                                    .primaryNavyBlackColor,
+                                                fontSize: 14,
+                                                overflow: TextOverflow.ellipsis,
+                                                fontWeight: FontWeight.w700)),
                                       ],
                                     ),
                                   ),
@@ -1032,403 +971,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                           SizedBox(
                             height: 15,
                           ),
-                          if (orderDetails['current_status_code'] != 2000 &&
-                              orderDetails["is_accepted"] == false)
-                            Container(
-                              height: 45,
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          singleSelectOptions = true;
-                                          orderDetails['is_order_placed'] =
-                                              true;
-
-                                          data = Provider.of<HomeProvider>(
-                                                  context,
-                                                  listen: false)
-                                              .loadJsonForChangeStatus(
-                                                  510,
-                                                  widget.order['id'],
-                                                  orderDetails['order_id'],
-                                                  context);
-                                        });
-                                      },
-                                      child: Container(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 9.0, 0, 9.0),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(100),
-                                            ),
-                                            border: Border.all(
-                                                color:
-                                                    ThemeApp.tealButtonColor),
-                                            color: ThemeApp.tealButtonColor,
-                                          ),
-                                          child: Center(
-                                            child: TextFieldUtils()
-                                                .usingPassTextFields(
-                                                    'Accept',
-                                                    ThemeApp.whiteColor,
-                                                    context),
-                                          )),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          singleSelectOptions = true;
-                                          Navigator.of(context).pushReplacement(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ReturnOrderActivity(
-                                                        values: widget.order,
-                                                        isSingleOrderReject:
-                                                            true,
-                                                      )));
-                                        });
-                                      },
-                                      child: Container(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 9.0, 0, 9.0),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(100),
-                                            ),
-                                            border: Border.all(
-                                                color:
-                                                    ThemeApp.tealButtonColor),
-                                            color: ThemeApp.buttonShade2,
-                                          ),
-                                          child: Center(
-                                            child: TextFieldUtils()
-                                                .usingPassTextFields(
-                                                    'Reject',
-                                                    ThemeApp.tealButtonColor,
-                                                    context),
-                                          )),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          if (orderDetails["is_accepted"] == true &&
-                              orderDetails["is_packed"] == false)
-                            Container(
-                              height: 45,
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          singleSelectOptions = true;
-                                          // orderDetails['is_order_placed'] =
-                                          //     true;
-                                          data = Provider.of<HomeProvider>(
-                                                  context,
-                                                  listen: false)
-                                              .loadJsonForChangeStatus(
-                                                  610,
-                                                  widget.order['id'],
-                                                  orderDetails['order_id'],
-                                                  context);
-                                        });
-                                      },
-                                      child: Container(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 9.0, 0, 9.0),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(100),
-                                            ),
-                                            border: Border.all(
-                                                color:
-                                                    ThemeApp.tealButtonColor),
-                                            color: ThemeApp.tealButtonColor,
-                                          ),
-                                          child: Center(
-                                            child: TextFieldUtils()
-                                                .usingPassTextFields(
-                                                    'Packed',
-                                                    ThemeApp.whiteColor,
-                                                    context),
-                                          )),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          singleSelectOptions = true;
-                                          Navigator.of(context).pushReplacement(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ReturnOrderActivity(
-                                                        values: widget.order,
-                                                        isSingleOrderReject:
-                                                            true,
-                                                      )));
-                                        });
-                                      },
-                                      child: Container(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 9.0, 0, 9.0),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(100),
-                                            ),
-                                            border: Border.all(
-                                                color:
-                                                    ThemeApp.tealButtonColor),
-                                            color: ThemeApp.buttonShade2,
-                                          ),
-                                          child: Center(
-                                            child: TextFieldUtils()
-                                                .usingPassTextFields(
-                                                    'Reject',
-                                                    ThemeApp.tealButtonColor,
-                                                    context),
-                                          )),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          if (orderDetails["is_accepted"] == true &&
-                              orderDetails["is_packed"] == true &&
-                              orderDetails["is_shipped"] == false)
-                            Container(
-                              height: 45,
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          singleSelectOptions = true;
-                                          orderDetails['is_order_placed'] =
-                                              true;
-                                          data = Provider.of<HomeProvider>(
-                                                  context,
-                                                  listen: false)
-                                              .loadJsonForChangeStatus(
-                                                  710,
-                                                  widget.order['id'],
-                                                  orderDetails['order_id'],
-                                                  context);
-                                        });
-                                      },
-                                      child: Container(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 9.0, 0, 9.0),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(100),
-                                            ),
-                                            border: Border.all(
-                                                color:
-                                                    ThemeApp.tealButtonColor),
-                                            color: ThemeApp.tealButtonColor,
-                                          ),
-                                          child: Center(
-                                            child: TextFieldUtils()
-                                                .usingPassTextFields(
-                                                    'Shipped',
-                                                    ThemeApp.whiteColor,
-                                                    context),
-                                          )),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          singleSelectOptions = true;
-                                          Navigator.of(context).pushReplacement(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ReturnOrderActivity(
-                                                        values: widget.order,
-                                                        isSingleOrderReject:
-                                                            true,
-                                                      )));
-                                        });
-                                      },
-                                      child: Container(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 9.0, 0, 9.0),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(100),
-                                            ),
-                                            border: Border.all(
-                                                color:
-                                                    ThemeApp.tealButtonColor),
-                                            color: ThemeApp.buttonShade2,
-                                          ),
-                                          child: Center(
-                                            child: TextFieldUtils()
-                                                .usingPassTextFields(
-                                                    'Reject',
-                                                    ThemeApp.tealButtonColor,
-                                                    context),
-                                          )),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          if (orderDetails["is_accepted"] == true &&
-                              orderDetails["is_packed"] == true &&
-                              orderDetails["is_shipped"] == true &&
-                              orderDetails["is_delivered"] == false)
-                            Container(
-                              height: 45,
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () {
-                                        // setState(() {
-                                        //   singleSelectOptions = true;
-                                        //   orderDetails['is_order_placed'] =
-                                        //       true;
-                                        //   data = Provider.of<HomeProvider>(
-                                        //           context,
-                                        //           listen: false)
-                                        //       .loadJsonForChangeStatus(
-                                        //           810,
-                                        //           widget.order['id'],
-                                        //           orderDetails['order_id'],
-                                        //           context);
-                                        // });
-                                        //QR code
-
-                                        showModalBottomSheet(
-                                            context: context,
-                                            isScrollControlled: true,
-                                            backgroundColor:
-                                            Colors.transparent,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                              BorderRadius.circular(60.0),
-                                            ),
-                                            builder: (context) {
-                                              return Stack(   alignment: Alignment
-                                                  .center, // <---------
-
-                                                children: [
-                                                  Container(
-                                                      width: width,
-                                                      padding:
-                                                      const EdgeInsets.only(
-                                                          top: 30.0),child: ScannerWidget(state: controller.state,orderId:  widget.order['id'])),
-                                                  Positioned(
-                                                    top: 0,
-                                                    child: InkWell(
-                                                      onTap: () {
-                                                        Navigator.pop(
-                                                            context);
-                                                      },
-                                                      child: Container(
-                                                          alignment: Alignment
-                                                              .center,
-                                                          child: const Icon(
-                                                            Icons.close,
-                                                            size: 30,
-                                                            color: ThemeApp
-                                                                .whiteColor,
-                                                          )),
-                                                    ),
-                                                  ), ],
-                                              );
-                                            });
-                                      },
-                                      child: Container(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 9.0, 0, 9.0),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(100),
-                                            ),
-                                            border: Border.all(
-                                                color:
-                                                    ThemeApp.tealButtonColor),
-                                            color: ThemeApp.tealButtonColor,
-                                          ),
-                                          child: Center(
-                                            child: TextFieldUtils()
-                                                .usingPassTextFields(
-                                                    'Order Code',
-                                                    ThemeApp.whiteColor,
-                                                    context),
-                                          )),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          singleSelectOptions = true;
-                                          Navigator.of(context).pushReplacement(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ReturnOrderActivity(
-                                                        values: widget.order,
-                                                        isSingleOrderReject:
-                                                            true,
-                                                      )));
-                                        });
-                                      },
-                                      child: Container(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 9.0, 0, 9.0),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(100),
-                                            ),
-                                            border: Border.all(
-                                                color:
-                                                    ThemeApp.tealButtonColor),
-                                            color: ThemeApp.buttonShade2,
-                                          ),
-                                          child: Center(
-                                            child: TextFieldUtils()
-                                                .usingPassTextFields(
-                                                    'Delivery Failure',
-                                                    ThemeApp.tealButtonColor,
-                                                    context),
-                                          )),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
+                          orderStatusButtons(orderDetails),
                           SizedBox(
                             height: 5,
                           ),
@@ -1620,6 +1163,716 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
             ],
           );
   }
+
+  var subOrderStatus = '';
+  Color colorsSubOrderStatus = ThemeApp.appColor;
+
+  Widget cancelDeliveredStatus(Map orderDetails) {
+    if (orderDetails["current_status_code"] == 2000) {
+      return TextFieldUtils().dynamicText(
+          'Initiate Refund',
+          context,
+          TextStyle(
+              color: ThemeApp.tealButtonColor,
+              fontSize: 12,
+              overflow: TextOverflow.ellipsis,
+              fontWeight: FontWeight.w700));
+    } else if (orderDetails["current_status_code"] == 810) {
+      colorsSubOrderStatus = ThemeApp.tealButtonColor;
+      return TextFieldUtils().dynamicText(
+          'Delivered',
+          context,
+          TextStyle(
+              color: ThemeApp.deliveredOrderColor,
+              fontSize: 12,
+              overflow: TextOverflow.ellipsis,
+              fontWeight: FontWeight.w700));
+    }
+    return Container();
+  }
+
+  bool isAnyOrderRejected = false;
+
+  Widget orderStatusButtons(Map orderDetails) {
+    if (orderDetails["current_status_code"] == 2000) {
+      return Text('');
+    } else {
+      if (orderDetails["is_accepted"] == false) {
+        // executing if is_accepted is false
+        print("step 1");
+        return Container(
+          height: 45,
+          child: Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      singleSelectOptions = true;
+                      orderDetails['is_order_placed'] = true;
+
+                      data = Provider.of<HomeProvider>(context, listen: false)
+                          .loadJsonForChangeStatus(
+                              510,
+                              orderDetails['merchant_id'],
+                              orderDetails['order_id'],
+                              context);
+                    });
+                  },
+                  child: Container(
+                      padding: const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(100),
+                        ),
+                        border: Border.all(color: ThemeApp.tealButtonColor),
+                        color: ThemeApp.tealButtonColor,
+                      ),
+                      child: Center(
+                        child: TextFieldUtils().usingPassTextFields(
+                            'Accept', ThemeApp.whiteColor, context),
+                      )),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      singleSelectOptions = true;
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => ReturnOrderActivity(
+                                values: widget.order,
+                                isSingleOrderReject: true,
+                              )));
+                    });
+                  },
+                  child: Container(
+                      padding: const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(100),
+                        ),
+                        border: Border.all(color: ThemeApp.tealButtonColor),
+                        color: ThemeApp.buttonShade2,
+                      ),
+                      child: Center(
+                        child: TextFieldUtils().usingPassTextFields(
+                            'Reject', ThemeApp.tealButtonColor, context),
+                      )),
+                ),
+              )
+            ],
+          ),
+        );
+      } else if ((orderDetails["is_accepted"] == true) &&
+          (orderDetails["is_packed"] == false)) {
+        // executing if is_accepted is true and is_packed is false
+        print("step 2");
+        return Container(
+          height: 45,
+          child: Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      singleSelectOptions = true;
+                      orderDetails['is_order_placed'] = true;
+                      data = Provider.of<HomeProvider>(context, listen: false)
+                          .loadJsonForChangeStatus(
+                              610,
+                              orderDetails['merchant_id'],
+                              orderDetails['order_id'],
+                              context);
+                    });
+                  },
+                  child: Container(
+                      padding: const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(100),
+                        ),
+                        border: Border.all(color: ThemeApp.tealButtonColor),
+                        color: ThemeApp.tealButtonColor,
+                      ),
+                      child: Center(
+                        child: TextFieldUtils().usingPassTextFields(
+                            'Packed', ThemeApp.whiteColor, context),
+                      )),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      singleSelectOptions = true;
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => ReturnOrderActivity(
+                                values: widget.order,
+                                isSingleOrderReject: true,
+                              )));
+                    });
+                  },
+                  child: Container(
+                      padding: const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(100),
+                        ),
+                        border: Border.all(color: ThemeApp.tealButtonColor),
+                        color: ThemeApp.buttonShade2,
+                      ),
+                      child: Center(
+                        child: TextFieldUtils().usingPassTextFields(
+                            'Reject', ThemeApp.tealButtonColor, context),
+                      )),
+                ),
+              )
+            ],
+          ),
+        );
+      } else if ((orderDetails["is_accepted"] == true) &&
+          (orderDetails["is_packed"] == true) &&
+          (orderDetails["is_shipped"] == false)) {
+        print("step 3");
+        return Container(
+          height: 45,
+          child: Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      singleSelectOptions = true;
+                      orderDetails['is_order_placed'] = true;
+                      data = Provider.of<HomeProvider>(context, listen: false)
+                          .loadJsonForChangeStatus(
+                              710,
+                              orderDetails['merchant_id'],
+                              orderDetails['order_id'],
+                              context);
+                    });
+                  },
+                  child: Container(
+                      padding: const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(100),
+                        ),
+                        border: Border.all(color: ThemeApp.tealButtonColor),
+                        color: ThemeApp.tealButtonColor,
+                      ),
+                      child: Center(
+                        child: TextFieldUtils().usingPassTextFields(
+                            'Shipped', ThemeApp.whiteColor, context),
+                      )),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      singleSelectOptions = true;
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => ReturnOrderActivity(
+                                values: widget.order,
+                                isSingleOrderReject: true,
+                              )));
+                    });
+                  },
+                  child: Container(
+                      padding: const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(100),
+                        ),
+                        border: Border.all(color: ThemeApp.tealButtonColor),
+                        color: ThemeApp.buttonShade2,
+                      ),
+                      child: Center(
+                        child: TextFieldUtils().usingPassTextFields(
+                            'Reject', ThemeApp.tealButtonColor, context),
+                      )),
+                ),
+              )
+            ],
+          ),
+        );
+      } else if ((orderDetails["is_accepted"] == true) &&
+          (orderDetails["is_packed"] == true) &&
+          (orderDetails["is_shipped"] == true) &&
+          (orderDetails["is_delivered"] == false)) {
+        print("step 4");
+        return Container(
+          height: 45,
+          child: Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    // setState(() {
+                    //   singleSelectOptions = true;
+                    //   orderDetails['is_order_placed'] =
+                    //       true;
+                    //   data = Provider.of<HomeProvider>(
+                    //           context,
+                    //           listen: false)
+                    //       .loadJsonForChangeStatus(
+                    //           810,
+                    //           widget.order['id'],
+                    //           orderDetails['order_id'],
+                    //           context);
+                    // });
+                    //QR code
+
+                    showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(60.0),
+                        ),
+                        builder: (context) {
+                          return Stack(
+                            alignment: Alignment.center, // <---------
+
+                            children: [
+                              Container(
+                                  width: width,
+                                  padding: const EdgeInsets.only(top: 30.0),
+                                  child: ScannerWidget(
+                                      state: controller.state,
+                                      merchant_id: orderDetails['merchant_id'],
+                                      orderId: orderDetails['order_id'])),
+                              Positioned(
+                                top: 0,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Container(
+                                      alignment: Alignment.center,
+                                      child: const Icon(
+                                        Icons.close,
+                                        size: 30,
+                                        color: ThemeApp.whiteColor,
+                                      )),
+                                ),
+                              ),
+                            ],
+                          );
+                        });
+                  },
+                  child: Container(
+                      padding: const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(100),
+                        ),
+                        border: Border.all(color: ThemeApp.tealButtonColor),
+                        color: ThemeApp.tealButtonColor,
+                      ),
+                      child: Center(
+                        child: TextFieldUtils().usingPassTextFields(
+                            'Order Code', ThemeApp.whiteColor, context),
+                      )),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      singleSelectOptions = true;
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => ReturnOrderActivity(
+                                values: widget.order,
+                                isSingleOrderReject: true,
+                              )));
+                    });
+                  },
+                  child: Container(
+                      padding: const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(100),
+                        ),
+                        border: Border.all(color: ThemeApp.tealButtonColor),
+                        color: ThemeApp.buttonShade2,
+                      ),
+                      child: Center(
+                        child: TextFieldUtils().usingPassTextFields(
+                            'Reject', ThemeApp.tealButtonColor, context),
+                      )),
+                ),
+              )
+            ],
+          ),
+        );
+      } else {
+        print("else............");
+        return Text('');
+      }
+    }
+
+    return Container();
+  }
+
+
+  int cntIsAccept = 0;
+  int cntIsPacked = 0;
+  int cntIsShipped = 0;
+  int cntIsCanceled = 0;
+
+  bottomButtonVisibility() {
+    for (int i = 0; i < widget.order['orders'].length; i++) {
+      if (widget.order['orders'][i]['is_accepted']) {
+        cntIsAccept = cntIsAccept + 1;
+      }
+
+      if (widget.order['orders'][i]['is_packed']) {
+        cntIsPacked = cntIsPacked + 1;
+      }
+      if (widget.order['orders'][i]['is_shipped']) {
+        cntIsShipped = cntIsShipped + 1;
+      }
+      if (widget.order['orders'][i]['current_status_code'] == 2000) {
+        cntIsCanceled = cntIsCanceled + 1;
+      }
+    }
+    // allBottomButtons();
+
+    print('cntIsAccept ' + cntIsAccept.toString());
+    print('cntIsPacked ' + cntIsPacked.toString());
+    print('cntIsShipped ' + cntIsShipped.toString());
+    print('cntIsCanceled ' + cntIsCanceled.toString());
+  }
+
+  Widget allBottomButtons() {
+    if (cntIsCanceled == widget.order['orders'].length) {
+      return Container();
+    } else if ((cntIsAccept == widget.order['orders'].length) &&
+        (cntIsPacked == widget.order['orders'].length) &&
+        (cntIsShipped == 0)) {
+      return SafeArea(
+          child: Container(
+        height: 45,
+        child: Row(
+          children: [
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    for (int i = 0; i < widget.order['orders'].length; i++) {
+                      if (widget.order['orders'][i]["is_accepted"] == false) {
+                        data = Provider.of<HomeProvider>(context, listen: false)
+                            .loadJsonForChangeStatus(
+                                510,
+                                widget.order['orders'][i]['merchant_id'],
+                                widget.order['orders'][i]['order_id'],
+                                context);
+                      }
+
+                      if (widget.order['orders'][i]["is_accepted"] == true &&
+                          widget.order['orders'][i]["is_packed"] == false) {
+                        data = Provider.of<HomeProvider>(context, listen: false)
+                            .loadJsonForChangeStatus(
+                                610,
+                                widget.order['orders'][i]['merchant_id'],
+                                widget.order['orders'][i]['order_id'],
+                                context);
+                      }
+
+                      if (widget.order['orders'][i]["is_accepted"] == true &&
+                          widget.order['orders'][i]["is_packed"] == true &&
+                          widget.order['orders'][i]["is_shipped"] == false) {
+                        data = Provider.of<HomeProvider>(context, listen: false)
+                            .loadJsonForChangeStatus(
+                                710,
+                                widget.order['orders'][i]['merchant_id'],
+                                widget.order['orders'][i]['order_id'],
+                                context);
+                      }
+
+                      if (widget.order['orders'][i]["is_accepted"] == true &&
+                          widget.order['orders'][i]["is_packed"] == true &&
+                          widget.order['orders'][i]["is_shipped"] == true &&
+                          widget.order['orders'][i]["is_delivered"] == false) {
+                        data = Provider.of<HomeProvider>(context, listen: false)
+                            .loadJsonForChangeStatus(
+                                810,
+                                widget.order['orders'][i]['merchant_id'],
+                                widget.order['orders'][i]['order_id'],
+                                context);
+                      }
+                    }
+                  });
+                },
+                child: Container(
+                    padding: const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(100),
+                      ),
+                      border: Border.all(color: ThemeApp.tealButtonColor),
+                      color: ThemeApp.tealButtonColor,
+                    ),
+                    child: Center(
+                      child: TextFieldUtils().usingPassTextFields(
+                          'All Orders Shipped', ThemeApp.whiteColor, context),
+                    )),
+              ),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => ReturnOrderActivity(
+                            values: widget.order,
+                            isSingleOrderReject: false,
+                          )));
+                },
+                child: Container(
+                    padding: const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(100),
+                      ),
+                      border: Border.all(color: ThemeApp.tealButtonColor),
+                      color: ThemeApp.buttonShade2,
+                    ),
+                    child: Center(
+                      child: TextFieldUtils().usingPassTextFields(
+                          'Reject Orders', ThemeApp.tealButtonColor, context),
+                    )),
+              ),
+            )
+          ],
+        ),
+      ));
+    } else if ((cntIsAccept == widget.order['orders'].length) &&
+        (cntIsPacked == 0)) {
+      return SafeArea(
+          child: Container(
+        height: 45,
+        child: Row(
+          children: [
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    for (int i = 0; i < widget.order['orders'].length; i++) {
+                      if (widget.order['orders'][i]["is_accepted"] == false) {
+                        data = Provider.of<HomeProvider>(context, listen: false)
+                            .loadJsonForChangeStatus(
+                                510,
+                                widget.order['orders'][i]['merchant_id'],
+                                widget.order['orders'][i]['order_id'],
+                                context);
+                      }
+
+                      if (widget.order['orders'][i]["is_accepted"] == true &&
+                          widget.order['orders'][i]["is_packed"] == false) {
+                        data = Provider.of<HomeProvider>(context, listen: false)
+                            .loadJsonForChangeStatus(
+                                610,
+                                widget.order['orders'][i]['merchant_id'],
+                                widget.order['orders'][i]['order_id'],
+                                context);
+                      }
+
+                      if (widget.order['orders'][i]["is_accepted"] == true &&
+                          widget.order['orders'][i]["is_packed"] == true &&
+                          widget.order['orders'][i]["is_shipped"] == false) {
+                        data = Provider.of<HomeProvider>(context, listen: false)
+                            .loadJsonForChangeStatus(
+                                710,
+                                widget.order['orders'][i]['merchant_id'],
+                                widget.order['orders'][i]['order_id'],
+                                context);
+                      }
+
+                      if (widget.order['orders'][i]["is_accepted"] == true &&
+                          widget.order['orders'][i]["is_packed"] == true &&
+                          widget.order['orders'][i]["is_shipped"] == true &&
+                          widget.order['orders'][i]["is_delivered"] == false) {
+                        data = Provider.of<HomeProvider>(context, listen: false)
+                            .loadJsonForChangeStatus(
+                                810,
+                                widget.order['orders'][i]['merchant_id'],
+                                widget.order['orders'][i]['order_id'],
+                                context);
+                      }
+                    }
+                  });
+                },
+                child: Container(
+                    padding: const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(100),
+                      ),
+                      border: Border.all(color: ThemeApp.tealButtonColor),
+                      color: ThemeApp.tealButtonColor,
+                    ),
+                    child: Center(
+                      child: TextFieldUtils().usingPassTextFields(
+                          'All Orders Packed', ThemeApp.whiteColor, context),
+                    )),
+              ),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => ReturnOrderActivity(
+                            values: widget.order,
+                            isSingleOrderReject: false,
+                          )));
+                },
+                child: Container(
+                    padding: const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(100),
+                      ),
+                      border: Border.all(color: ThemeApp.tealButtonColor),
+                      color: ThemeApp.buttonShade2,
+                    ),
+                    child: Center(
+                      child: TextFieldUtils().usingPassTextFields(
+                          'Reject Orders', ThemeApp.tealButtonColor, context),
+                    )),
+              ),
+            )
+          ],
+        ),
+      ));
+    } else if ((cntIsAccept == widget.order['orders'].length) &&
+        (cntIsPacked == 0)) {
+      return Container();
+    } else if (cntIsAccept == 0 && cntIsPacked == 0 && cntIsShipped == 0) {
+      return SafeArea(
+          child: Container(
+        height: 45,
+        child: Row(
+          children: [
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    for (int i = 0; i < widget.order['orders'].length; i++) {
+                      if (widget.order['orders'][i]["is_accepted"] == false) {
+                        data = Provider.of<HomeProvider>(context, listen: false)
+                            .loadJsonForChangeStatus(
+                                510,
+                                widget.order['orders'][i]['merchant_id'],
+                                widget.order['orders'][i]['order_id'],
+                                context);
+                      }
+
+                      if (widget.order['orders'][i]["is_accepted"] == true &&
+                          widget.order['orders'][i]["is_packed"] == false) {
+                        data = Provider.of<HomeProvider>(context, listen: false)
+                            .loadJsonForChangeStatus(
+                                610,
+                                widget.order['orders'][i]['merchant_id'],
+                                widget.order['orders'][i]['order_id'],
+                                context);
+                      }
+
+                      if (widget.order['orders'][i]["is_accepted"] == true &&
+                          widget.order['orders'][i]["is_packed"] == true &&
+                          widget.order['orders'][i]["is_shipped"] == false) {
+                        data = Provider.of<HomeProvider>(context, listen: false)
+                            .loadJsonForChangeStatus(
+                                710,
+                                widget.order['orders'][i]['merchant_id'],
+                                widget.order['orders'][i]['order_id'],
+                                context);
+                      }
+
+                      if (widget.order['orders'][i]["is_accepted"] == true &&
+                          widget.order['orders'][i]["is_packed"] == true &&
+                          widget.order['orders'][i]["is_shipped"] == true &&
+                          widget.order['orders'][i]["is_delivered"] == false) {
+                        data = Provider.of<HomeProvider>(context, listen: false)
+                            .loadJsonForChangeStatus(
+                                810,
+                                widget.order['orders'][i]['merchant_id'],
+                                widget.order['orders'][i]['order_id'],
+                                context);
+                      }
+                    }
+                  });
+                },
+                child: Container(
+                    padding: const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(100),
+                      ),
+                      border: Border.all(color: ThemeApp.tealButtonColor),
+                      color: ThemeApp.tealButtonColor,
+                    ),
+                    child: Center(
+                      child: TextFieldUtils().usingPassTextFields(
+                          'Accept All Orders', ThemeApp.whiteColor, context),
+                    )),
+              ),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => ReturnOrderActivity(
+                            values: widget.order,
+                            isSingleOrderReject: false,
+                          )));
+                },
+                child: Container(
+                    padding: const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(100),
+                      ),
+                      border: Border.all(color: ThemeApp.tealButtonColor),
+                      color: ThemeApp.buttonShade2,
+                    ),
+                    child: Center(
+                      child: TextFieldUtils().usingPassTextFields(
+                          'Reject Orders', ThemeApp.tealButtonColor, context),
+                    )),
+              ),
+            )
+          ],
+        ),
+      ));
+    }
+
+    return Container();
+  }
+
 
   Widget prices() {
     return StringConstant.isLogIn
@@ -2016,7 +2269,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                                       listen: false)
                                   .loadJsonForChangeStatus(
                                       510,
-                                      widget.order['id'],
+                                      orderDetails['merchant_id'],
                                       orderDetails['order_id'],
                                       context);
                               Navigator.pop(context);
@@ -2047,7 +2300,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                                       listen: false)
                                   .loadJsonForChangeStatus(
                                       550,
-                                      widget.order['id'],
+                                      orderDetails['merchant_id'],
                                       orderDetails['order_id'],
                                       context);
                               Navigator.pop(context);
@@ -2078,7 +2331,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                                       listen: false)
                                   .loadJsonForChangeStatus(
                                       610,
-                                      widget.order['id'],
+                                      orderDetails['merchant_id'],
                                       orderDetails['order_id'],
                                       context);
                               Navigator.pop(context);
@@ -2158,7 +2411,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                                       listen: false)
                                   .loadJsonForChangeStatus(
                                       710,
-                                      widget.order['id'],
+                                      orderDetails['merchant_id'],
                                       orderDetails['order_id'],
                                       context);
                               selectedTypeOfOrders = "Shipped";
@@ -2187,7 +2440,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                                       listen: false)
                                   .loadJsonForChangeStatus(
                                       810,
-                                      widget.order['id'],
+                                      orderDetails['merchant_id'],
                                       orderDetails['order_id'],
                                       context);
                               selectedTypeOfOrders = "Delivered";
@@ -2217,19 +2470,19 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                                       listen: false)
                                   .loadJsonForChangeStatus(
                                       850,
-                                      widget.order['id'],
+                                      orderDetails['merchant_id'],
                                       orderDetails['order_id'],
                                       context);
-                              selectedTypeOfOrders = "Delivery Failure";
+                              selectedTypeOfOrders = "Reject";
                               Navigator.pop(context);
                             })
                           : setState(() {
-                              selectedTypeOfOrders = "Delivery Failure";
+                              selectedTypeOfOrders = "Reject";
                               Navigator.pop(context);
                             });
                     },
                     child: TextFieldUtils().dynamicText(
-                        'Delivery Failure',
+                        'Reject',
                         context,
                         const TextStyle(
                             color: ThemeApp.deliveredOrderColor,
@@ -2245,11 +2498,18 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
     });
   }
 }
+
 class ScannerWidget extends StatefulWidget {
   BarcodeFinderState state;
-var orderId;
+  var merchant_id;
+  var orderId;
 
-  ScannerWidget({Key? key, required this.state,required this.orderId}) : super(key: key);
+  ScannerWidget(
+      {Key? key,
+      required this.state,
+      required this.merchant_id,
+      required this.orderId})
+      : super(key: key);
 
   @override
   State<ScannerWidget> createState() => _ScannerWidgetState();
@@ -2257,9 +2517,10 @@ var orderId;
 
 class _ScannerWidgetState extends State<ScannerWidget> {
   var getResult = 'QR Code Result';
-  final controller = BarcodeFinderController();
+  final controller = BarcodeFindersController();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   String _scanBarcode = 'Please scan proper content';
+
   // QRCodeViewModel qrViewMode =QRCodeViewModel();
   @override
   Widget build(BuildContext context) {
@@ -2269,33 +2530,32 @@ class _ScannerWidgetState extends State<ScannerWidget> {
       decoration: const BoxDecoration(
           color: ThemeApp.whiteColor,
           borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20.0),
-              topRight: Radius.circular(20.0))),
+              topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0))),
       child: Center(
-            child: Wrap(
-              children: [
-                AnimatedBuilder(
-                  animation: controller,
-                  builder: (_, __) {
-                    final state = controller.state;
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        proceedButton("Scan with Camera",
-                            ThemeApp.darkGreyColor, context, false, () {
-                              // Navigator.of(context).pop();
+        child: Wrap(
+          children: [
+            AnimatedBuilder(
+              animation: controller,
+              builder: (_, __) {
+                final state = controller.state;
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    proceedButton("Scan with Camera", ThemeApp.darkGreyColor,
+                        context, false, () {
+                      // Navigator.of(context).pop();
 
-                              scanQR(context);
-                            }),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * .01,
-                        ),
-                        _startScanFileButton(state),
-                        // const Text(
-                        //   'Code:',
-                        //   textAlign: TextAlign.center,
-                        // ),
-                        /*    if (state is BarcodeFinderLoading)
+                      scanQR(context);
+                    }),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * .01,
+                    ),
+                    _startScanFileButton(state),
+                    // const Text(
+                    //   'Code:',
+                    //   textAlign: TextAlign.center,
+                    // ),
+                    /*    if (state is BarcodeFinderLoading)
                           _loading()
                         else if (state is BarcodeFinderError)
 
@@ -2307,26 +2567,26 @@ class _ScannerWidgetState extends State<ScannerWidget> {
                           _text(
                             '${state.code}',
                           ),*/
-                      ],
-                    );
-                  },
-                ),
-              ],
+                  ],
+                );
+              },
             ),
-          ),
+          ],
+        ),
+      ),
     );
   }
 
   Widget _loading() => const Padding(
-    padding: EdgeInsets.all(8.0),
-    child: Center(
-        child: CircularProgressIndicator(
+        padding: EdgeInsets.all(8.0),
+        child: Center(
+            child: CircularProgressIndicator(
           color: ThemeApp.darkGreyColor,
         )),
-  );
+      );
 
   Future<void> scanQR(BuildContext context) async {
-  String  barcodeScanRes = '';
+    String barcodeScanRes = '';
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           '#ff6666', 'Cancel', true, ScanMode.QR);
@@ -2352,9 +2612,11 @@ class _ScannerWidgetState extends State<ScannerWidget> {
       //     barcodeScanRes.toString(), context);
       // QRRepository().getProductDeliveryScannerList('2062',
       //     barcodeScanRes.toString(), context);
-      QRRepository().getProductDeliveryScannerList(widget.orderId.toString(),
-          barcodeScanRes.toString(), context);
-
+      QRRepository().getProductDeliveryScannerList(
+          widget.merchant_id.toString(),
+          widget.orderId.toString(),
+          barcodeScanRes.toString(),
+          context);
 
       StringConstant.ScannedProductId =
           (prefs.getString('ScannedProductIDPref')) ?? '';
@@ -2379,21 +2641,20 @@ class _ScannerWidgetState extends State<ScannerWidget> {
   }
 
   Widget _startScanFileButton(BarcodeFinderState state) {
-    return
-      proceedButton( "Open Gallery", ThemeApp.tealButtonColor, context,false, () async {
-        FilePickerResult? pickedFile =
-        await FilePicker.platform.pickFiles();
-        if (pickedFile != null) {
-          String? filePath = pickedFile.files.single.path;
-          if (filePath != null) {
-            final file = File(filePath);
-            controller.scanFile(file);
-
-          }
-        } else {
-          Utils.errorToast('Please select content');
+    return proceedButton(
+        "Open Gallery", ThemeApp.tealButtonColor, context, false, () async {
+      FilePickerResult? pickedFile = await FilePicker.platform.pickFiles();
+      if (pickedFile != null) {
+        String? filePath = pickedFile.files.single.path;
+        if (filePath != null) {
+          final file = File(filePath);
+          controller.scanFile(file, widget.merchant_id.toString(),
+              widget.orderId.toString(), context);
         }
-      });
+      } else {
+        Utils.errorToast('Please select content');
+      }
+    });
 
 /*
       Container(
@@ -2424,5 +2685,47 @@ class _ScannerWidgetState extends State<ScannerWidget> {
           child: TextFieldUtils().usingPassTextFields(
               "Open Gallery", ThemeApp.whiteColor, context)),
     );*/
+  }
+}
+
+class BarcodeFindersController extends ChangeNotifier {
+  BarcodeFinderState state = BarcodeFinderInitial();
+  var barcode = '';
+
+  void scanFile(File file, String merchant_id, String orderId,
+      BuildContext context) async {
+    emit(BarcodeFinderLoading());
+    try {
+      barcode = (await BarcodeFinder.scanFile(
+        path: file.path,
+      ))!;
+      _update(barcode);
+      QRRepository().getProductDeliveryScannerList(
+          merchant_id, orderId.toString(), barcode.toString(), context);
+
+      print("scanned value is : barcode" + barcode.toString());
+    } catch (_) {
+      emit(
+        BarcodeFinderError('Not found'),
+      );
+      Utils.errorToast('Please scan proper content');
+    }
+  }
+
+  void emit(BarcodeFinderState newState) {
+    state = newState;
+    notifyListeners();
+  }
+
+  void _update(String? barcode) {
+    if (barcode != null) {
+      emit(
+        BarcodeFinderSuccess(barcode),
+      );
+    } else {
+      emit(
+        BarcodeFinderError('Not Found'),
+      );
+    }
   }
 }

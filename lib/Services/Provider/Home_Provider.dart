@@ -33,14 +33,19 @@ class HomeProvider with ChangeNotifier {
         "is_active_order_list": IsActiveOrderList,
         "from_days_in_past": PastDays
       });
+      Map data = {
+        "merchant_id": merchanId,
+        "IsActiveOrderList": StringConstant.IsActiveOrderList,
+        "from_days_in_past":IsActiveOrderList==true?0: PastDays
+      };
+print("jsonContent"+data.toString());
 
-      // Map data = {
-      //   "merchant_id": merchanId,
-      //   "IsActiveOrderList": StringConstant.IsActiveOrderList,
-      //   "from_days_in_past": PastDays
-      // };
       // rootBundle.loadString("assets/jsonData.json");
       jsonDataBasket = json.decode(jsonContent);
+      List<dynamic> consumerBasket= jsonDataBasket['payload']['merchant_baskets'];
+
+      consumerBasket.sort((a, b) =>b['id']
+          .compareTo(a['id'].toInt()));
       notifyListeners();
       // return jsonData;
       print("____________loadJson______________________");
@@ -77,6 +82,7 @@ class HomeProvider with ChangeNotifier {
 
 
       jsonDataStatus = json.decode(jsonContent);
+
       notifyListeners();
       print("____________loadJson______________________");
 

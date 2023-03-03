@@ -34,11 +34,17 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
   double height = 0.0;
   double width = 0.0;
   var data;
-
+var orderId;
   @override
   void initState() {
     // data = Provider.of<HomeProvider>(context, listen: false).loadJsonss();
     super.initState();
+    for (int i = 0;
+    i < widget.values['orders'].length;
+    i++) {
+      orderId =  widget.values['orders'][i]['order_id'];
+
+    }
   }
 
   int? _radioIndex = 5;
@@ -90,8 +96,8 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
                                 padding:
                                     const EdgeInsets.only(left: 20, right: 20),
                                 child: TextFieldUtils().dynamicText(
-                                    "Basket ID : " +
-                                        widget.values['id'].toString(),
+                                    "Order ID : " +
+                                        orderId.toString(),
                                     context,
                                     TextStyle(
                                       fontFamily: 'Roboto',
@@ -103,7 +109,7 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
                               SizedBox(
                                 height: 15,
                               ),
-                              widget.isSingleOrderReject == false
+                              widget.isSingleOrderReject == true
                                   ? isSingleOrderOnly()
                                   : isMultipleOrders(),
                             ],
@@ -461,7 +467,7 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           TextFieldUtils().dynamicText(
-                                              'Write your reason for rejection order',
+                                              'Write your reason for order rejection',
                                               context,
                                               TextStyle(
                                                   fontFamily: 'Roboto',
@@ -545,7 +551,7 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
                                                   context,
                                                   listen: false)
                                                   .loadJsonForCancelOrder(
-                                                  _radioVal+ ' '+ vendorReviewController.text,
+                                                  _radioVal.toString()+ ' '+ vendorReviewController.text.toString(),
                                                   widget.values['orders'][index]
                                                   ['order_id'],
                                                   context);

@@ -204,10 +204,10 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                               padding: const EdgeInsets.only(right: 10),
                               child: SvgPicture.asset(
                                 'assets/appImages/Username.svg',
-                                color: ThemeApp.primaryNavyBlackColor,
+                                color: ThemeApp.appColor,
                                 semanticsLabel: 'Acme Logo',
                                 theme: SvgTheme(
-                                  currentColor: ThemeApp.primaryNavyBlackColor,
+                                  currentColor: ThemeApp.appColor,
                                 ),
                                 height: 28,
                                 width: 28,
@@ -232,7 +232,7 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                                           (context, error, stackTrace) {
                                         return Icon(
                                           Icons.image,
-                                          color: ThemeApp.whiteColor,
+                                          color: ThemeApp.appColor,
                                         );
                                       },
                                     ),
@@ -963,12 +963,12 @@ Widget bottomNavBarItems(BuildContext context, int indexSelected) {
       _currentIndex = index;
       if (_currentIndex == 0) {
         // Navigator.pushNamed(context, '/dashBoardScreen');
-        Navigator.pushAndRemoveUntil(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => const OrderDashboard(),
             ),
-            (route) => false);
+           );
         // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DashboardScreen(),));
 
       }

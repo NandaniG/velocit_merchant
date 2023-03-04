@@ -20,6 +20,7 @@ import '../../Routes/Routes.dart';
 import '../../utils/GlobalWidgets/appBar.dart';
 import '../../utils/GlobalWidgets/textFormFields.dart';
 import 'EditAccount/EditAccountActivity.dart';
+import 'EditAccount/ProfilePicDialog.dart';
 
 class MyAccountActivity extends StatefulWidget {
   const MyAccountActivity({Key? key}) : super(key: key);
@@ -39,45 +40,15 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getPreference();
+    getCartId();
   }
-
-  getPreference() async {
-    final preferences = await SharedPreferences.getInstance();
-
-    StringConstant.UserLoginId =
-        (await preferences.getString('isUserId'))!;
-
-    StringConstant.userAccountName =
-        (await preferences.getString('usernameLogin'))!;
-    StringConstant.userAccountEmail =
-    (await preferences.getString('emailLogin'))!;
-    StringConstant.userAccountMobile =
-        (await Prefs.instance.getToken(StringConstant.userAccountMobilePref))!;
-    StringConstant.userAccountPass =
-        (await Prefs.instance.getToken(StringConstant.userAccountPassPref))!;
-    print(StringConstant.userAccountName);
-
-    StringConstant.userAccountImagePicker = (await Prefs.instance
-        .getToken(StringConstant.userAccountImagePickerPref))!;
-
-    print("StringConstant.userAccountImagePicker");
-    print(StringConstant.userAccountImagePicker);
-    setState(() {});
-
+  getCartId() async {
     final prefs = await SharedPreferences.getInstance();
-    bool check = prefs.containsKey('profileImagePrefs');
-    if (check) {
-      setState(() {
-        print("yes/./././.");
-        StringConstant.ProfilePhoto = prefs.getString('profileImagePrefs')!;
-      });
-      return;
-    } else {
-      StringConstant.ProfilePhoto = '';
-    }
-  }
+    StringConstant.ProfilePhoto =
+        ( prefs.getString('userProfileImagePrefs'))?? "";
+    StringConstant.UserLoginId = (prefs.getString('isUserId')) ?? '';
 
+  }
   @override
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
@@ -186,215 +157,209 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            StringConstant.ProfilePhoto.toString() != null
+                            snapshot.data!.payload!.imageUrl
+                                .toString() !=
+                                null
                                 ? Stack(
-                                    // alignment: Alignment.center,
-                                    children: [
-                                      Center(
-                                        child: Container(
-                                          width: 110.0,
-                                          height: 110.0,
-                                          decoration: new BoxDecoration(
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: ThemeApp.buttonShade2,
-                                                  spreadRadius: 1,
-                                                  blurRadius: 5)
-                                            ],
-                                            border: Border.all(
-                                                color: ThemeApp.whiteColor,
-                                                width: 4),
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius: const BorderRadius.all(
-                                                Radius.circular(100)),
-                                            child: Image.file(
-                                              File(StringConstant.ProfilePhoto),
-                                              fit: BoxFit.fitWidth,
-                                              width: 90.0,
-                                              height: 90.0,
-                                              errorBuilder:
-                                                  (context, error, stackTrace) {
-                                                return Icon(
-                                                  Icons.image,
-                                                  color: ThemeApp.whiteColor,
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                        ),
+                              // alignment: Alignment.center,
+                              children: [
+                                Center(
+                                  child: Container(
+                                    width: 110.0,
+                                    height: 110.0,
+                                    decoration:
+                                    new BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: ThemeApp
+                                                .appLightColor,
+                                            spreadRadius: 1,
+                                            blurRadius: 5)
+                                      ],
+                                      border: Border.all(
+                                          color: ThemeApp
+                                              .whiteColor,
+                                          width: 4),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius:
+                                      const BorderRadius
+                                          .all(
+                                          Radius.circular(
+                                              100)),
+                                      child: Image.network(
+                                        // imageFile1!,
+                                        snapshot
+                                            .data!
+                                            .payload!
+                                            .imageUrl ??
+                                            "",
+                                        fit: BoxFit.fitWidth,
+                                        width: 90.0,
+                                        height: 90.0,
+                                        errorBuilder:
+                                            (context, error,
+                                            stackTrace) {
+                                          return Icon(
+                                            Icons.image,
+                                            color: ThemeApp
+                                                .whiteColor,
+                                          );
+                                        },
                                       ),
-                                      Positioned(
-                                        bottom: 0,
-                                        right: width / 2.5,
-                                        // width: 130.0,
-
-                                        // height: 40.0,
-                                        child: InkWell(
-                                            onTap: () {
-                                              // _getFromCamera();
-
-                                              showModalBottomSheet(
-                                                  context: context,
-                                                  isScrollControlled: true,
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(60.0),
-                                                  ),
-                                                  builder: (context) {
-                                                    return Stack(
-                                                      alignment: Alignment
-                                                          .center, // <---------
-
-                                                      children: [
-                                                        Container(
-                                                          width: width,
-                                                          padding:
-                                                              const EdgeInsets.only(
-                                                                  top: 30.0),
-                                                          child:
-                                                              bottomSheetForImagePicker(),
-                                                        ),
-                                                        Positioned(
-                                                          top: 0,
-                                                          child: InkWell(
-                                                            onTap: () {
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
-                                                            child: Container(
-                                                                alignment: Alignment
-                                                                    .center,
-                                                                child: const Icon(
-                                                                  Icons.close,
-                                                                  size: 30,
-                                                                  color: ThemeApp
-                                                                      .whiteColor,
-                                                                )),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    );
-                                                  });
-                                              // showDialog(
-                                              //     context: context,
-                                              //     builder: (BuildContext context) {
-                                              //       return ProfileImageDialogBox(
-                                              //         imageFile1: imageFile1,
-                                              //         isEditAccount: true,
-                                              //       );
-                                              //     });
-                                            },
-                                            child: Container(
-                                              height: 32,
-                                              width: 32,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(30),
-                                                  color: ThemeApp.appColor),
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(7),
-                                                child: SvgPicture.asset(
-                                                  'assets/appImages/cameraIcon.svg',
-                                                  color: ThemeApp.whiteColor,
-                                                  semanticsLabel: 'Acme Logo',
-
-                                                  // height: height * .03,
-                                                ),
-                                              ),
-                                            )),
-                                      ),
-                                    ],
-                                  )
-                                : Stack(
-                                    // alignment: Alignment.center,
-                                    children: [
-                                      Center(
-                                        child: Container(
-                                          width: 110.0,
-                                          height: 110.0,
-                                          decoration: new BoxDecoration(
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: ThemeApp.buttonShade2,
-                                                  spreadRadius: 1,
-                                                  blurRadius: 15)
-                                            ],
-                                            color: ThemeApp.buttonShade2,
-                                            border: Border.all(
-                                                color: ThemeApp.whiteColor,
-                                                width: 7),
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius: const BorderRadius.all(
-                                                Radius.circular(100)),
-                                            child: Image.file(
-                                              File(StringConstant.ProfilePhoto),
-                                              fit: BoxFit.fitWidth,
-                                              width: 130.0,
-                                              height: 130.0,
-                                              errorBuilder:
-                                                  (context, error, stackTrace) {
-                                                return Icon(
-                                                  Icons.image,
-                                                  color: ThemeApp.whiteColor,
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        bottom: 0,
-                                        right: width / 2.5,
-                                        // width: 130.0,
-
-                                        // height: 40.0,
-                                        child: InkWell(
-                                            onTap: () {
-                                              // _getFromCamera();
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (BuildContext context) {
-                                                    return ProfileImageDialogBox(
-                                                      imageFile1: imageFile1,
-                                                      isEditAccount: true,
-                                                    );
-                                                  });
-                                            },
-                                            child: Container(
-                                              height: 32,
-                                              width: 32,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(30),
-                                                  color: ThemeApp.appColor),
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(7),
-                                                child: SvgPicture.asset(
-                                                  'assets/appImages/cameraIcon.svg',
-                                                  color: ThemeApp.whiteColor,
-                                                  semanticsLabel: 'Acme Logo',
-
-                                                  // height: height * .03,
-                                                ),
-                                              ),
-                                            )
-                                            /*; Container(
-                                                      // alignment: Alignment.bottomCenter,
-                                                      color: ThemeApp.primaryNavyBlackColor,
-                                                      alignment: const Alignment(-2, -0.1),
-                                                      child: iconsUtils(
-                                                          'assets/appImages/editIcon.svg'),
-                                                    ),*/
-                                            ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  right: width / 2.5,
+                                  // width: 130.0,
+
+                                  // height: 40.0,
+                                  child: InkWell(
+                                      onTap: () {
+                                        // _getFromCamera();
+
+
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return ProfileImageDialog(
+                                                  isEditAccount: false);
+                                            });
+                                      },
+                                      child: Container(
+                                        height: 32,
+                                        width: 32,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                            BorderRadius
+                                                .circular(
+                                                30),
+                                            color: ThemeApp
+                                                .appColor),
+                                        child: Padding(
+                                          padding:
+                                          const EdgeInsets
+                                              .all(7),
+                                          child: SvgPicture
+                                              .asset(
+                                            'assets/appImages/cameraIcon.svg',
+                                            color: ThemeApp
+                                                .whiteColor,
+                                            semanticsLabel:
+                                            'Acme Logo',
+
+                                            // height: height * .03,
+                                          ),
+                                        ),
+                                      )),
+                                ),
+                              ],
+                            )
+                                : Stack(
+                              // alignment: Alignment.center,
+                              children: [
+                                Center(
+                                  child: Container(
+                                    width: 110.0,
+                                    height: 110.0,
+                                    decoration:
+                                    new BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: ThemeApp
+                                                .appBackgroundColor,
+                                            spreadRadius: 1,
+                                            blurRadius: 15)
+                                      ],
+                                      color: ThemeApp
+                                          .appBackgroundColor,
+                                      border: Border.all(
+                                          color: ThemeApp
+                                              .whiteColor,
+                                          width: 7),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius:
+                                      const BorderRadius
+                                          .all(
+                                          Radius.circular(
+                                              100)),
+                                      child: Image.file(
+                                        File(''),
+                                        fit: BoxFit.fitWidth,
+                                        width: 130.0,
+                                        height: 130.0,
+                                        errorBuilder:
+                                            (context, error,
+                                            stackTrace) {
+                                          return Icon(
+                                            Icons.image,
+                                            color: ThemeApp
+                                                .whiteColor,
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  right: width / 2.5,
+                                  // width: 130.0,
+
+                                  // height: 40.0,
+                                  child: InkWell(
+                                      onTap: () {
+                                        // _getFromCamera();
+
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return ProfileImageDialog(
+                                                  isEditAccount: false);
+                                            });
+                                      },
+                                      child: Container(
+                                        height: 32,
+                                        width: 32,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                            BorderRadius
+                                                .circular(
+                                                30),
+                                            color: ThemeApp
+                                                .appColor),
+                                        child: Padding(
+                                          padding:
+                                          const EdgeInsets
+                                              .all(7),
+                                          child: SvgPicture
+                                              .asset(
+                                            'assets/appImages/cameraIcon.svg',
+                                            color: ThemeApp
+                                                .whiteColor,
+                                            semanticsLabel:
+                                            'Acme Logo',
+
+                                            // height: height * .03,
+                                          ),
+                                        ),
+                                      )
+                                    /*; Container(
+                                                  // alignment: Alignment.bottomCenter,
+                                                  color: ThemeApp.primaryNavyBlackColor,
+                                                  alignment: const Alignment(-2, -0.1),
+                                                  child: iconsUtils(
+                                                      'assets/appImages/editIcon.svg'),
+                                                ),*/
+                                  ),
+                                ),
+                              ],
+                            ),
                             SizedBox(
                               height: 20,
                             ),
@@ -589,7 +554,7 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
             fontSize: 16,
             letterSpacing: -0.25));
   }
-
+/*
   Widget bottomSheetForImagePicker() {
     return SingleChildScrollView(
       child: Container(
@@ -612,23 +577,47 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
               children: [
                 InkWell(
                   onTap: () async {
+                    // final prefs = await SharedPreferences.getInstance();
+                    //
+                    // FilePickerResult? pickedFile =
+                    // await FilePicker.platform.pickFiles();
+                    // if (pickedFile != null) {
+                    //   String? filePath = pickedFile.files.single.path;
+                    //   if (filePath != null) {
+                    //     final file = File(filePath);
+                    //     await prefs.setString('profileImagePrefs', filePath);
+                    //
+                    //     imageFile1 = file;
+                    //     Navigator.of(context).pushReplacement(
+                    //       MaterialPageRoute(
+                    //         builder: (context) =>  EditAccountActivity(),
+                    //       ),
+                    //     );
+                    //   }
+                    // }
+
                     final prefs = await SharedPreferences.getInstance();
 
-                    FilePickerResult? pickedFile =
-                        await FilePicker.platform.pickFiles();
+                    final pickedFile = await picker.getImage(
+                      source: ImageSource.gallery,);
+                    print(pickedFile!.path.toString());
                     if (pickedFile != null) {
-                      String? filePath = pickedFile.files.single.path;
-                      if (filePath != null) {
-                        final file = File(filePath);
-                        await prefs.setString('profileImagePrefs', filePath);
+                      await prefs.setString(
+                          'userProfileImagePrefs', pickedFile.path);
+                      await prefs.setString(
+                          'profileImagePrefs', pickedFile.path);
+                      StringConstant.UserLoginId =
+                          (prefs.getString('isUserId')) ?? '';
 
-                        imageFile1 = file;
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => const MyAccountActivity(),
-                          ),
-                        );
-                      }
+
+                      AuthRepository().updateProfileImageApi(
+                          File(pickedFile.path), StringConstant.UserLoginId, context);
+
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) =>  MyAccountActivity(),
+                        ),
+                      );
                     }
                   },
                   child: Container(
@@ -654,25 +643,43 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
                 ),
                 InkWell(
                   onTap: () async {
-                    var image =
-                        await picker.getImage(source: ImageSource.camera);
+                    // var image =
+                    // await picker.getImage(source: ImageSource.camera);
+                    // final prefs = await SharedPreferences.getInstance();
+                    // // StringConstant.CurrentPinCode = (prefs.getString('CurrentPinCodePref') ?? '');
+                    // String imagePath = image!.path;
+                    //
+                    // await prefs.setString('profileImagePrefs', imagePath);
+                    // Map data = {
+                    //   "imgUrl": image.path,
+                    // };
+                    //
+                    // setState(() {
+                    //   imageFile1 = File(image.path);
+                    //   Navigator.of(context).pushReplacement(
+                    //     MaterialPageRoute(
+                    //       builder: (context) =>  EditAccountActivity(),
+                    //     ),
+                    //   );
+                    // });
+
+
+                    var image = await picker.getImage(source: ImageSource.camera);
                     final prefs = await SharedPreferences.getInstance();
-                    // StringConstant.CurrentPinCode = (prefs.getString('CurrentPinCodePref') ?? '');
                     String imagePath = image!.path;
-
                     await prefs.setString('profileImagePrefs', imagePath);
-                    Map data = {
-                      "imgUrl": image.path,
-                    };
+                    StringConstant.UserLoginId =
+                        (prefs.getString('isUserId')) ?? '';
+                    await  prefs.setString('userProfileImagePrefs',imagePath) ;
 
-                    setState(() {
-                      imageFile1 = File(image.path);
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => const MyAccountActivity(),
-                        ),
-                      );
-                    });
+                    AuthRepository().updateProfileImageApi(
+                        File(image.path), StringConstant.UserLoginId,context);
+
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => MyAccountActivity(),
+                      ),
+                    );
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -699,24 +706,8 @@ class _MyAccountActivityState extends State<MyAccountActivity> {
       ),
     );
   }
+*/
 
-// Future _getFromCamera() async {
-//   var image = await picker.getImage(source: ImageSource.camera);
-//   final prefs = await SharedPreferences.getInstance();
-//   // StringConstant.CurrentPinCode = (prefs.getString('CurrentPinCodePref') ?? '');
-//   String imagePath = image!.path;
 
-//   await prefs.setString('profileImagePrefs', imagePath);
-
-//   setState(() {
-//     imageFile1 = File(image.path);
-
-//     // final   file = File(image!.path);
-//     //    final bytes =
-//     //    file!.readAsBytesSync();
-//     //   final img64 = base64Encode(bytes);
-//   });
-//   // Navigator.pop(this.context);
-// }
 
 }

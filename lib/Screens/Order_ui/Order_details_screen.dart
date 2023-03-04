@@ -1,5 +1,7 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
-
+import 'package:http/http.dart'as http;
 import 'package:barcode_finder/barcode_finder.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,19 +11,23 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/otp_field_style.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocit_merchant/Core/repository/qrcode_repository.dart';
+import 'package:velocit_merchant/Core/repository/repository.dart';
 import 'package:velocit_merchant/Screens/Order_ui/Return_order_screen.dart';
+import 'package:velocit_merchant/Services/HomeModel.dart';
 import 'package:velocit_merchant/utils/GlobalWidgets/proceedButtons.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/styles.dart';
 import '../../../utils/utils.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../Core/AppConstant/apiMapping.dart';
 import '../../Core/ViewModel/qrCode_view_model.dart';
 import '../../Routes/Routes.dart';
 import '../../Services/Provider/Home_Provider.dart';
@@ -29,19 +35,20 @@ import '../../utils/GlobalWidgets/appBar.dart';
 import '../../utils/GlobalWidgets/textFormFields.dart';
 import '../../utils/StringUtils.dart';
 import '../../utils/features/scannerWithGallery.dart';
+import '../orders_Dashboard.dart';
 import 'Cancel_order_screen.dart';
 import 'Order_delivery_screen.dart';
 
-class OrderReviewSubActivity extends StatefulWidget {
-  OrderReviewSubActivity({Key? key, required this.order}) : super(key: key);
+class OrderDetailScreen extends StatefulWidget {
+  OrderDetailScreen({Key? key, required this.order}) : super(key: key);
 
   final Map order;
 
   @override
-  State<OrderReviewSubActivity> createState() => _OrderReviewSubActivityState();
+  State<OrderDetailScreen> createState() => _OrderDetailScreenState();
 }
 
-class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
+class _OrderDetailScreenState extends State<OrderDetailScreen> {
   GlobalKey<ScaffoldState> scaffoldGlobalKey = GlobalKey<ScaffoldState>();
   double height = 0.0;
   double width = 0.0;
@@ -65,6 +72,8 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
   var data;
   bool orderStatus = false;
   var orderStatusName = '';
+  bool showSpinner = false ;
+  HomeProvider homeProvider = HomeProvider();
 
   @override
   void initState() {
@@ -95,7 +104,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
     } else if (order["status_code"] == 900) {
       //canceled
       colorsStatus = ThemeApp.redColor;
-      statusData = 'Canceled';
+      statusData = 'Contains Cancelled Product(s)';
     } else if (order["status_code"] == 500) {
       //Acceptance pending
       colorsStatus = ThemeApp.megentaColor;
@@ -119,17 +128,6 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
-    // if (widget.order['overall_status'] == 'CONTAINS_CANCELLED') {
-    //   statusData = 'Order Canceled';
-    // } else if (widget.order['overall_status'] == 'ACCEPTANCE_PENDING') {
-    //   statusData = 'Acceptance Pending';
-    // } else if (widget.order['overall_status'] == 'PACKING_PENDING') {
-    //   statusData = 'To be Packed';
-    // } else if (widget.order['overall_status'] == 'SHIPPING_PENDING') {
-    //   statusData = 'To be Shipped';
-    // } else if (widget.order['overall_status'] == 'DELIVERY_PENDING') {
-    //   statusData = 'To be Delivered';
-    // }
 
     return WillPopScope(
       onWillPop: () {
@@ -241,12 +239,18 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
         //         ),
         //       )),
         body: SafeArea(
-            child: Container(
-                color: ThemeApp.appBackgroundColor,
-                width: width,
-                child: !StringConstant.isLogIn
-                    ? unAuthorizedUser()
-                    : authorizedUser())),
+            child: ModalProgressHUD(
+              inAsyncCall:showSpinner,
+              child:ChangeNotifierProvider<HomeProvider>.value(
+                value: homeProvider,
+                child: Container(
+                    color: ThemeApp.appBackgroundColor,
+                    width: width,
+                    child: !StringConstant.isLogIn
+                        ? unAuthorizedUser()
+                        : authorizedUser()),
+              ),
+            )),
       ),
     );
   }
@@ -275,7 +279,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                     ),
                     Text(statusData,
                         style: TextStyle(
-                            color: ThemeApp.primaryNavyBlackColor,
+                            color: colorsStatus,
                             fontSize: 15,
                             fontFamily: 'Roboto',
                             fontWeight: FontWeight.w700))
@@ -448,7 +452,7 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                     ),
                     Text(statusData,
                         style: TextStyle(
-                            color: ThemeApp.primaryNavyBlackColor,
+                            color: colorsStatus,
                             fontSize: 15,
                             fontFamily: 'Roboto',
                             fontWeight: FontWeight.w700))
@@ -557,18 +561,18 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                         ],
                       ),
                     ),
-                    Container(
-                      alignment: Alignment.centerRight,
-                      child: SvgPicture.asset(
-                        // 'assets/appImages/canceledIcon.svg',
-                        'assets/appImages/Cancelled.svg',
-                        color: ThemeApp.redColor,
-                        theme: SvgTheme(
-                            // currentColor: ThemeApp.appColor,
-                            ),
-                        // height: height * .025,
-                      ),
-                    ),
+         // Container(
+         //              alignment: Alignment.centerRight,
+         //              child: SvgPicture.asset(
+         //                // 'assets/appImages/canceledIcon.svg',
+         //                'assets/appImages/Cancelled.svg',
+         //                color: ThemeApp.redColor,
+         //                theme: SvgTheme(
+         //                    // currentColor: ThemeApp.appColor,
+         //                    ),
+         //                // height: height * .025,
+         //              ),
+         //            ),
                   ],
                 ),
                 SizedBox(
@@ -1207,17 +1211,44 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    setState(() {
+                    setState(() {    showSpinner =true;
                       singleSelectOptions = true;
                       orderDetails['is_order_placed'] = true;
 
-                      data = Provider.of<HomeProvider>(context, listen: false)
-                          .loadJsonForChangeStatus(
-                              510,
-                              orderDetails['merchant_id'],
-                              orderDetails['order_id'],
-                              context);
+
+
+                      // putApiForChangeStatus( 510,
+                      //     orderDetails['merchant_id'],
+                      //     orderDetails['order_id'],
+                      //     context);
                     });
+                    Provider.of<HomeProvider>(context, listen: false)
+                             .loadJsonForChangeStatus(
+                             510,
+                             orderDetails['merchant_id'],
+                             orderDetails['order_id'],
+                             context);
+                    Timer(
+                        const Duration(seconds: 2),
+                            () {
+                              setState(() {
+                                showSpinner =false;
+                              });
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>  const OrderDashboard()
+                                  ));
+                            });
+
+                    print("Repository().showSpinner"+showSpinner.toString());
+               // Provider.of<HomeProvider>(context, listen: false)
+               //          .loadJsonForChangeStatus(
+               //          510,
+               //          orderDetails['merchant_id'],
+               //          orderDetails['order_id'],
+               //          context);
+
                   },
                   child: Container(
                       padding: const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
@@ -1244,7 +1275,8 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                       singleSelectOptions = true;
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => ReturnOrderActivity(
-                                values: widget.order,
+                                basket: widget.order,
+                                order: orderDetails,
                                 isSingleOrderReject: true,
                               )));
                     });
@@ -1314,7 +1346,8 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                       singleSelectOptions = true;
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => ReturnOrderActivity(
-                                values: widget.order,
+                            basket: widget.order,
+                            order: orderDetails,
                                 isSingleOrderReject: true,
                               )));
                     });
@@ -1384,8 +1417,8 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                       singleSelectOptions = true;
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => ReturnOrderActivity(
-                                values: widget.order,
-                                isSingleOrderReject: true,
+                            basket: widget.order,
+                            order: orderDetails,                                isSingleOrderReject: true,
                               )));
                     });
                   },
@@ -1497,8 +1530,8 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                       singleSelectOptions = true;
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => ReturnOrderActivity(
-                                values: widget.order,
-                                isSingleOrderReject: true,
+                            basket: widget.order,
+                            order: orderDetails,                                isSingleOrderReject: true,
                               )));
                     });
                   },
@@ -1528,7 +1561,6 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
 
     return Container();
   }
-
 
   int cntIsAccept = 0;
   int cntIsPacked = 0;
@@ -1642,8 +1674,8 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                 onTap: () {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (context) => ReturnOrderActivity(
-                            values: widget.order,
-                            isSingleOrderReject: false,
+                        basket: widget.order,
+                        order: widget.order['orders'][0],                            isSingleOrderReject: false,
                           )));
                 },
                 child: Container(
@@ -1743,8 +1775,9 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                 onTap: () {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (context) => ReturnOrderActivity(
-                            values: widget.order,
-                            isSingleOrderReject: false,
+                        basket: widget.order,
+                        order: widget.order['orders'][0],
+                        isSingleOrderReject: false,
                           )));
                 },
                 child: Container(
@@ -1846,8 +1879,9 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
                 onTap: () {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (context) => ReturnOrderActivity(
-                            values: widget.order,
-                            isSingleOrderReject: false,
+                        basket: widget.order,
+                        order: widget.order['orders'][0],
+                        isSingleOrderReject: false,
                           )));
                 },
                 child: Container(
@@ -1872,7 +1906,6 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
 
     return Container();
   }
-
 
   Widget prices() {
     return StringConstant.isLogIn
@@ -2497,6 +2530,58 @@ class _OrderReviewSubActivityState extends State<OrderReviewSubActivity> {
       );
     });
   }
+
+  // Future putApiForChangeStatus(int statusCode,var merchantId, var orderId,BuildContext context) async {
+  //   setState(() {
+  //     showSpinner = true ;
+  //   });
+  //
+  //   print("orderId ID" + orderId.toString());
+  //   print("merchantId ID" + merchantId.toString());
+  //
+  //   var url = '/order/$orderId/changeStatus';
+  //
+  //   Map<String, String> statusData = {
+  //     'newStatusCode': statusCode.toString(),
+  //     'merchantBasketId': merchantId.toString(),
+  //
+  //   };
+  //   print("statusData Query$statusData");
+  //   String queryString = Uri(queryParameters: statusData).query;
+  //
+  //   var requestUrl = '${ApiMapping.BaseAPI}$url?$queryString';
+  //   print("statusData URL $requestUrl");
+  //
+  //   try {
+  //     dynamic reply;
+  //     http.Response response = await http.put(Uri.parse(requestUrl),
+  //         headers: {'content-type': 'application/json'});
+  //     print("response statusData" + response.body.toString());
+  //     var jsonData = json.decode(response.body);
+  //     if(response.statusCode == 200) {
+  //       Provider.of<HomeProvider>(context, listen: false).loadJsonForGetMerchantBasket();
+  //       Navigator.of(context).pushReplacement(
+  //           MaterialPageRoute(builder: (context) => OrderDetailScreen(order: widget.order,))).then((value)  {
+  //
+  //
+  //       });
+  //     }else{
+  //       setState(() {
+  //         showSpinner = false ;
+  //       });
+  //
+  //     }
+  //     print("response  statusData" + jsonData['status'].toString());
+  //
+  //     // Utils.successToast(response.body.toString());}
+  //     return reply;
+  //
+  //     return response;
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  // }
+
 }
 
 class ScannerWidget extends StatefulWidget {
@@ -2728,4 +2813,6 @@ class BarcodeFindersController extends ChangeNotifier {
       );
     }
   }
+
+
 }

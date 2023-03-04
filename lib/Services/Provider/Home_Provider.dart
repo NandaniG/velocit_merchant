@@ -16,13 +16,14 @@ class HomeProvider with ChangeNotifier {
   //---------------------------------------------------------
   //--------------------load json file------------------------
   //----------------------------------------------------------
-
+  bool showSpinner=false;
   bool IsActiveOrderList = true;
   int PastDays =7;
 //get merchant Basket Data
   loadJsonForGetMerchantBasket() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     var merchanId = (pref.getInt('merchant_id')) ?? 0;
+    showSpinner =true;
     try {
       String jsonContent = await Repository().postApiRequest(IsActiveOrderList==true?{
         "merchant_id": merchanId,
@@ -46,6 +47,7 @@ print("jsonContent"+data.toString());
 
       consumerBasket.sort((a, b) =>b['id']
           .compareTo(a['id'].toInt()));
+      showSpinner =false;
       notifyListeners();
       // return jsonData;
       print("____________loadJson______________________");
@@ -91,6 +93,7 @@ print("jsonContent"+data.toString());
       return {};
     }
   }
+
   loadJsonForCancelOrder(String cancellationReason,orderId, context) async {
 
     try {

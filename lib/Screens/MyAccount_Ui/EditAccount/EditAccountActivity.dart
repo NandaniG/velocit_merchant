@@ -16,11 +16,13 @@ import '../../../../Core/Model/userModel.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/styles.dart';
 import '../../../../utils/utils.dart';
+import '../../../Core/repository/auth_repository.dart';
 import '../../../Routes/Routes.dart';
 import '../../../utils/GlobalWidgets/proceedButtons.dart';
 import '../../../utils/GlobalWidgets/textFormFields.dart';
 import '../../../utils/StringUtils.dart';
 import 'OTPVerificationDialog.dart';
+import 'ProfilePicDialog.dart';
 
 class EditAccountActivity extends StatefulWidget {
   // final Payload? payload;
@@ -53,35 +55,24 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
   void initState() {
     // TODO: implement initState
 
-    getPrefValue();
+    // getPrefValue();
     getUserData();
     super.initState();
   }
 
-  getPrefValue() async {
-    final prefs = await SharedPreferences.getInstance();
-    bool check = prefs.containsKey('profileImagePrefs');
-    if (check) {
-      setState(() {
-        print("yes/./././.");
-        StringConstant.ProfilePhoto = prefs.getString('profileImagePrefs')!;
-      });
-      return;
-    }
-  }
-
-  getUserData()async{
+  getUserData() async {
     final prefs = await SharedPreferences.getInstance();
 
     setState(() {
-      StringConstant.UserLoginId =
-          (prefs.getString('isUserId')) ?? '';
+      StringConstant.UserLoginId = (prefs.getString('isUserId')) ?? '';
       StringConstant.userProfileName =
           prefs.getString('userProfileNamePrefs') ?? "";
       StringConstant.userProfileEmail =
           prefs.getString('userProfileEmailPrefs') ?? "";
       StringConstant.userProfileMobile =
           prefs.getString('userProfileMobilePrefs') ?? "";
+      StringConstant.ProfilePhoto =
+          prefs.getString('userProfileImagePrefs') ?? "";
       userNameController =
           TextEditingController(text: StringConstant.userProfileName);
       mobileController =
@@ -90,7 +81,6 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
           TextEditingController(text: StringConstant.userProfileEmail);
     });
   }
-
   @override
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
@@ -131,8 +121,330 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
       ),
     );
   }
-
   Widget mainUI() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+        color: ThemeApp.whiteColor,
+      ),
+      padding: const EdgeInsets.all(20),
+      child: Form(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            StringConstant.ProfilePhoto!=null
+                ? Stack(
+              // alignment: Alignment.center,
+              children: [
+                Center(
+                  child: Container(
+                    width: 110.0,
+                    height: 110.0,
+                    decoration: new BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            color: ThemeApp.appLightColor,
+                            spreadRadius: 1,
+                            blurRadius: 5)
+                      ],
+                      border: Border.all(
+                          color: ThemeApp.whiteColor, width: 4),
+                      shape: BoxShape.circle,
+                    ),
+                    child: ClipRRect(
+                      borderRadius:
+                      const BorderRadius.all(Radius.circular(100)),
+                      child: Image.network(
+                        StringConstant.ProfilePhoto.toString()!,
+                        fit: BoxFit.fitWidth,
+                        width: 90.0,
+                        height: 90.0,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(
+                            Icons.image,
+                            color: ThemeApp.whiteColor,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0, right: width / 2.7,
+                  // width: 130.0,
+
+                  // height: 40.0,
+                  child: InkWell(
+                      onTap: () {
+                        // _getFromCamera();
+
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return ProfileImageDialog(
+                                  isEditAccount: true);
+                            });
+                      },
+                      child: Container(
+                        height: 32,
+                        width: 32,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            color: ThemeApp.appColor),
+                        child: Padding(
+                          padding: const EdgeInsets.all(7),
+                          child: SvgPicture.asset(
+                            'assets/appImages/cameraIcon.svg',
+                            color: ThemeApp.whiteColor,
+                            semanticsLabel: 'Acme Logo',
+
+                            // height: height * .03,
+                          ),
+                        ),
+                      )),
+                ),
+              ],
+            )
+                : Stack(
+              // alignment: Alignment.center,
+              children: [
+                Center(
+                  child: Container(
+                    width: 110.0,
+                    height: 110.0,
+                    decoration: new BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            color: ThemeApp.appBackgroundColor,
+                            spreadRadius: 1,
+                            blurRadius: 15)
+                      ],
+                      color: ThemeApp.appBackgroundColor,
+                      border: Border.all(
+                          color: ThemeApp.whiteColor, width: 7),
+                      shape: BoxShape.circle,
+                    ),
+                    child: ClipRRect(
+                      borderRadius:
+                      const BorderRadius.all(Radius.circular(100)),
+                      child: Image.file(
+                        File(StringConstant.ProfilePhoto),
+                        fit: BoxFit.fitWidth,
+                        width: 110.0,
+                        height: 110.0,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(
+                            Icons.image,
+                            color: ThemeApp.whiteColor,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0, right: width / 2.7,
+                  // width: 130.0,
+
+                  // height: 40.0,
+                  child: InkWell(
+                      onTap: () {
+                        // _getFromCamera();
+
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return ProfileImageDialog(
+                                  isEditAccount: true);
+                            });
+                      },
+                      child: Container(
+                        height: 32,
+                        width: 32,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            color: ThemeApp.appColor),
+                        child: Padding(
+                          padding: const EdgeInsets.all(7),
+                          child: SvgPicture.asset(
+                            'assets/appImages/cameraIcon.svg',
+                            color: ThemeApp.whiteColor,
+                            semanticsLabel: 'Acme Logo',
+
+                            // height: height * .03,
+                          ),
+                        ),
+                      )
+                    /*; Container(
+                                            // alignment: Alignment.bottomCenter,
+                                            color: ThemeApp.primaryNavyBlackColor,
+                                            alignment: const Alignment(-2, -0.1),
+                                            child: iconsUtils(
+                                                'assets/appImages/editIcon.svg'),
+                                          ),*/
+                  ),
+                ),
+              ],
+            ),
+            /*     imageFile1 != null
+                    ? Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          // height: 50,width:50,
+                          decoration: new BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          alignment: Alignment.center,
+                          child: InkWell(
+                            onTap: () async {
+                              _getFromCamera();
+                            },
+                            child: ClipRRect(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(100)),
+                              child: Image.file(
+                                imageFile1!,
+                                fit: BoxFit.fill,
+                                width: 100,
+                                height: 100,
+                              ),
+                            ),
+                          ),
+                        ))
+                    : Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                            alignment: Alignment.center,
+                            child: InkWell(
+                              onTap: () async {
+                                _getFromCamera();
+                              },
+                              child: Icon(
+                                Icons.account_circle_rounded,
+                                size: height * .15,
+                                color: ThemeApp.backgroundColor,
+                              ),
+                            ))),*/
+            SizedBox(
+              height: height * .03,
+            ),
+            TextFieldUtils().asteriskTextField(
+              StringUtils.fullName,
+              context,
+            ),
+            CharacterTextFormFieldsWidget(
+              // isEnable: true,
+                errorText: StringUtils.enterFullName,
+                textInputType: TextInputType.name,
+                controller: userNameController,
+                autoValidation: AutovalidateMode.onUserInteraction,
+                intialvalue: 'Testing Name',
+                hintText: 'Full Name',
+                onChange: (val) {
+                  setState(() {
+                    if (val.isEmpty && userNameController.text.isEmpty) {
+                      _validateFullName = true;
+                    } else {
+                      _validateFullName = false;
+                    }
+                  });
+                },
+                validator: (value) {
+                  if (value.isEmpty && userNameController.text.isEmpty) {
+                    _validateFullName = true;
+                    return StringUtils.validUserNameError;
+                  } else {
+                    _validateFullName = false;
+                  }
+                  return null;
+                }),
+            SizedBox(
+              height: height * .02,
+            ),
+            Text(
+              StringUtils.emailAddress,
+              style: SafeGoogleFont(
+                'Roboto',
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: ThemeApp.primaryNavyBlackColor,
+              ),
+            ),
+            EmailTextFormFieldsWidget(
+                enabled: false,
+                errorText: StringUtils.validEmailError,
+                textInputType: TextInputType.emailAddress,
+                controller: emailController,
+                autoValidation: AutovalidateMode.onUserInteraction,
+                hintText: '',
+                onChange: (val) {},
+                validator: (val) {
+                  return null;
+                }),
+            SizedBox(
+              height: height * .02,
+            ),
+            Text(
+              StringUtils.mobileNumber,
+              style: SafeGoogleFont(
+                'Roboto',
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: ThemeApp.primaryNavyBlackColor,
+              ),
+            ),
+            MobileNumberTextFormField(
+                controller: mobileController,
+                enable: false,
+                onChanged: (phone) {
+                  print(phone.completeNumber);
+                  if (phone.countryCode == "IN") {
+                    print("india selected");
+                    print(phone.completeNumber);
+                  } else {
+                    print("india not selected");
+                  }
+                },
+                validator: (value) {
+                  return null;
+                }),
+            SizedBox(
+              height: 5,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: ThemeApp.appColor),
+                  color: ThemeApp.appBackgroundColor),
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Text(
+                  "In order to prevent unauthorized access of personal information, request you to contact admin for changing the registered mobile number and email address.",
+                  style: SafeGoogleFont(
+                    'Roboto',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: ThemeApp.appColor,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: height * .03,
+            ),
+            updateButton(),
+            SizedBox(
+              height: height * .02,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+/*  Widget mainUI() {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
@@ -367,18 +679,18 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
                                 ),
                               ),
                             )
-                            /*; Container(
+                            *//*; Container(
                                             // alignment: Alignment.bottomCenter,
                                             color: ThemeApp.primaryNavyBlackColor,
                                             alignment: const Alignment(-2, -0.1),
                                             child: iconsUtils(
                                                 'assets/appImages/editIcon.svg'),
-                                          ),*/
+                                          ),*//*
                             ),
                       ),
                     ],
                   ),
-            /*     imageFile1 != null
+            *//*     imageFile1 != null
                     ? Align(
                         alignment: Alignment.center,
                         child: Container(
@@ -416,7 +728,7 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
                                 size: height * .15,
                                 color: ThemeApp.backgroundColor,
                               ),
-                            ))),*/
+                            ))),*//*
             SizedBox(
               height: height * .03,
             ),
@@ -531,7 +843,7 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
         ),
       ),
     );
-  }
+  }*/
 
   File? imageFile1;
   Widget accountTextList(String text) {
@@ -546,6 +858,7 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
             letterSpacing: -0.25));
   }
 
+/*
   Widget bottomSheetForImagePicker() {
     return SingleChildScrollView(
       child: Container(
@@ -568,23 +881,47 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
               children: [
                 InkWell(
                   onTap: () async {
+                    // final prefs = await SharedPreferences.getInstance();
+                    //
+                    // FilePickerResult? pickedFile =
+                    // await FilePicker.platform.pickFiles();
+                    // if (pickedFile != null) {
+                    //   String? filePath = pickedFile.files.single.path;
+                    //   if (filePath != null) {
+                    //     final file = File(filePath);
+                    //     await prefs.setString('profileImagePrefs', filePath);
+                    //
+                    //     imageFile1 = file;
+                    //     Navigator.of(context).pushReplacement(
+                    //       MaterialPageRoute(
+                    //         builder: (context) =>  EditAccountActivity(),
+                    //       ),
+                    //     );
+                    //   }
+                    // }
+
                     final prefs = await SharedPreferences.getInstance();
 
-                    FilePickerResult? pickedFile =
-                    await FilePicker.platform.pickFiles();
+                    final pickedFile = await picker.getImage(
+                      source: ImageSource.gallery,);
+                    print(pickedFile!.path.toString());
                     if (pickedFile != null) {
-                      String? filePath = pickedFile.files.single.path;
-                      if (filePath != null) {
-                        final file = File(filePath);
-                        await prefs.setString('profileImagePrefs', filePath);
+                      await prefs.setString(
+                          'userProfileImagePrefs', pickedFile.path);
+                      await prefs.setString(
+                          'profileImagePrefs', pickedFile.path);
+                      StringConstant.UserLoginId =
+                          (prefs.getString('isUserId')) ?? '';
 
-                        imageFile1 = file;
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) =>  EditAccountActivity(),
-                          ),
-                        );
-                      }
+
+                      AuthRepository().updateProfileImageApi(
+                          File(pickedFile.path), StringConstant.UserLoginId, context);
+
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) =>  EditAccountActivity(),
+                        ),
+                      );
                     }
                   },
                   child: Container(
@@ -610,25 +947,43 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
                 ),
                 InkWell(
                   onTap: () async {
-                    var image =
-                    await picker.getImage(source: ImageSource.camera);
+                    // var image =
+                    // await picker.getImage(source: ImageSource.camera);
+                    // final prefs = await SharedPreferences.getInstance();
+                    // // StringConstant.CurrentPinCode = (prefs.getString('CurrentPinCodePref') ?? '');
+                    // String imagePath = image!.path;
+                    //
+                    // await prefs.setString('profileImagePrefs', imagePath);
+                    // Map data = {
+                    //   "imgUrl": image.path,
+                    // };
+                    //
+                    // setState(() {
+                    //   imageFile1 = File(image.path);
+                    //   Navigator.of(context).pushReplacement(
+                    //     MaterialPageRoute(
+                    //       builder: (context) =>  EditAccountActivity(),
+                    //     ),
+                    //   );
+                    // });
+
+
+                    var image = await picker.getImage(source: ImageSource.camera);
                     final prefs = await SharedPreferences.getInstance();
-                    // StringConstant.CurrentPinCode = (prefs.getString('CurrentPinCodePref') ?? '');
                     String imagePath = image!.path;
-
                     await prefs.setString('profileImagePrefs', imagePath);
-                    Map data = {
-                      "imgUrl": image.path,
-                    };
+                    StringConstant.UserLoginId =
+                        (prefs.getString('isUserId')) ?? '';
+                    await  prefs.setString('userProfileImagePrefs',imagePath) ;
 
-                    setState(() {
-                      imageFile1 = File(image.path);
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) =>  EditAccountActivity(),
-                        ),
-                      );
-                    });
+                    AuthRepository().updateProfileImageApi(
+                        File(image.path), StringConstant.UserLoginId,context);
+
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => EditAccountActivity(),
+                      ),
+                    );
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -655,111 +1010,26 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
       ),
     );
   }
+*/
 
-/*  Widget fullName(ProductProvider provider) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TextFieldUtils().dynamicText(
-            StringUtils.fullName,
-            context,
-            TextStyle(
-                fontFamily: 'Roboto',
-                color: ThemeApp.blackColor,
-                fontSize: height * .02,
-                fontWeight: FontWeight.w600)),
-        CharacterTextFormFieldsWidget(
-            isEnable: true,
-            errorText: StringUtils.enterFullName,
-            textInputType: TextInputType.name,
-            controller: provider.userNameController,
-            autoValidation: AutovalidateMode.onUserInteraction,
-            hintText: 'Type your name',
-            onChange: (val) {},
-            validator: (value) {
-              return null;
-            }),
-      ],
-    );
-  }
 
-  Widget mobileNumber(ProductProvider provider) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TextFieldUtils().dynamicText(
-            StringUtils.mobileNumber,
-            context,
-            TextStyle(
-                fontFamily: 'Roboto',
-                color: ThemeApp.blackColor,
-                fontSize: height * .02,
-                fontWeight: FontWeight.w600)),
-        MobileNumberTextFormField(
-            controller: provider.userMobileController,
-            enable: false,
-            validator: (value) {
-              if (value.isEmpty && provider.userMobileController.text.isEmpty) {
-                _validateMobile = true;
-                return StringUtils.enterMobileNumber;
-              } else if (provider.userMobileController.text.length < 10) {
-                _validateMobile = true;
-                return StringUtils.enterMobileNumber;
-              } else {
-                _validateMobile = false;
-              }
-              return null;
-            }),
-      ],
-    );
-  }
-
-  Widget emailId(ProductProvider provider) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TextFieldUtils().dynamicText(
-            StringUtils.emailAddress,
-            context,
-            TextStyle(
-                fontFamily: 'Roboto',
-                color: ThemeApp.blackColor,
-                fontSize: height * .02,
-                fontWeight: FontWeight.w600)),
-        EmailTextFormFieldsWidget(
-            errorText: StringUtils.validEmailError,
-            textInputType: TextInputType.emailAddress,
-            controller: provider.userEmailController,
-            autoValidation: AutovalidateMode.onUserInteraction,
-            hintText: 'test@gmail.com',
-
-            onChange: (val) {},
-            validator: (val) {
-              if (val.isEmpty && provider.userEmailController.text.isEmpty) {
-                _validateEmail = true;
-                return StringUtils.validEmailError;
-              } else if (!StringConstant().isEmail(val)) {
-                _validateEmail = true;
-                return StringUtils.validEmailError;
-              } else {
-                _validateEmail = false;
-              }
-              return null;
-            }),
-      ],
-    );
-  }*/
 
   Widget updateButton() {
     return proceedButton(
         StringUtils.update, ThemeApp.tealButtonColor, context, false, () {
       FocusManager.instance.primaryFocus?.unfocus();
+      Map data = {
+        "username": userNameController.text,
+      };
+      AuthRepository().editUserInfoApi(data, StringConstant.UserLoginId);
 
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return OTPVerificationDialog();
-          });
+
+
+      // showDialog(
+      //     context: context,
+      //     builder: (BuildContext context) {
+      //       return OTPVerificationDialog();
+      //     });
     });
   }
 

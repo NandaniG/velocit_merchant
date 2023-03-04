@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocit_merchant/Routes/Routes.dart';
@@ -11,15 +14,20 @@ import '../../utils/GlobalWidgets/appBar.dart';
 import '../../utils/GlobalWidgets/proceedButtons.dart';
 import '../../utils/GlobalWidgets/textFormFields.dart';
 import '../../utils/constants.dart';
+import '../orders_Dashboard.dart';
 import 'Order_details_screen.dart';
 
 class ReturnOrderActivity extends StatefulWidget {
   // final MyOrdersModel values;
-  final dynamic values;
+  final dynamic basket;
+  final Map order;
   final bool isSingleOrderReject;
 
   ReturnOrderActivity(
-      {Key? key, required this.values, required this.isSingleOrderReject})
+      {Key? key,
+      required this.basket,
+      required this.order,
+      required this.isSingleOrderReject})
       : super(key: key);
 
   @override
@@ -34,20 +42,21 @@ class _ReturnOrderActivityState extends State<ReturnOrderActivity> {
   double height = 0.0;
   double width = 0.0;
   var data;
-var orderId;
+
+// var orderId;
   @override
   void initState() {
     // data = Provider.of<HomeProvider>(context, listen: false).loadJsonss();
     super.initState();
-    for (int i = 0;
-    i < widget.values['orders'].length;
-    i++) {
-      orderId =  widget.values['orders'][i]['order_id'];
-
-    }
+    // for (int i = 0;
+    // i < widget.values['orders'].length;
+    // i++) {
+    //   orderId =  widget.values['orders'][i]['order_id'];
+    //
+    // }
   }
 
-  int? _radioIndex = 5;
+  int? _radioIndex = 1;
   String _radioVal = "";
 
   @override
@@ -68,56 +77,60 @@ var orderId;
         Navigator.canPop(context);
         return Future.value(true);
       },
-      child: Scaffold(
-        backgroundColor: ThemeApp.appBackgroundColor,
-        key: scaffoldGlobalKey,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(height * .09),
-          child: AppBar_BackWidget(
-              context: context,
-              titleWidget: appTitle(context, "Reject Order"),
-              location: SizedBox()),
-        ),
-        body: SafeArea(
-          child: Container(
-            color: ThemeApp.appBackgroundColor,
-            // width: width,
-            child: data == ''
-                ? CircularProgressIndicator()
-                : Consumer<HomeProvider>(builder: (context, provider, child) {
-                    return (provider.jsonDataBasket.isNotEmpty &&
-                            provider.jsonDataBasket['error'] == null)
-                        ? ListView(
-                            children: [
-                              SizedBox(
-                                height: 15,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 20, right: 20),
-                                child: TextFieldUtils().dynamicText(
-                                    "Order ID : " +
-                                        orderId.toString(),
-                                    context,
-                                    TextStyle(
-                                      fontFamily: 'Roboto',
-                                      color: ThemeApp.blackColor,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 16,
-                                    )),
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              widget.isSingleOrderReject == true
-                                  ? isSingleOrderOnly()
-                                  : isMultipleOrders(),
-                            ],
-                          )
-                        : provider.jsonDataBasket['error'] != null
-                            ? Container()
-                            : Center(child: CircularProgressIndicator());
-                  }),
+      child:  ModalProgressHUD(
+        inAsyncCall:showSpinner,
+        child: Scaffold(
+          backgroundColor: ThemeApp.appBackgroundColor,
+          key: scaffoldGlobalKey,
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(height * .09),
+            child: AppBar_BackWidget(
+                context: context,
+                titleWidget: appTitle(context, "Reject Order"),
+                location: SizedBox()),
+          ),
+          body: SafeArea(
+            child: Container(
+              color: ThemeApp.appBackgroundColor,
+              // width: width,
+              child: data == ''
+                  ? CircularProgressIndicator()
+                  : Consumer<HomeProvider>(builder: (context, provider, child) {
+                      return (provider.jsonDataBasket.isNotEmpty &&
+                              provider.jsonDataBasket['error'] == null)
+                          ? ListView(
+                              children: [
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 20, right: 20),
+                                  child: TextFieldUtils().dynamicText(
+                widget.isSingleOrderReject == true?      "Order ID : " +
+                                          widget.order['order_id'].toString():"Basket ID : " +
+                    widget.basket['id'].toString(),
+                                      context,
+                                      TextStyle(
+                                        fontFamily: 'Roboto',
+                                        color: ThemeApp.blackColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 16,
+                                      )),
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                widget.isSingleOrderReject == true
+                                    ? isSingleOrderOnly()
+                                    : isMultipleOrders(),
+                              ],
+                            )
+                          : provider.jsonDataBasket['error'] != null
+                              ? Container()
+                              : Center(child: CircularProgressIndicator());
+                    }),
+            ),
           ),
         ),
       ),
@@ -142,9 +155,9 @@ var orderId;
 
                       // physics: NeverScrollableScrollPhysics(),
                       scrollDirection: Axis.horizontal,
-                      itemCount: widget.values["orders"].length,
+                      itemCount: widget.basket["orders"].length,
                       itemBuilder: (_, index) {
-                        Map orders = widget.values["orders"][index];
+                        Map orders = widget.basket["orders"][index];
 
                         return Padding(
                           padding: const EdgeInsets.only(right: 20),
@@ -262,13 +275,18 @@ var orderId;
                                                     activeColor:
                                                         ThemeApp.appColor,
                                                     onChanged: (value) {
-                                                      widget.values['orders'][index]['current_status_code'] ==2000?null:   setState(() {
-                                                        _radioIndex =
-                                                            value as int;
-                                                        _radioVal =
-                                                            'Unable to fulfil order on time';
-                                                        print(_radioVal);
-                                                      });
+                                                      widget.basket['orders']
+                                                                      [index][
+                                                                  'current_status_code'] ==
+                                                              2000
+                                                          ? null
+                                                          : setState(() {
+                                                              _radioIndex =
+                                                                  value as int;
+                                                              _radioVal =
+                                                                  'Unable to fulfil order on time';
+                                                              print(_radioVal);
+                                                            });
                                                     },
                                                   ),
                                                 ),
@@ -303,13 +321,18 @@ var orderId;
                                                     activeColor:
                                                         ThemeApp.appColor,
                                                     onChanged: (value) {
-                                                      widget.values['orders'][index]['current_status_code'] ==2000?null:  setState(() {
-                                                        _radioIndex =
-                                                            value as int;
-                                                        _radioVal =
-                                                            'Reason of order rejection';
-                                                        print(_radioVal);
-                                                      });
+                                                      widget.basket['orders']
+                                                                      [index][
+                                                                  'current_status_code'] ==
+                                                              2000
+                                                          ? null
+                                                          : setState(() {
+                                                              _radioIndex =
+                                                                  value as int;
+                                                              _radioVal =
+                                                                  'Reason of order rejection';
+                                                              print(_radioVal);
+                                                            });
                                                     },
                                                   ),
                                                 ),
@@ -344,13 +367,18 @@ var orderId;
                                                     activeColor:
                                                         ThemeApp.appColor,
                                                     onChanged: (value) {
-                                                      widget.values['orders'][index]['current_status_code'] ==2000?null:    setState(() {
-                                                        _radioIndex =
-                                                            value as int;
-                                                        _radioVal =
-                                                            'Reason for rejecting order';
-                                                        print(_radioVal);
-                                                      });
+                                                      widget.basket['orders']
+                                                                      [index][
+                                                                  'current_status_code'] ==
+                                                              2000
+                                                          ? null
+                                                          : setState(() {
+                                                              _radioIndex =
+                                                                  value as int;
+                                                              _radioVal =
+                                                                  'Reason for rejecting order';
+                                                              print(_radioVal);
+                                                            });
                                                     },
                                                   ),
                                                 ),
@@ -385,13 +413,18 @@ var orderId;
                                                     activeColor:
                                                         ThemeApp.appColor,
                                                     onChanged: (value) {
-                                                      widget.values['orders'][index]['current_status_code'] ==2000?null:     setState(() {
-                                                        _radioIndex =
-                                                            value as int;
-                                                        _radioVal =
-                                                            'Fourth reason will go here';
-                                                        print(_radioVal);
-                                                      });
+                                                      widget.basket['orders']
+                                                                      [index][
+                                                                  'current_status_code'] ==
+                                                              2000
+                                                          ? null
+                                                          : setState(() {
+                                                              _radioIndex =
+                                                                  value as int;
+                                                              _radioVal =
+                                                                  'Fourth reason will go here';
+                                                              print(_radioVal);
+                                                            });
                                                     },
                                                   ),
                                                 ),
@@ -426,12 +459,18 @@ var orderId;
                                                     activeColor:
                                                         ThemeApp.appColor,
                                                     onChanged: (value) {
-                                                      widget.values['orders'][index]['current_status_code'] ==2000?null:    setState(() {
-                                                        _radioIndex =
-                                                            value as int;
-                                                        _radioVal = 'Other';
-                                                        print(_radioVal);
-                                                      });
+                                                      widget.basket['orders']
+                                                                      [index][
+                                                                  'current_status_code'] ==
+                                                              2000
+                                                          ? null
+                                                          : setState(() {
+                                                              _radioIndex =
+                                                                  value as int;
+                                                              _radioVal =
+                                                                  'Other';
+                                                              print(_radioVal);
+                                                            });
                                                     },
                                                   ),
                                                 ),
@@ -460,7 +499,7 @@ var orderId;
                                       SizedBox(
                                         height: 15,
                                       ),
-                              Column(
+                                      Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         crossAxisAlignment:
@@ -480,7 +519,7 @@ var orderId;
                                       SizedBox(
                                         height: 16,
                                       ),
-                                 TextFormField(
+                                      TextFormField(
                                         controller: vendorReviewController,
                                         style: TextStyle(
                                           fontFamily: 'Roboto',
@@ -528,46 +567,65 @@ var orderId;
                                       SizedBox(
                                         height: 20,
                                       ),
-                                      widget.values['orders'][index]['current_status_code'] ==2000?Center(
-                                        child: Text(
-                                          "Your order is already Rejected",
-                                          style: TextStyle(
-                                              color: ThemeApp.redColor,
-                                              fontSize: 15,
-                                              fontWeight:
-                                              FontWeight.w700),
-                                        ),
-                                      ):    proceedButton(
-                                          "Reject Order",
-                                          ThemeApp.tealButtonColor,
-                                          context,
-                                          false, () async {
-                                        FocusManager.instance.primaryFocus
-                                            ?.unfocus();
+                                      widget.basket['orders'][index]
+                                                  ['current_status_code'] ==
+                                              2000
+                                          ? Center(
+                                              child: Text(
+                                                "Your order is already Rejected",
+                                                style: TextStyle(
+                                                    color: ThemeApp.redColor,
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              ),
+                                            )
+                                          : proceedButton(
+                                              "Reject Order",
+                                              ThemeApp.tealButtonColor,
+                                              context,
+                                              false, () async {
+                                              FocusManager.instance.primaryFocus
+                                                  ?.unfocus();
 
-                                          setState(() {
+                                              setState(() {
+                                                showSpinner =true;
 
-                                          Provider.of<HomeProvider>(
+                                              });    Provider.of<HomeProvider>(
                                                   context,
                                                   listen: false)
                                                   .loadJsonForCancelOrder(
-                                                  _radioVal.toString()+ ' '+ vendorReviewController.text.toString(),
-                                                  widget.values['orders'][index]
-                                                  ['order_id'],
+                                                  _radioVal.toString() +
+                                                      ' ' +
+                                                      vendorReviewController
+                                                          .text
+                                                          .toString(),
+                                                  widget.basket['orders']
+                                                  [index]['order_id'],
                                                   context);
-
-                                          });
-
-
-
-                                        //
-                                        // Navigator.of(context).pushReplacement(
-                                        //     MaterialPageRoute(
-                                        //         builder: (context) =>
-                                        //             OrderReviewSubActivity(
-                                        //               order: widget.values,
-                                        //             )));
-                                      })
+                                              await Provider.of<HomeProvider>(context,
+                                                  listen: false)
+                                                  .loadJsonForGetMerchantBasket();
+                                              Timer(
+                                                  const Duration(seconds: 2),
+                                                      () {
+                                                    setState(() {
+                                                      showSpinner =false;
+                                                    });
+                                                    Navigator.pushReplacement(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>  const OrderDashboard()
+                                                        ));
+                                                  });
+                                              //
+                                              // Navigator.of(context).pushReplacement(
+                                              //     MaterialPageRoute(
+                                              //         builder: (context) =>
+                                              //             OrderReviewSubActivity(
+                                              //               order: widget.values,
+                                              //             )));
+                                            })
                                     ]),
                               ),
                             ),
@@ -599,7 +657,7 @@ var orderId;
         ),*/
     );
   }
-
+  bool showSpinner = false ;
   Widget isSingleOrderOnly() {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
@@ -864,20 +922,40 @@ var orderId;
               () async {
             FocusManager.instance.primaryFocus?.unfocus();
             setState(() {
-              for (int i = 0;
-              i < widget.values['orders'].length;
-              i++) {
-                data = Provider.of<HomeProvider>(
-                    context,
-                    listen: false)
-                    .loadJsonForChangeStatus(
-                    2000,
-                    widget.values['id'],
-                    widget.values['orders'][i]
-                    ['order_id'],
-                    context);
-              }
-            });
+              // for (int i = 0;
+              // i < widget.values['orders'].length;
+              // i++) {
+              //   data = Provider.of<HomeProvider>(
+              //       context,
+              //       listen: false)
+              //       .loadJsonForChangeStatus(
+              //       2000,
+              //       widget.values['id'],
+              //       widget.values['orders'][i]
+              //       ['order_id'],
+              //       context);
+              // }
+              showSpinner =true;
+
+            });      Provider.of<HomeProvider>(context, listen: false)
+                .loadJsonForCancelOrder(
+                _radioVal.toString() +
+                    ' ' +
+                    vendorReviewController.text.toString(),
+                widget.order['order_id'],
+                context);
+            Timer(
+                const Duration(seconds: 2),
+                    () {
+                  setState(() {
+                    showSpinner =false;
+                  });
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  const OrderDashboard()
+                      ));
+                });
             // Navigator.of(context).pushReplacement(MaterialPageRoute(
             //     builder: (context) => OrderReviewSubActivity(
             //           order: widget.values,

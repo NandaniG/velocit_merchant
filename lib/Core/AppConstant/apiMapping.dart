@@ -7,6 +7,8 @@ class ApiMapping {
   static String apiVersion = "api/v1";
   static String username = "/v1/IAM/authenticateWithUID";
   static String BaseAPI = 'https://velocitapiqa.fulgorithmapi.com:443/api/v1';
+  static String changeImageWithFile = '/changeimagewithfile';
+  static String createImageURL = '/image/createimage';
 
   static String ConstructURI(String path) {
     return baseProtocol +

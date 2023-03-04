@@ -5,6 +5,7 @@ import 'package:http/http.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:velocit_merchant/Core/data/network/baseApiServices.dart';
+import 'package:velocit_merchant/Core/repository/repository.dart';
 
 import '../../../utils/utils.dart';
 import '../app_excaptions.dart';
@@ -12,6 +13,7 @@ import '../app_excaptions.dart';
 class NetworkApiServices extends BaseApiServices {
   @override
   Future getGetApiResponse(String url) async {
+    Repository().showSpinner ==true;
     dynamic responseJson;
     try {
       final client = http.Client();
@@ -19,6 +21,7 @@ class NetworkApiServices extends BaseApiServices {
       await client.get(Uri.parse(url)).timeout(Duration(seconds: 10));
       responseJson = returnResponse(response);
     } on SocketException {
+      Repository().showSpinner ==false;
       throw  Utils.errorToast("System is busy, Please try after sometime.");
     }
     return responseJson;

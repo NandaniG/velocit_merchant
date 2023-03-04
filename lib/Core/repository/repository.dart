@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -59,8 +60,8 @@ class Repository {
       throw e;
     }
   }
-
   Future postApiRequest(Map jsonMap) async {
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('jwt_token') ?? '';
     // dynamic responseJson;
@@ -128,9 +129,9 @@ print(url);
     httpClient.close();
     return responseJson;
   }
-
+bool showSpinner=false;
   Future putApiForChangeStatus(int statusCode,var merchantId, var orderId,BuildContext context) async {
-
+    showSpinner;
     print("orderId ID" + orderId.toString());
     print("merchantId ID" + merchantId.toString());
 
@@ -155,8 +156,9 @@ print(url);
       var jsonData = json.decode(response.body);
       if(response.statusCode == 200) {
 
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => OrderDashboard()));
+
+      }else{
+        showSpinner = false;
       }
         print("response  statusData" + jsonData['status'].toString());
 

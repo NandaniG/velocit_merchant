@@ -20,6 +20,7 @@ class StringConstant {
 
   static int isUserLoggedIn = 0;
   static String UserLoginId = '';
+  static int MerchantLoginId = 0;
   static String RandomUserLoginId = '';
   static String UserCartID = '';
   static String BadgeCounterValue = '';

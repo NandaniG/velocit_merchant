@@ -359,7 +359,7 @@ class _SignUpState extends State<SignUp> {
                               "email": email.text,
                               "mobile": mobileNumberController.text,
                             };
-                            postApiUsingEmailRequest(data,context);
+                            apiRequest(data);
 
                             // authViewModel.authSignUpUsingPost(data, context);
                           } else {
@@ -821,59 +821,47 @@ class _SignUpState extends State<SignUp> {
       throw 'Could not launch $url';
     }
   }
-  Future postApiUsingEmailRequest(Map jsonMap, BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    dynamic responseJson;
-    var url = ApiMapping.getURI(apiEndPoint.auth_signIn_using_post);
+  Future apiRequest(Map jsonMap) async {
+    var url = ApiMapping.getURI(apiEndPoint.auth_signUp_using_post);
+    print("SignUp URL " + url.toString());
+    print("SignUp Data " + jsonMap.toString());
 
     HttpClient httpClient = new HttpClient();
-    HttpClientRequest request =
-    await httpClient.postUrl(Uri.parse(url)).timeout(Duration(seconds: 10));
+    HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
     request.headers.set('content-type', 'application/json');
     request.add(utf8.encode(json.encode(jsonMap)));
 
     HttpClientResponse response = await request.close();
     // todo - you should check the response.statusCode
-    responseJson = await response.transform(utf8.decoder).join();
-    String rawJson = responseJson.toString();
-    print(responseJson.toString());
+    dynamic reply = await response.transform(utf8.decoder).join();
+    String rawJson = reply.toString();
+    print(reply);
 
-    Map<String, dynamic> map = jsonDecode(rawJson);
-    String id = map['id'].toString();
-    int merchantId = map['principal_id'] ?? -1;
-    try {
-      if (response.statusCode == 200) {
-        print(responseJson.toString());
-        String userId = id.toString();
-        print("UserId from Api" + userId);
-        // prefs.setString(StringConstant.userId, userId);
-        prefs.setString(StringConstant.testId, userId);
-        if (merchantId != -1) {
-          prefs.setInt('merchant_id', merchantId);
-          prefs.setBool('isLogin', true);
-          StringConstant.isLogIn = true;
-          prefs.setString('jwt_token', map['jwt_token'].toString());
-        }
-        // Prefs.instance.setToken(StringConstant.userId, id.toString());
 
-        var loginId = await prefs.getString(StringConstant.testId);
 
-        print("LoginId : .. " + loginId.toString());
-        // StringConstant.isLogIn = true;
-        Utils.successToast(id.toString());
+    if (response.statusCode == 200) {
+      Map<String, dynamic> map = jsonDecode(rawJson);
+      String name = map['message'];
+      Utils.successToast(name.toString());
+      print("SignUp response " + name.toString());
 
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => OrderDashboard()));
-      } else {      Utils.errorToast("System is busy, Please try after sometime.");
-      }
-    } catch (e) {
-      Utils.errorToast("System is busy, Please try after sometime.");
+      // Utils.successToast(name.toString());
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) => SignIn_Screen()));
+      businessNameController.clear();
+
+      mobileNumberController.clear();
+      email.clear();
+      password.clear();
+      confirmPassword.clear();
+      print(reply.toString());
+    } else {
+      Utils.errorToast('Something went wrong');
     }
-    httpClient.close();
-    return responseJson;
-  }
 
+    httpClient.close();
+    return reply;
+  }
 /*
   Future apiRequest(Map jsonMap) async {
     var url = ApiMapping.getURI(apiEndPoint.auth_signUp_using_post);

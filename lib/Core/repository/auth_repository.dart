@@ -4,19 +4,23 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocit_merchant/Core/Enum/apiEndPointEnums.dart';
+import 'package:velocit_merchant/Screens/MyAccount_Ui/my_account.dart';
 import 'package:velocit_merchant/Screens/orders_Dashboard.dart';
 
 import '../../Routes/Routes.dart';
 import '../../Screens/Auth_Screens/forgot_password.dart';
 import '../../Screens/Auth_Screens/sign_in.dart';
+import '../../Screens/MyAccount_Ui/EditAccount/EditAccountActivity.dart';
 import '../../utils/constants.dart';
 import '../../utils/utils.dart';
 import '../AppConstant/apiMapping.dart';
+import '../Model/KYCDataModel.dart';
 import '../Model/userModel.dart';
 import '../data/network/baseApiServices.dart';
 import '../data/network/networkApiServices.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:async/async.dart';
+import 'package:path/path.dart';
 class AuthRepository {
   BaseApiServices _apiServices = NetworkApiServices();
 
@@ -119,6 +123,7 @@ class AuthRepository {
 
       int merchantId = jsonData['payload']['body']['principal_id'] ?? -1;
 print("merchantId ${merchantId}");
+
       if (merchantId != -1) {
         prefs.setInt('merchant_id', merchantId);
         prefs.setBool('isLogin', true);
@@ -336,6 +341,8 @@ print("merchantId ${merchantId}");
           'userProfileEmailPrefs', response['payload']['email'].toString());
       await prefs.setString(
           'userProfileMobilePrefs', response['payload']['mobile'].toString());
+      await prefs.setString(
+          'userProfileImagePrefs', response['payload']['image_url'].toString());
 
       return response = UserModel.fromJson(response);
     } catch (e) {
@@ -452,41 +459,46 @@ print("merchantId ${merchantId}");
       return responseJson;
     }
   }
-
   //update profile image
-  Future updateProfileImageApi(dynamic data, String userId) async {
-    // var url = ApiMapping.getURI(apiEndPoint.put_carts);
-    final prefs = await SharedPreferences.getInstance();
+  Future updateProfileImageApi(File imageFile,String userId, BuildContext context, bool isEditProfile) async {
+    var stream = http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+    var length = await imageFile.length();
+    var url =
+        ApiMapping.BASEAPI + '/user/' + userId + ApiMapping.changeImageWithFile;
+    print(url);
+    var uri = Uri.parse(url);
 
-    print("userId ID" + userId.toString());
-    print("userId ID" + data.toString());
+    var request = http.MultipartRequest("POST", uri);
+    var multipartFile = http.MultipartFile('imageFile', stream, length,
+        filename: basename(imageFile.path));
+    //contentType: new MediaType('image', 'png'));
 
-    var url = '/user/$userId/changeimage';
+    request.files.add(multipartFile);
+    var response = await request.send();
+    print("response Image "+response.statusCode.toString());
 
-    var requestUrl = ApiMapping.BaseAPI + url;
-    print(requestUrl.toString());
+    response.stream.transform(utf8.decoder).listen((value) {
+      print("Image response "+value);
+      getUserDetailsById(userId).then((value){if (isEditProfile == true) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) =>  EditAccountActivity(),
+          ),
+        );
+      } else {
 
-    String body = json.encode(data);
-    print("updateProfileImageApi jsonMap" + body.toString());
-
-    try {
-      dynamic reply;
-      http.Response response = await http.put(Uri.parse(requestUrl),
-          body: body, headers: {'content-type': 'application/json'});
-      print("response Put Address" + response.body.toString());
-      var jsonData = json.decode(response.body);
-      print("response post jsonData" + jsonData['status'].toString());
-
-      // Utils.successToast(response.body.toString());
-      return reply;
-
-      return response;
-    } catch (e) {
-      throw e;
-    }
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => MyAccountActivity(),
+          ),
+        );
+      }});
 
 
-}
+
+    });
+  }
+
   ///firebase fcm token
   Future passFCMToken(String userId, String fcmToken) async {
     Map<String, String> queryParams = {
@@ -514,4 +526,94 @@ print("merchantId ${merchantId}");
     } catch (e) {
       throw e;
     }
-  }}
+  }
+
+  // update user profile
+  Future editUserInfoApi(dynamic data, String userId) async {
+    // var url = ApiMapping.getURI(apiEndPoint.put_carts);
+    final prefs = await SharedPreferences.getInstance();
+
+    print("userId ID" + userId.toString());
+
+    var url = '/user/$userId/updatebasicinfo';
+
+    var requestUrl = ApiMapping.BaseAPI + url;
+    print(requestUrl.toString());
+
+    String body = json.encode(data);
+    print("editUserInfoApi jsonMap" + body.toString());
+
+    try {
+      dynamic reply;
+      http.Response response = await http.post(Uri.parse(requestUrl),
+          body: body, headers: {'content-type': 'application/json'});
+      print("response update user info " + response.body.toString());
+      var jsonData = json.decode(response.body);
+      print("response  update user info" + jsonData['status'].toString());
+
+      Utils.successToast('Profile updated successfully');
+      return reply;
+
+      return response;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  //get KYC DATA
+//get user details
+  Future<KYCDataModel> getKYCDetails(String merchantID) async {
+    // var url = ApiMapping.getURI(apiEndPoint.user_get);
+    final prefs = await SharedPreferences.getInstance();
+
+    Map<String, String> queryParams = {
+      'merchant_id': StringConstant.MerchantLoginId.toString(),
+    };
+    var url = ApiMapping.BaseAPI + '/merchant-kyc/findbymerchantid';
+    String queryString = Uri(queryParameters: queryParams).query;
+
+    var requestUrl = '$url?$queryString';
+    print(requestUrl.toString());
+    print("kyc url get : " + requestUrl );
+    print("jsonMap url : " + queryParams.toString());
+    try {
+      dynamic response = await _apiServices.getGetApiResponse(requestUrl);
+      print("KYC Response : " + response.toString());
+
+      return response = KYCDataModel.fromJson(response);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+
+  // /// KYC Upload
+  // Future uploadKYCApi(File imageFile) async {
+  //   var stream = http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+  //   var length = await imageFile.length();
+  //   var url =
+  //       ApiMapping.BASEAPI + ApiMapping.createImageURL;
+  //   print(url);
+  //   var uri = Uri.parse(url);
+  //
+  //   var request = http.MultipartRequest("POST", uri);
+  //   var multipartFile = http.MultipartFile('imageFile', stream, length,
+  //       filename: basename(imageFile.path));
+  //   //contentType: new MediaType('image', 'png'));
+  //
+  //   request.files.add(multipartFile);
+  //   var response = await request.send();
+  //   print("response Image "+response.statusCode.toString());
+  //
+  //   response.stream.transform(utf8.decoder).listen((value) {
+  //     print("Image response "+value);
+  //
+  //
+  //     String jsonString = value;
+  //     Map<String,dynamic> d  = json.decode(jsonString.trim());
+  //     print(d[2]);
+  //     // List<MyModel> list = List<MyModel>.from(d['jsonArrayName'].map((x) => MyModel.fromJson(x)));
+  //
+  //   });
+  // }
+}

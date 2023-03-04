@@ -71,6 +71,7 @@ dependencies:
   permission_handler: ^10.2.0
   csv: ^5.0.1
   path_provider: ^2.0.11
+  modal_progress_hud_nsn: ^0.3.0
 
 dev_dependencies:
   flutter_test:

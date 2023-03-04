@@ -103,8 +103,7 @@ class _ReportScreenState extends State<ReportScreen> {
     }
     //save pdf file
     final file = File('${directory.path}/ActiveOrders_$currentDate.csv');
-    Utils.successToast('Report Successfully Downloaded');
-
+    Utils.successToast('Reports Downloaded Successfully');
     file.writeAsString(csv);
 
     setState(() {
@@ -173,8 +172,7 @@ class _ReportScreenState extends State<ReportScreen> {
 
     //save pdf file
     final file = File('${directory.path}/PastOrders_$currentDate.csv');
-    Utils.successToast('Report Successfully Downloaded');
-
+    Utils.successToast('Reports Downloaded Successfully');
     file.writeAsString(csv);
 
     setState(() {
@@ -183,6 +181,12 @@ class _ReportScreenState extends State<ReportScreen> {
   }
 
   void _generateCancelledOrderCsvFile(HomeProvider value) async {
+    DateFormat format = DateFormat('dd_MM_yyyy_hh_mm_aaa');
+    DateTime date = DateTime.now();
+    var currentDate = format.format(date);
+
+    print('date ;' + currentDate);
+
     List<List<dynamic>> rows = [];
 
     List<dynamic> row = [];
@@ -197,50 +201,57 @@ class _ReportScreenState extends State<ReportScreen> {
     rows.add(row);
 
     for (int i = 0;
-    i < value.jsonDataBasket['payload']['merchant_baskets'].length;
-    i++) {
+        i < value.jsonDataBasket['payload']['merchant_baskets'].length;
+        i++) {
       for (int j = 0;
-      j <
-          value.jsonDataBasket['payload']['merchant_baskets'][i]['orders']
-              .length;
-      j++) {
-        // print(\u{20B9 +value.jsonDataBasket['payload']['merchant_baskets'][i]['orders'][j]['mrp']}');
-        List<dynamic> row = [];
-        row.add(i + 1);
-        row.add('NA');
-        row.add(value.jsonDataBasket['payload']['merchant_baskets'][i]['id']);
-        row.add(value.jsonDataBasket['payload']['merchant_baskets'][i]['orders']
-        [j]['order_id']);
-        row.add(value.jsonDataBasket['payload']['merchant_baskets'][i]['orders']
-        [j]['oneliner']);
-        row.add(value.jsonDataBasket['payload']['merchant_baskets'][i]['orders']
-        [j]['item_qty']);
-        row.add(
-            'Rs. ${value.jsonDataBasket['payload']['merchant_baskets'][i]['orders'][j]['mrp']}');
+          j <
+              value.jsonDataBasket['payload']['merchant_baskets'][i]['orders']
+                  .length;
+          j++) {
+        // Map cancelledOrderList;
+        if (value.jsonDataBasket['payload']['merchant_baskets'][i]['orders'][j]
+                ['current_status_code'] ==
+            2000) {
+          print('Cancelled Order' +
+              value.jsonDataBasket['payload']['merchant_baskets'][i]['orders']
+                      [j]['order_id']
+                  .toString());
 
-        row.add(value.jsonDataBasket['payload']['merchant_baskets'][i]
-        ['overall_status']);
-        rows.add(row);
+          List<dynamic> row = [];
+          row.add(i + 1);
+          row.add('NA');
+          row.add(value.jsonDataBasket['payload']['merchant_baskets'][i]['id']);
+          row.add(value.jsonDataBasket['payload']['merchant_baskets'][i]
+              ['orders'][j]['order_id']);
+          row.add(value.jsonDataBasket['payload']['merchant_baskets'][i]
+              ['orders'][j]['oneliner']);
+          row.add(value.jsonDataBasket['payload']['merchant_baskets'][i]
+              ['orders'][j]['item_qty']);
+          row.add(
+              'Rs. ${value.jsonDataBasket['payload']['merchant_baskets'][i]['orders'][j]['mrp']}');
+
+          row.add(value.jsonDataBasket['payload']['merchant_baskets'][i]
+              ['overall_status']);
+          rows.add(row);
+        }
       }
     }
 
     String csv = const ListToCsvConverter().convert(rows);
     //create file path
     var directory =
-    await Directory('/storage/emulated/0/VelocITt Merchant Reports');
-    if(await directory.exists()==false){
+        await Directory('/storage/emulated/0/VelocITt Merchant Reports');
+    if (await directory.exists() == false) {
       directory.create();
       print('Directory path past:${directory.path}');
-
-    }else{
+    } else {
       directory;
     }
     // print('Directory path :${directory.path}');
 
     //save pdf file
-    final file = File('${directory.path}/CancelledOrders.csv');
-    Utils.successToast('Report Successfully Downloaded');
-
+    final file = File('${directory.path}/CancelledOrders_$currentDate.csv');
+    Utils.successToast('Reports Downloaded Successfully');
     file.writeAsString(csv);
 
     setState(() {
@@ -273,8 +284,7 @@ class _ReportScreenState extends State<ReportScreen> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: isAnySelected == true
-                          ? proceedButton(
+                      child: proceedButton(
                               "Share Reports",
                               ThemeApp.tealButtonColor,
                               context,
@@ -324,7 +334,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                 }
                               }
                             })
-                          : inActiveButton("Share Reports", context, () {}),
+                          ,
                     ),
                     bottomNavigationBarWidget(context, 4)
                   ],
@@ -373,7 +383,6 @@ class _ReportScreenState extends State<ReportScreen> {
                             isAnySelected = true;
                             print(t.index);
                           });
-
                         },
                       ),
                     ),
@@ -386,7 +395,7 @@ class _ReportScreenState extends State<ReportScreen> {
 
   final List<SimpleModel> _items = <SimpleModel>[
     SimpleModel(1, "Active Order Report", false),
-    SimpleModel(2, "Past 7 Days Report", false),
+    SimpleModel(2, "Past 7 Days Order Report", false),
     SimpleModel(3, "Cancelled Order Report", false),
   ];
 

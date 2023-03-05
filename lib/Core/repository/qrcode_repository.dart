@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,12 +8,11 @@ import '../AppConstant/apiMapping.dart';
 import '../data/network/baseApiServices.dart';
 import '../data/network/networkApiServices.dart';
 
-class QRRepository{
+class QRRepository {
   BaseApiServices _apiServices = NetworkApiServices();
 
- getProductDeliveryScannerList(
-    String merchant_id, String orderId,  String QrCode, BuildContext context) async {
-
+  getProductDeliveryScannerList(String merchant_id, String orderId,
+      String QrCode, BuildContext context) async {
     Map<String, String> fmcgData = {
       'qr_code': QrCode.toString().trim(),
     };
@@ -31,28 +28,29 @@ class QRRepository{
     try {
       dynamic response = await _apiServices.getGetApiResponse(requestUrl);
       print("Order Scan Response: " + response.toString());
-      print("Order Scan status : "+response['status'].toString());
+      print("Order Scan status : " + response['status'].toString());
       // final prefs = await SharedPreferences.getInstance();
       // prefs.setString(
       //     'ScannedProductIDPref', response['payload']['id'].toString());
-      if(response['status']== 'OK'){
-        Utils.successToast("Scan successfully", );
+      if (response['status'] == 'OK') {
+        print(response['payload']['match_result']);
+        if (response['payload']['match_result'] == true) {
+          Provider.of<HomeProvider>(context, listen: false)
+              .loadJsonForChangeStatus(810, merchant_id, orderId, context);
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => OrderDashboard()));
+        }
+        Utils.successToast(
+          "Scan successfully",
+        );
         // setState(() {
         //   singleSelectOptions = true;
         //   orderDetails['is_order_placed'] =
         //       true;
-         Provider.of<HomeProvider>(
-                  context,
-                  listen: false)
-              .loadJsonForChangeStatus(
-                  810,
-             merchant_id,
-                  orderId,
-                  context);
-        // });
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => OrderDashboard()));
-       }else{
+
+        // // });
+
+      } else {
         print("NOT_FOUND....");
         // Navigator.pop(context);
         Utils.flushBarErrorMessage("Please scan proper content", context);
@@ -71,6 +69,4 @@ class QRRepository{
       throw e;
     }
   }
-
 }
-

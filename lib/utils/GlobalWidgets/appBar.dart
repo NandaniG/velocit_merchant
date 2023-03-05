@@ -1164,7 +1164,7 @@ Widget bottomNavigationBarWidget(BuildContext context, int indexSelected) {
       Padding(
         padding: const EdgeInsets.only(bottom: 0),
         child: Container(
-          margin: EdgeInsets.only(bottom: 30),
+          margin: EdgeInsets.only(bottom: 50),
           height: 70,
           width: 70,
           child: FloatingActionButton(

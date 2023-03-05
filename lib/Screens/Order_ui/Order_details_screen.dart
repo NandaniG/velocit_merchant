@@ -1203,7 +1203,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     } else {
       if (orderDetails["is_accepted"] == false) {
         // executing if is_accepted is false
-        print("step 1");
+        // print("step 1");
         return Container(
           height: 45,
           child: Row(
@@ -1302,7 +1302,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       } else if ((orderDetails["is_accepted"] == true) &&
           (orderDetails["is_packed"] == false)) {
         // executing if is_accepted is true and is_packed is false
-        print("step 2");
+        // print("step 2");
         return Container(
           height: 45,
           child: Row(
@@ -1311,15 +1311,29 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 child: InkWell(
                   onTap: () {
                     setState(() {
+                      showSpinner =true;
                       singleSelectOptions = true;
                       orderDetails['is_order_placed'] = true;
-                      data = Provider.of<HomeProvider>(context, listen: false)
-                          .loadJsonForChangeStatus(
-                              610,
-                              orderDetails['merchant_id'],
-                              orderDetails['order_id'],
-                              context);
-                    });
+
+                    });    data = Provider.of<HomeProvider>(context, listen: false)
+                        .loadJsonForChangeStatus(
+                        610,
+                        orderDetails['merchant_id'],
+                        orderDetails['order_id'],
+                        context);
+                    Timer(
+                        const Duration(seconds: 2),
+                            () {
+                          setState(() {
+                            showSpinner =false;
+                          });
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>  const OrderDashboard()
+                              ));
+                        });
+
                   },
                   child: Container(
                       padding: const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
@@ -1373,7 +1387,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       } else if ((orderDetails["is_accepted"] == true) &&
           (orderDetails["is_packed"] == true) &&
           (orderDetails["is_shipped"] == false)) {
-        print("step 3");
+        // print("step 3");
         return Container(
           height: 45,
           child: Row(
@@ -1381,16 +1395,28 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    setState(() {
+                    setState(() {showSpinner =true;
                       singleSelectOptions = true;
-                      orderDetails['is_order_placed'] = true;
-                      data = Provider.of<HomeProvider>(context, listen: false)
-                          .loadJsonForChangeStatus(
-                              710,
-                              orderDetails['merchant_id'],
-                              orderDetails['order_id'],
-                              context);
-                    });
+
+                    }); orderDetails['is_order_placed'] = true;
+                    data = Provider.of<HomeProvider>(context, listen: false)
+                        .loadJsonForChangeStatus(
+                        710,
+                        orderDetails['merchant_id'],
+                        orderDetails['order_id'],
+                        context);
+                    Timer(
+                        const Duration(seconds: 2),
+                            () {
+                          setState(() {
+                            showSpinner =false;
+                          });
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>  const OrderDashboard()
+                              ));
+                        });
                   },
                   child: Container(
                       padding: const EdgeInsets.fromLTRB(0, 9.0, 0, 9.0),
@@ -1444,7 +1470,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           (orderDetails["is_packed"] == true) &&
           (orderDetails["is_shipped"] == true) &&
           (orderDetails["is_delivered"] == false)) {
-        print("step 4");
+        // print("step 4");
         return Container(
           height: 45,
           child: Row(
@@ -2683,8 +2709,14 @@ class _ScannerWidgetState extends State<ScannerWidget> {
       final prefs = await SharedPreferences.getInstance();
 
       if (_scanBarcode == '-1') {
-        // Utils.flushBarErrorMessage("Please scan proper content", context);
+        Navigator.pop(context);
+        Utils.flushBarErrorMessage("Please scan proper content", context);
       } else {
+        QRRepository().getProductDeliveryScannerList(
+            widget.merchant_id.toString(),
+            widget.orderId.toString(),
+            barcodeScanRes.toString(),
+            context);
         // Utils.successToast(_scanBarcode);
       }
       print('_scanBarcode timer... : ' + _scanBarcode);
@@ -2697,11 +2729,7 @@ class _ScannerWidgetState extends State<ScannerWidget> {
       //     barcodeScanRes.toString(), context);
       // QRRepository().getProductDeliveryScannerList('2062',
       //     barcodeScanRes.toString(), context);
-      QRRepository().getProductDeliveryScannerList(
-          widget.merchant_id.toString(),
-          widget.orderId.toString(),
-          barcodeScanRes.toString(),
-          context);
+
 
       StringConstant.ScannedProductId =
           (prefs.getString('ScannedProductIDPref')) ?? '';

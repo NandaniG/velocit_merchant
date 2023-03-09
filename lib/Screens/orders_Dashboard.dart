@@ -81,7 +81,8 @@ class _OrderDashboardState extends State<OrderDashboard> {
 
   setPram() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    StringConstant.isLogIn = (pref.getBool('isLogin')) ?? false;
+    StringConstant.isLogIn = (pref.getBool('isLogin')) ?? false;    StringConstant.UserLoginId = (pref.getString('isUserId')) ?? '';
+
   }
 
   final indianRupeesFormat = NumberFormat.currency(
@@ -322,16 +323,16 @@ class _OrderDashboardState extends State<OrderDashboard> {
 
 */
                     Column(
-                      children: [
+                      children: [  SizedBox(
+                        height: 10,
+                      ),
                         !isActiveOrders
                             ? activeOrderDropdownShow()
                             : pastOrderDropdownShow(value),
                         SizedBox(
                           height: 10,
                         ),
-                        SizedBox(
-                          height: height * .02,
-                        ),
+
                         isActiveOrders
                             ? pastOrderList(value)
                             : activeOrderList(value)
@@ -1778,7 +1779,10 @@ class _OrderDashboardState extends State<OrderDashboard> {
             buttonDecoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
               color: ThemeApp.whiteColor,
-            ),
+            ),dropdownDecoration:  BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: ThemeApp.whiteColor,
+          ),
             icon: Icon(Icons.arrow_drop_down_outlined,
                 color: ThemeApp.subIconColor),
             iconSize: 30,

@@ -81,7 +81,10 @@ class _ProfileImageDialogState extends State<ProfileImageDialog> {
                           (prefs.getString('isUserId')) ?? '';
                       await  prefs.setString('userProfileImagePrefs',imagePath) ;
                       AuthRepository().updateProfileImageApi(
-                          File(imagePath), StringConstant.UserLoginId, context, widget.isEditAccount);
+                          File(imagePath), StringConstant.UserLoginId, context, widget.isEditAccount).then((value) {
+                        Navigator.pop(context);
+
+                      });
                       // setState(() {
                       //   if (widget.isEditAccount == true) {
                       //

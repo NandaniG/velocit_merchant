@@ -42,7 +42,7 @@ class StringConstant {
   static String selectedFullName = 'David Wong';
   static String selectedFullNamePref = 'selectedfullNamePref';
 
-  static String selectedTypeOfAddress = 'Home';
+  static String selectedTypeOfAddress = '';
   static String selectedTypeOfAddressPref = 'SelectedTypeOfAddressPref';
 
   static String selectedMobile = '7898285852';

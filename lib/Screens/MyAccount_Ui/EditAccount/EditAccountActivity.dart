@@ -331,17 +331,17 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
               height: height * .03,
             ),
             TextFieldUtils().asteriskTextField(
-              StringUtils.fullName,
+              StringUtils.businessName,
               context,
             ),
             CharacterTextFormFieldsWidget(
               // isEnable: true,
-                errorText: StringUtils.enterFullName,
+                errorText: StringUtils.validUserBusinessNameError,
                 textInputType: TextInputType.name,
                 controller: userNameController,
                 autoValidation: AutovalidateMode.onUserInteraction,
                 intialvalue: 'Testing Name',
-                hintText: 'Full Name',
+                hintText: StringUtils.businessName,
                 onChange: (val) {
                   setState(() {
                     if (val.isEmpty && userNameController.text.isEmpty) {
@@ -354,7 +354,7 @@ class _EditAccountActivityState extends State<EditAccountActivity> {
                 validator: (value) {
                   if (value.isEmpty && userNameController.text.isEmpty) {
                     _validateFullName = true;
-                    return StringUtils.validUserNameError;
+                    return StringUtils.validUserBusinessNameError;
                   } else {
                     _validateFullName = false;
                   }

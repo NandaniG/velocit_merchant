@@ -155,12 +155,15 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
                 height: 100,
                 child: TextField(
                   expands: true,
-                  maxLines: null,
+                  maxLines: null,textAlign: TextAlign.start,
                   decoration: InputDecoration(
                       labelText: "Write description here",
                       labelStyle: TextStyle(
-                        color: Colors.black,
-                      ),
+
+                        color: Colors.grey,
+                          fontSize: 14,
+                          fontFamily: "Roboto",
+                          fontWeight: FontWeight.w400),
                       fillColor: Colors.white,
                       filled: true,
                       focusedBorder: OutlineInputBorder(

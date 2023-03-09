@@ -525,7 +525,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                           Text(
                               // provider.orderCheckOutDetails[0]
                               //     ["orderCheckOutDeliveryAddress"],
-                              '${widget.order["delivery_address_line1"]},${widget.order["delivery_address_line2"]},${widget.order["delivery_address_city"]},${widget.order["delivery_address_pincode"]},${widget.order["delivery_address_state"]}',
+                              // '${widget.order["delivery_address_line1"]},${widget.order["delivery_address_line2"]},${widget.order["delivery_address_city"]},${widget.order["delivery_address_pincode"]},${widget.order["delivery_address_state"]}',
+
+                              // widget.order["delivery_address_line1"]??""+widget.order["delivery_address_line2"]??""+widget.order["delivery_address_city"]??""+widget.order["delivery_address_pincode"]??""+widget.order["delivery_address_state"]??"",
+                              '${widget.order["delivery_address_line1"]??""},${widget.order["delivery_address_line2"]??""},${widget.order["delivery_address_city"]??""},${widget.order["delivery_address_pincode"]??""},${widget.order["delivery_address_state"]??""}',
                               softWrap: true,
                               style: TextStyle(
                                   color: ThemeApp.primaryNavyBlackColor,

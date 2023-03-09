@@ -5,12 +5,13 @@ import 'package:flutter/material.dart';
 class ThemeApp {
   static const appColor = Color(0xff00A7BF);
   static const appBackgroundColor = Color(0xffE3FCFF);
-    static const appBarShadowColor = const Color.fromRGBO(0, 167, 191, 0.07);
+    static const appBarShadowColor = const Color.fromRGBO(0, 167, 191, 0.12);
 
   static const appLightColor = Color(0xff75E4ED);
   static const buttonShade2 = Color(0xff95EAF1);
   static const lightBorderColor = Color(0xffDADADA);
   static const unSelectedBottomBarItemColor = Color(0xff1b283d);
+  static const inactiveStepperColor =  Color(0xff88F0FF);
 
   static const innerBoxesColor = Color(0xffCFF9FF);
   static const dropDownBorderColor = Color(0xffE9E9E9);

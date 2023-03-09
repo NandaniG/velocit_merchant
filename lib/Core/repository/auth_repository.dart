@@ -479,7 +479,8 @@ print("merchantId ${merchantId}");
 
     response.stream.transform(utf8.decoder).listen((value) {
       print("Image response "+value);
-      getUserDetailsById(userId).then((value){if (isEditProfile == true) {
+      getUserDetailsById(userId).then((value){
+        if (isEditProfile == true) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) =>  EditAccountActivity(),

@@ -72,7 +72,8 @@ class MyApp extends StatelessWidget {
               unselectedWidgetColor: ThemeApp.appColor,
               textTheme: GoogleFonts.robotoTextTheme(
                 Theme.of(context).textTheme,
-              ),
+              ),selectedRowColor: ThemeApp.buttonShade2,backgroundColor:ThemeApp.buttonShade2,
+              focusColor: ThemeApp.appBarShadowColor,
               primarySwatch: colorCustomForMaterialApp,
             ),
             color: ThemeApp.appColor,
@@ -205,6 +206,7 @@ class _SplashScreenState extends State<SplashScreen> {  String deviceTokenToSend
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              Text(' versionCode 2(1.0.1)'),
               Center(
                 child: Image.asset(
                   'assets/appImages/splashScreen.png',

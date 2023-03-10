@@ -99,7 +99,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   getColorCodeStatus(Map order) {
     if (order["status_code"] == 1000) {
       //
-      colorsStatus = ThemeApp.whiteColor;
+      colorsStatus = ThemeApp.blackColor;
       statusData = 'Completed';
     } else if (order["status_code"] == 900) {
       //canceled

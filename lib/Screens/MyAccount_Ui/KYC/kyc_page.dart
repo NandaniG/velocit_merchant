@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocit_merchant/Core/repository/auth_repository.dart';
 import '../../../Core/AppConstant/apiMapping.dart';
 import '../../../Core/Model/KYCDataModel.dart';
+import '../../../Routes/Routes.dart';
 import '../../../utils/GlobalWidgets/proceedButtons.dart';
 import '../../../utils/GlobalWidgets/textFormFields.dart';
 import '../../../utils/constants.dart';
@@ -61,26 +62,70 @@ getPref() async {
     return WillPopScope(
       onWillPop: () {
         // Navigator.pushReplacementNamed(context, '/dashBoardScreen');
-        Navigator.pop(context);
+        Navigator.pushReplacementNamed(context, RoutesName.myAccountRoute);
         return Future.value(true);
       },
       child: Scaffold(
         backgroundColor: ThemeApp.appBackgroundColor,
         key: scaffoldGlobalKey,
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(height * .09),
-          child: appBar_backWidget(
-              context, appTitle(context, "KYC"), const SizedBox()),
-        ),
-        // bottomNavigationBar: SafeArea(
-        //     child:     Padding(
-        //       padding: const EdgeInsets.only(left: 20, right: 20),
-        //       child: proceedButton("Submit Documents", ThemeApp.tealButtonColor,
-        //           context, false, () {}),
-        //     ),),
-        // bottomNavigationBar: bottomNavigationBarWidget(context),
-        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        body: SafeArea(
+          preferredSize: Size.fromHeight(height * .07),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            color: ThemeApp.appBackgroundColor,
+            alignment: Alignment.center,
+            child: AppBar(
+              centerTitle: false,
+              elevation: 0,
+              backgroundColor: ThemeApp.appBackgroundColor,
+              flexibleSpace: Container(
+                height: height * .07,
+                width: width,
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(
+                  color: ThemeApp.appBackgroundColor,
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(15),
+                      bottomRight: Radius.circular(15)),
+                ),
+              ),
+              titleSpacing: 0,
+              leading: InkWell(
+                onTap: () {
+                  // Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //     builder: (context) =>
+                  //     const DashboardScreen(),
+                  //   ),
+                  // );
+
+                  Navigator.pushReplacementNamed(context, RoutesName.myAccountRoute);
+
+                },
+                child: Transform.scale(
+                  scale: 0.7,
+                  child: Image.asset(
+                    'assets/appImages/backArrow.png',
+                    color: ThemeApp.primaryNavyBlackColor,
+                    // height: height*.001,
+                  ),
+                ),
+              ),
+
+              // leadingWidth: width * .06,
+              title: TextFieldUtils().dynamicText(
+                  'KYC',
+                  context,
+                  TextStyle(
+                      fontFamily: 'Roboto',
+                      color: ThemeApp.blackColor,
+                      // fontWeight: FontWeight.w500,
+                      fontSize: MediaQuery.of(context).size.height * .022,
+                      fontWeight: FontWeight.w500)),
+              // Row
+            ),
+          ),
+        ),  body: SafeArea(
             child: ModalProgressHUD(
           inAsyncCall: showSpinner,
           child: FutureBuilder<KYCDataModel>(

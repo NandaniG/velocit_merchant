@@ -11,6 +11,7 @@ import '../../../utils/GlobalWidgets/appBar.dart';
 import 'package:expansion_widget/expansion_widget.dart';
 import 'dart:math' as math;
 
+import '../../Routes/Routes.dart';
 import '../../utils/GlobalWidgets/textFormFields.dart';
 import 'package:dropdown_button2/custom_dropdown_button2.dart';
 // import '../../utils/GlobalWidgets/textFormFields.dart';
@@ -53,7 +54,7 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
 
     return WillPopScope(
       onWillPop: () {
-        Navigator.pushReplacementNamed(context, '/dashBoardScreen');
+        Navigator.pushReplacementNamed(context, RoutesName.dashboardRoute);
 
         return Future.value(true);
       },

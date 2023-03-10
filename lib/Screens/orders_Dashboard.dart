@@ -657,6 +657,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => OrderDetailScreen(
                                             order: {},
+                                        // basketId: 0,
                                           )));
                                 },
                                 child: Text(
@@ -1187,6 +1188,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                                       builder: (context) =>
                                                           OrderDetailScreen(
                                                             order: order,
+                                                         // basketId: order['id'],
                                                           )));
                                             },
                                             child: Text(
@@ -1747,6 +1749,7 @@ class _OrderDashboardState extends State<OrderDashboard> {
                                                       builder: (context) =>
                                                           OrderDetailScreen(
                                                             order: order,
+                                                            // basketId: order['id'],
                                                           )));
                                             },
                                             child: Text(

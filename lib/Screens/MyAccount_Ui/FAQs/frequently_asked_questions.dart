@@ -85,10 +85,13 @@ class _FAQsActivityState extends State<FAQsActivity> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(width: 5,),
-                Expanded(child: Text('Expansion Widget Title ${index+1}')),
+                Expanded(child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text('Expansion Widget Title ${index+1}'),
+                )),
                 Transform.rotate(
-                  angle: math.pi * animationValue / 2,
-                  child: Icon(Icons.expand_more_sharp, size: 30,color: ThemeApp.lightFontColor),
+                  angle: math.pi * animationValue * 1,
+                    child: Icon(Icons.keyboard_arrow_down_rounded, size: 30,color: ThemeApp.lightFontColor),
                   alignment: Alignment.center,
                 ),
                 // Divider(thickness: 1,color: Colors.black,)

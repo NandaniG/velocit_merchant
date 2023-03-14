@@ -56,7 +56,7 @@ class _AppBarWidgetState extends State<AppBarWidget> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       StringConstant.ProfilePhoto =
-          (prefs.getString('profileImagePrefs')) ?? "";
+          prefs.getString('userProfileImagePrefs') ?? "";
     });
   }
 
@@ -199,7 +199,7 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                                 }
                               },
 
-                            child: StringConstant.ProfilePhoto == ''
+                            child: StringConstant.ProfilePhoto.isEmpty
                                 ? Padding(
                               padding: const EdgeInsets.only(right: 10),
                               child: SvgPicture.asset(
@@ -218,21 +218,29 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                               child: Container(
                                 height: 28,
                                 width: 28,
+                                decoration: new BoxDecoration(
+
+                                  shape: BoxShape.circle,
+                                ),
                                 child: CircleAvatar(
-                                  backgroundColor: ThemeApp.whiteColor,
+                                  backgroundColor: ThemeApp.appLightColor,
                                   child: ClipRRect(
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(100)),
-                                    child: Image.file(
-                                      File(StringConstant.ProfilePhoto),
-                                      fit: BoxFit.fill,
-                                      height: 25,
-                                      width: 25,
-                                      errorBuilder:
-                                          (context, error, stackTrace) {
-                                        return Icon(
-                                          Icons.image,
+                                    child: Image.network(
+                                      StringConstant.ProfilePhoto.toString(),
+                                      height: 28,
+                                      width: 28,
+                                      errorBuilder: (context, error, stackTrace) {
+                                        return SvgPicture.asset(
+                                          'assets/appImages/Username.svg',
                                           color: ThemeApp.appColor,
+                                          semanticsLabel: 'Acme Logo',
+                                          theme: SvgTheme(
+                                            currentColor: ThemeApp.appColor,
+                                          ),
+                                          height: 28,
+                                          width: 28,
                                         );
                                       },
                                     ),

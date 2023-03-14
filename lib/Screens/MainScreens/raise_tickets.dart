@@ -11,6 +11,7 @@ import '../../../utils/GlobalWidgets/appBar.dart';
 import 'package:expansion_widget/expansion_widget.dart';
 import 'dart:math' as math;
 
+import '../../Routes/Routes.dart';
 import '../../utils/GlobalWidgets/textFormFields.dart';
 import 'package:dropdown_button2/custom_dropdown_button2.dart';
 // import '../../utils/GlobalWidgets/textFormFields.dart';
@@ -53,7 +54,7 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
 
     return WillPopScope(
       onWillPop: () {
-        Navigator.pushReplacementNamed(context, '/dashBoardScreen');
+        Navigator.pushReplacementNamed(context, RoutesName.dashboardRoute);
 
         return Future.value(true);
       },
@@ -155,12 +156,15 @@ class _RaiseTicketsPageActivityState extends State<RaiseTicketsPageActivity> {
                 height: 100,
                 child: TextField(
                   expands: true,
-                  maxLines: null,
+                  maxLines: null,textAlign: TextAlign.start,
                   decoration: InputDecoration(
                       labelText: "Write description here",
                       labelStyle: TextStyle(
-                        color: Colors.black,
-                      ),
+
+                        color: Colors.grey,
+                          fontSize: 14,
+                          fontFamily: "Roboto",
+                          fontWeight: FontWeight.w400),
                       fillColor: Colors.white,
                       filled: true,
                       focusedBorder: OutlineInputBorder(

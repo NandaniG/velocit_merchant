@@ -76,12 +76,14 @@ class _ProfileImageDialogState extends State<ProfileImageDialog> {
                       var image = await picker.getImage(source: ImageSource.camera);
                       final prefs = await SharedPreferences.getInstance();
                       String imagePath = image!.path;
-                      await prefs.setString('profileImagePrefs', imagePath);
                       StringConstant.UserLoginId =
                           (prefs.getString('isUserId')) ?? '';
-                      await  prefs.setString('userProfileImagePrefs',imagePath) ;
+                       prefs.setString('userProfileImagePrefs',imagePath) ;
                       AuthRepository().updateProfileImageApi(
-                          File(imagePath), StringConstant.UserLoginId, context, widget.isEditAccount);
+                          File(imagePath), StringConstant.UserLoginId, context, widget.isEditAccount).then((value) {
+                        Navigator.pop(context);
+
+                      });
                       // setState(() {
                       //   if (widget.isEditAccount == true) {
                       //
@@ -117,8 +119,8 @@ class _ProfileImageDialogState extends State<ProfileImageDialog> {
                         source: ImageSource.gallery,);
                       print(pickedFile!.path.toString());
                       if (pickedFile != null) {
-                        await  prefs.setString('userProfileImagePrefs', pickedFile.path) ;
-                        await prefs.setString('profileImagePrefs', pickedFile.path);
+                         prefs.setString('userProfileImagePrefs', pickedFile.path) ;
+                        // await prefs.setString('profileImagePrefs', pickedFile.path);
                         StringConstant.UserLoginId =
                             (prefs.getString('isUserId')) ?? '';
                         AuthRepository().updateProfileImageApi(

@@ -25,6 +25,7 @@ class StringUtils {
   static String confirmPasswordError = "Confirm Password field cannot be blank.";
   static String validEmailError = "Please enter a valid email.";
   static String validUserNameError = "Please enter a valid name.";
+  static String validUserBusinessNameError = "Please enter a valid Business name.";
   static String validemailORMobileError = "Please enter a valid email or mobile.";
   static String validPasswordError = "Please enter a valid password.";
   static String validConfirmPasswordError = "Please enter a valid confirm password.";
@@ -101,7 +102,7 @@ class StringUtils {
   static String pushNotifications = "Push Notifications";
   static String notifications = "Notifications";
   static String offersOnly = "Offers only";
-  static String businessName = "Business Name*";
+  static String businessName = "Business Name";
   static String fullName = "Full Name";
   static String mobileNumber = "Mobile Number";
   static String emailAddress = "Email Address";

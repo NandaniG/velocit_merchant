@@ -157,9 +157,14 @@ class _StockScreenState extends State<StockScreen> {
                                               activeColor:
                                                   ThemeApp.greenappcolor,
                                               inactiveTrackColor:
-                                                  ThemeApp.redColor,
-
-                                              // inactiveThumbColor: ThemeApp.w,
+                                                  ThemeApp.redColor,activeTrackColor:ThemeApp.greenappcolor,
+                                              thumbColor: MaterialStateProperty.resolveWith ((Set  states) {
+                                                if (states.contains(MaterialState.disabled)) {
+                                                  return ThemeApp.whiteColor;
+                                                }
+                                                return ThemeApp.whiteColor;
+                                              }),
+                                              inactiveThumbColor: ThemeApp.whiteColor,
                                               onChanged: (bool val) {
                                                 // This is called when the user toggles the switch.
                                                 setState(() {
